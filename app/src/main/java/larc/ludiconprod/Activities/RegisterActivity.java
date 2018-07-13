@@ -24,7 +24,7 @@ import larc.ludiconprod.PasswordEncryptor;
 import larc.ludiconprod.R;
 
 
-public class RegisterActivity extends FragmentActivity {
+public class RegisterActivity extends BasicActivity {
     RelativeLayout backButton;
     Button createAccountButton;
     EditText firstName;
@@ -43,18 +43,32 @@ public class RegisterActivity extends FragmentActivity {
         }
         return validity;
     }
+/*
+    public void setLanguage() {
+        if (language.compareToIgnoreCase("en") == 0) {
 
-    // Hide soft keyboard
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.
-                INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText()) {
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            titleText.setText(R.string.en_login);
+            email.setHint(R.string.en_email);
+            password.setHint(R.string.en_password);
+            forgotPasswordText.setText(R.string.en_forgot_password);
+            loginButton.setText(R.string.en_login);
+
+            languageButton.setText(R.string.ro_experience);
+
+        } else {
+
+            titleText.setText(R.string.ro_login);
+            email.setHint(R.string.ro_email);
+            password.setHint(R.string.ro_password);
+            loginButton.setText(R.string.ro_login);
+            forgotPasswordText.setText(R.string.ro_forgot_password);
+
+            languageButton.setText(R.string.en_experience);
+
         }
-
-        return true;
+        titleText.setTypeface(typeFace);
     }
+*/
 
     //verify all register fields constraints and shake them if not check them
     public boolean checkFieldsConstraints() {

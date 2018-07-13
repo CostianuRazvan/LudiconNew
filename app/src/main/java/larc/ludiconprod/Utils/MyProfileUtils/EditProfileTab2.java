@@ -24,9 +24,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
+import larc.ludiconprod.Activities.BasicFragment;
 import larc.ludiconprod.Activities.EditProfileActivity;
 import larc.ludiconprod.Activities.IntroActivity;
 import larc.ludiconprod.Controller.ImagePicker;
@@ -40,14 +42,21 @@ import static android.R.color.transparent;
  * Created by alex_ on 10.08.2017.
  */
 
-public class EditProfileTab2 extends Fragment {
+public class EditProfileTab2 extends BasicFragment {
+    private RadioGroup sexSwitch;
     private RadioButton male;
     private RadioButton female;
-    private RadioGroup sexSwitch;
+
+    private RadioGroup languageSwitch;
+    private RadioButton romanian;
+    private RadioButton english;
 
     private EditText ageTextView;
     private RelativeLayout passwordLayout;
     private TextWatcher textWatcher;
+    private boolean languageChanged = false;
+
+    private String localLanguage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +66,6 @@ public class EditProfileTab2 extends Fragment {
             final EditProfileActivity epa = (EditProfileActivity) super.getActivity();
             final Button save = (Button) v.findViewById(R.id.saveChangesButton);
             User u = Persistance.getInstance().getProfileInfo(super.getActivity());
-
             this.textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -71,19 +79,23 @@ public class EditProfileTab2 extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    if (epa.sameProfileInfo()) {
-                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
-                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
-                    } else {
-                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
-                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    try {
+                        if (epa.sameProfileInfo()) {
+                            epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                            epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                        } else {
+                            epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                            epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             };
 
             AssetManager assets = inflater.getContext().getAssets();// Is this the right asset?
-            Typeface typeFace= Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
-            Typeface typeFaceBold = Typeface.createFromAsset(assets,"fonts/Quicksand-Bold.ttf");
+            Typeface typeFace = Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
+            Typeface typeFaceBold = Typeface.createFromAsset(assets, "fonts/Quicksand-Bold.ttf");
 
             EditText firstName = (EditText) v.findViewById(R.id.editFirstName);
             firstName.setTypeface(typeFace);
@@ -92,6 +104,10 @@ public class EditProfileTab2 extends Fragment {
             male = (RadioButton) v.findViewById(R.id.editMale);
             female = (RadioButton) v.findViewById(R.id.editFemale);
             sexSwitch = (RadioGroup) v.findViewById(R.id.editSexSwitch);
+            romanian = (RadioButton) v.findViewById(R.id.RadioBtnEditRo);
+            english = (RadioButton) v.findViewById(R.id.RadioBtnEditEn);
+            languageSwitch = (RadioGroup) v.findViewById(R.id.RadioBtnEditLang);
+
             ageTextView = (EditText) v.findViewById(R.id.editDate);
             ageTextView.setTypeface(typeFace);
             Button changePassword = (Button) v.findViewById(R.id.editPasswordButton);
@@ -132,33 +148,45 @@ public class EditProfileTab2 extends Fragment {
 
             Log.d("Epa gender", u.firstName + u.gender);
 
-            if(u.gender.equals("0")){
+            if (u.gender.equals("0")) {
                 male.setChecked(true);
                 male.setTextColor(Color.parseColor("#ffffff"));
-            } else if(u.gender.equals("1")) {
+            } else if (u.gender.equals("1")) {
                 female.setChecked(true);
                 female.setTextColor(Color.parseColor("#ffffff"));
             }
 
-            if(male.isChecked()) {
+            if (male.isChecked()) {
                 male.setBackgroundResource(R.drawable.toggle_male);
                 male.setTextColor(Color.parseColor("#ffffff"));
-            } else{
+            } else {
                 female.setBackgroundResource(R.drawable.toggle_female);
                 male.setTextColor(Color.parseColor("#ffffff"));
+            }
+
+            if (getLanguage().equals("ro"))
+                romanian.setChecked(true);
+            else
+                english.setChecked(false);
+
+            if (romanian.isChecked()) {
+                romanian.setBackgroundResource(R.drawable.toggle_male);
+                romanian.setTextColor(Color.parseColor("#ffffff"));
+            } else {
+                english.setBackgroundResource(R.drawable.toggle_female);
+                english.setTextColor(Color.parseColor("#ffffff"));
             }
 
             sexSwitch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                    if(male.isChecked()){
+                    if (male.isChecked()) {
                         male.setBackgroundResource(R.drawable.toggle_male);
                         female.setBackgroundResource(transparent);
                         male.setTextColor(Color.parseColor("#ffffff"));
                         female.setTextColor(Color.parseColor("#1A0c3855"));
-                        epa.setSex(0);;
-                    }
-                    else{
+                        epa.setSex(0);
+                    } else {
                         female.setBackgroundResource(R.drawable.toggle_female);
                         male.setBackgroundResource(transparent);
                         male.setTextColor(Color.parseColor("#1A0c3855"));
@@ -174,6 +202,33 @@ public class EditProfileTab2 extends Fragment {
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
                 }
+            });
+
+            languageSwitch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                    if (romanian.isChecked()) {
+                        romanian.setBackgroundResource(R.drawable.toggle_male);
+                        english.setBackgroundResource(transparent);
+                        romanian.setTextColor(Color.parseColor("#ffffff"));
+                        english.setTextColor(Color.parseColor("#1A0c3855"));
+                        epa.setSavedLanguage("ro");
+                    } else {
+                        english.setBackgroundResource(R.drawable.toggle_female);
+                        romanian.setBackgroundResource(transparent);
+                        romanian.setTextColor(Color.parseColor("#1A0c3855"));
+                        english.setTextColor(Color.parseColor("#ffffff"));
+                        epa.setSavedLanguage("en");
+                    }
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+                }
+
             });
 
             if (u.facebookId == null || u.facebookId.isEmpty()) {
@@ -220,7 +275,10 @@ public class EditProfileTab2 extends Fragment {
             oldPass.addTextChangedListener(this.textWatcher);
             newPass.addTextChangedListener(this.textWatcher);
             rePass.addTextChangedListener(this.textWatcher);
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             e.printStackTrace();
         }
 

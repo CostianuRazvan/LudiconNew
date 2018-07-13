@@ -17,7 +17,7 @@ import larc.ludiconprod.R;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 
-public class Main extends FragmentActivity {
+public class Main extends BasicActivity {
     public static BottomBar bottomBar;
     public static boolean exit = false;
 
@@ -65,34 +65,30 @@ public class Main extends FragmentActivity {
                     ActivitiesActivity main = new ActivitiesActivity();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame, main).commit();
-                } else
-                    if (tabId == R.id.tab_profile) {
-                        ChatAndFriendsActivity.isOnChatPage = false;
-                        ActivitiesActivity.isOnActivityPage = false;
-                        MyProfileActivity myProfileActivity = new MyProfileActivity();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frame, myProfileActivity).commit();
-                    } else
-                        if (tabId == R.id.tab_coupons) {
-                            ChatAndFriendsActivity.isOnChatPage = false;
-                            ActivitiesActivity.isOnActivityPage = false;
-                            CouponsActivity coupons = new CouponsActivity();
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.frame, coupons).commit();
-                        } else
-                            if (tabId == R.id.tab_leaderboard) {
-                                ChatAndFriendsActivity.isOnChatPage = false;
-                                ActivitiesActivity.isOnActivityPage = false;
-                                LeaderboardActivity leaderboard = new LeaderboardActivity();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.frame, leaderboard).commit();
-                            } else
-                                if (tabId == R.id.tab_friends) {
-                                    ActivitiesActivity.isOnActivityPage = false;
-                                    ChatAndFriendsActivity chatFriends = new ChatAndFriendsActivity();
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.frame, chatFriends).commit();
-                                }/*else if(tabId==R.id.tab_food){
+                } else if (tabId == R.id.tab_profile) {
+                    ChatAndFriendsActivity.isOnChatPage = false;
+                    ActivitiesActivity.isOnActivityPage = false;
+                    MyProfileActivity myProfileActivity = new MyProfileActivity();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame, myProfileActivity).commit();
+                } else if (tabId == R.id.tab_coupons) {
+                    ChatAndFriendsActivity.isOnChatPage = false;
+                    ActivitiesActivity.isOnActivityPage = false;
+                    CouponsActivity coupons = new CouponsActivity();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame, coupons).commit();
+                } else if (tabId == R.id.tab_leaderboard) {
+                    ChatAndFriendsActivity.isOnChatPage = false;
+                    ActivitiesActivity.isOnActivityPage = false;
+                    LeaderboardActivity leaderboard = new LeaderboardActivity();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame, leaderboard).commit();
+                } else if (tabId == R.id.tab_friends) {
+                    ActivitiesActivity.isOnActivityPage = false;
+                    ChatAndFriendsActivity chatFriends = new ChatAndFriendsActivity();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame, chatFriends).commit();
+                }/*else if(tabId==R.id.tab_food){
                     SettingsActivity settings=new SettingsActivity();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame,settings).commit();
@@ -112,7 +108,10 @@ public class Main extends FragmentActivity {
             Bundle bundle = new Bundle();
             bundle.putInt("ludicoins", 100);
             bundle.putInt("points", 0);
-            bundle.putString("message", "Profile complete!");
+            if (getLanguage().equalsIgnoreCase("ro"))
+                bundle.putString("message", getResources().getString(R.string.ro_profile_complete));
+            else
+                bundle.putString("message", getResources().getString(R.string.en_profile_complete));
             bundle.putInt("level", 1);
             dialog.setArguments(bundle);
             dialog.show(this.getFragmentManager(), "tag");
@@ -126,8 +125,12 @@ public class Main extends FragmentActivity {
             if (exit) {
                 finish(); // finish activity
             } else {
-                Toast.makeText(this, "Press back again to exit.",
-                        Toast.LENGTH_SHORT).show();
+                if (getLanguage().equalsIgnoreCase("ro"))
+                    Toast.makeText(this, getResources().getString(R.string.ro_press_back_to_exit),
+                            Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, getResources().getString(R.string.en_press_back_to_exit),
+                            Toast.LENGTH_SHORT).show();
                 exit = true;
                 new Handler().postDelayed(new Runnable() {
                     @Override

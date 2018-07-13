@@ -47,7 +47,7 @@ import larc.ludiconprod.Utils.util.Sport;
 
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 
-public class CouponsActivity extends Fragment implements Response.ErrorListener, Response.Listener<JSONObject> {
+public class CouponsActivity extends BasicFragment implements Response.ErrorListener, Response.Listener<JSONObject> {
 
     private static final CharSequence TITLES[] = {"COUPONS", "MY COUPONS"};
 
@@ -157,7 +157,10 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         ll.getLayoutParams().height = 0;
         ll.setLayoutParams(ll.getLayoutParams());
         if (this.noGps) {
-            this.prepareError("No location services available!");
+            if (getLanguage().equalsIgnoreCase("ro"))
+                this.prepareError(getResources().getString(R.string.ro_location_services));
+            else
+                this.prepareError(getResources().getString(R.string.en_location_services));
         }
 
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.couponsSwapRefresh);
@@ -244,7 +247,10 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         ll.getLayoutParams().height = 0;
         ll.setLayoutParams(ll.getLayoutParams());
         if (this.noGps) {
-            this.prepareError("No location services available!");
+            if (getLanguage().equalsIgnoreCase("ro"))
+                this.prepareError(getResources().getString(R.string.ro_location_services));
+            else
+                this.prepareError(getResources().getString(R.string.en_location_services));
         }
 
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.myCouponsSwapRefresh);
@@ -330,15 +336,18 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
                 String json = trimMessage(error.getMessage(), "error");
                 if (json != null) {
                     if (json.compareTo("User does not have enough points to redeem coupon.") == 0) {
-                        Toast.makeText(super.getContext(), "You do not have enough ludicoins to redeem the coupon.", Toast.LENGTH_LONG).show();
+                        if (getLanguage().equalsIgnoreCase("ro"))
+                            Toast.makeText(super.getContext(), getResources().getString(R.string.ro_not_enough_points), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(super.getContext(), getResources().getString(R.string.en_not_enough_points), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(super.getContext(), json, Toast.LENGTH_LONG).show();
                     }
                 }
-        } else {
-            Toast.makeText(super.getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(super.getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
-    }
         if (error instanceof NetworkError) {
             this.prepareError("No internet connection!");
         } else {
@@ -354,9 +363,9 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-            if(trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")){
+            if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
-                Intent intent =new Intent(activity,LoginActivity.class);
+                Intent intent = new Intent(activity, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
             }
@@ -538,19 +547,18 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         }
 
         try {
-            if(response.get("status") != null && ((String)response.get("status")).compareTo("Success") == 0){
+            if (response.get("status") != null && ((String) response.get("status")).compareTo("Success") == 0) {
                 Toast.makeText(activity, "The coupon is yours, congrats!", Toast.LENGTH_SHORT).show();
 
                 // Reset the value for ludicoins
                 TextView ludicoins = (TextView) v.findViewById(R.id.cuponsLudicoins);
                 User userInfo = Persistance.getInstance().getUserInfo(getActivity());
-                userInfo.ludicoins = (int)response.get("pointsLeft");
+                userInfo.ludicoins = (int) response.get("pointsLeft");
                 Persistance.getInstance().setUserInfo(getActivity(), userInfo);
 
                 ludicoins.setText(String.valueOf(userInfo.ludicoins));
                 ludicoins.invalidate();  // for refreshment
-            }
-            else {
+            } else {
                 Toast.makeText(activity, "" + response, Toast.LENGTH_SHORT).show();
             }
 

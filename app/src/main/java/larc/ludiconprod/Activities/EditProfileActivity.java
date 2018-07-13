@@ -1,6 +1,8 @@
 package larc.ludiconprod.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -51,7 +54,7 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
  * Created by alex_ on 10.08.2017.
  */
 
-public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject> {
+public class EditProfileActivity extends BasicActivity implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject> {
     public static final int PICK_IMAGE_ID = 1423;
 
     private static final CharSequence TITLES[] = {"SPORT DETAILS", "INFO DETAILS"};
@@ -61,6 +64,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private SlidingTabLayout tabs;
     private EditActivitiesAdapter myAdapter;
 
+    private String language;
     private int sex = 0;
     private EditText firstName;
     private EditText lastName;
@@ -72,6 +76,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private SeekBar range;
     private ImageView image;
     private boolean imageChanged;
+    private RadioGroup myLanguage;
 
     @Nullable
     @Override
@@ -88,7 +93,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             final Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
 
             RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.tool_bar);
-            TextView title = (TextView)toolbar.findViewById(R.id.titleText);
+            TextView title = (TextView) toolbar.findViewById(R.id.titleText);
             title.setTypeface(typeFace);
 
             findViewById(R.id.internetRefresh).setAlpha(0);
@@ -145,6 +150,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     public boolean sameProfileInfo() {
         UserProfile old = Persistance.getInstance().getProfileInfo(this);
+        /* Language is a SharedPreference variable */
+        String language = getLanguage();
+        Toast.makeText(getApplicationContext(), getSavedLanguage() + " " + language, Toast.LENGTH_SHORT).show();
 
         old.gender = "" + this.sex;
         old.firstName = this.firstName.getText().toString();
@@ -180,6 +188,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         if (u.age != old.age) {
             return false;
         }
+        if (language.compareToIgnoreCase(getSavedLanguage()) != 0) {
+            return false;
+        }
         if (!u.range.equals(old.range)) {
             return false;
         }
@@ -213,7 +224,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         Log.d("Changed", "" + firstName.getText() + range.getProgress() + sex + sports);
-
+        String lang = getSavedLanguage();
         User old = Persistance.getInstance().getProfileInfo(this);
 
         User user = new User();
@@ -222,6 +233,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         user.gender = "" + this.sex;
 
         user.firstName = this.firstName.getText().toString();
+        setLanguage(lang);
 
 
         if (user.firstName.isEmpty()) {
@@ -332,12 +344,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        if(error.getMessage().contains("error")) {
+        if (error.getMessage().contains("error")) {
             String json = trimMessage(error.getMessage(), "error");
-            if (json != null){
+            if (json != null) {
                 Toast.makeText(this, json, Toast.LENGTH_LONG).show();
             }
-        }else {
+        } else {
             Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
         }
         if (error instanceof NetworkError) {
@@ -355,10 +367,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-            if(trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")){
+            if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
-                Intent intent =new Intent(this,LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 this.startActivity(intent);
             }
         } catch (JSONException e) {
@@ -391,6 +403,14 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         Persistance.getInstance().setUserInfo(this, t);
 
         finish();
+    }
+
+    public String getSavedLanguage() {
+        return language;
+    }
+
+    public void setSavedLanguage(String language) {
+        this.language = language;
     }
 
     public int getSex() {

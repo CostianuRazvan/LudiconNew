@@ -7,6 +7,51 @@
     <string name="fontmedium">Quicksand-Medium.ttf</string>
     <string name="fontbold">Quicksand-Bold.ttf</string>
 
+    <string name="ro_forgot_password">Ai uitat parola?</string>
+    <string name="ro_email_address">Adresa de Email</string>
+    <string name="ro_login">Logheaza-te</string>
+    <string name="ro_email">Email-ul tau</string>
+    <string name="ro_password">Parola</string>
+    <string name="ro_experience">Press me for a Romanian experience</string>
+    <string name="ro_will_play">Va juca</string>
+    <string name="ro_will_go_to">Va merge la</string>
+    <string name="ro_will_gain">Vei primi</string>
+    <string name="ro_hour">pe ora</string>
+    <string name="ro_players">JUCATORI</string>
+    <string name="ro_group_chat">CHATUL GRUPULUI</string>
+    <string name="ro_invite_friends">INVITA PRIETENI</string>
+    <string name="ro_edit">MODIFICA</string>
+    <string name="ro_delete">STERGE</string>
+    <string name="ro_join">PARTICIPA</string>
+    <string name="ro_profile_complete">Profil complet</string>
+    <string name="ro_press_back_to_exit">Apasa pe inapoi ca sa iesi din aplicatie</string>
+    <string name="ro_location_services">Eroare la serverul de locatie</string>
+    <string name="ro_not_enough_points">Nu ai destule ludicions pentru a primi cuponul</string>
+    <string name="ro_no_internet_connection">Nu exista conexiune la internet</string>
+
+
+    <string name="en_forgot_password">Forgot your password?</string>
+    <string name="en_email_address">Email Adress</string>
+    <string name="en_login">Login</string>
+    <string name="en_email">Email</string>
+    <string name="en_password">Password</string>
+    <string name="en_experience">Press me for an American experience</string>
+    <string name="en_will_play">Will play</string>
+    <string name="en_will_go_to">Will go to</string>
+    <string name="en_will_gain">You will gain</string>
+    <string name="en_hour">per hour</string>
+    <string name="en_players">PLAYERS</string>
+    <string name="en_group_chat">GROUP CHAT</string>
+    <string name="en_invite_friends">INVITE FRIENDS</string>
+    <string name="en_edit">EDIT</string>
+    <string name="en_delete">DELETE</string>
+    <string name="en_join">JOIN</string>
+    <string name="en_profile_complete">Profile complete</string>
+    <string name="en_press_back_to_exit">Press back again to exit</string>
+    <string name="en_location_services">No location services available</string>
+    <string name="en_not_enough_points">You do not have enough ludicoins to redeem the coupon.</string>
+    <string name="en_no_internet_connection">No internet connection</string>
+
     <string name="app_name">Ludicon</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="errorMessage">Incorrect email or password</string>
@@ -24,7 +69,7 @@
     <string name="dialogbutton1">Settings</string>
     <string name="dialogbutton2">Close</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_activity_ask_preferences">AskPreferences</string>
@@ -54,11 +99,11 @@
         <item>Other</item>
     </string-array>
 
-        <string-array name="chooseSex_array">
-            <item>M</item>
-            <item>F</item>
+    <string-array name="chooseSex_array">
+        <item>M</item>
+        <item>F</item>
 
-        </string-array>
+    </string-array>
 
 
     <string-array name="sports_array">

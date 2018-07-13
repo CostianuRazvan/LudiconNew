@@ -1,12 +1,10 @@
 package larc.ludiconprod.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,14 +17,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -63,7 +59,6 @@ import com.google.firebase.database.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -86,12 +81,13 @@ import larc.ludiconprod.Utils.util.Sport;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 import static larc.ludiconprod.Activities.Main.bottomBar;
+import static larc.ludiconprod.Utils.Constants.CONFIRM;
 
 /**
  * Created by ancuta on 7/26/2017.
  */
 
-public class ActivitiesActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Response.ErrorListener {
+public class ActivitiesActivity extends BasicFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Response.ErrorListener {
 
     ViewPager pager;
     private Context mContext;
@@ -163,22 +159,14 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     public static boolean fromSwipe = false;
     public static boolean checkinDone = false;
 
+    /* Constructor */
 
     public ActivitiesActivity() {
         currentFragment = this;
         activity = getActivity();
     }
 
-    public Bitmap decodeBase64(String input) {
-        byte[] decodedBytes = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
-
-    public String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
+    /* Check my Location */
 
     public boolean checkedLocation(Event currentEvent) {
         Boolean isInLocation = false;
@@ -198,13 +186,14 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         return isInLocation;
     }
 
+    /* Message handler */
+
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {
 
             if (msg.what == 0) {
-
 
                 HPShouldBeVisible = true;
                 if (isFirstTimeMyEvents) {
@@ -224,97 +213,96 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                     });
 
 
-                //set happening now field
-                TextView weWillplay = (TextView) v.findViewById(R.id.HNPlay);
-                TextView sportField = (TextView) v.findViewById(R.id.HNPlayWhat);
-                TextView ludicoins = (TextView) v.findViewById(R.id.ludicoinsHN);
-                TextView points = (TextView) v.findViewById(R.id.pointsHN);
-                TextView location = (TextView) v.findViewById(R.id.locationHN);
-                ImageView imageViewBackground = (ImageView) v.findViewById(R.id.imageViewBackground);
-                CircleImageView friends0 = (CircleImageView) v.findViewById(R.id.friends0HN);
-                CircleImageView friends1 = (CircleImageView) v.findViewById(R.id.friends1HN);
-                CircleImageView friends2 = (CircleImageView) v.findViewById(R.id.friends2HN);
-                TextView allFriends = (TextView) v.findViewById(R.id.friendsNumberHN);
-                checkinButton = (Button) v.findViewById(R.id.checkinHN);
+                    //set happening now field
+                    TextView weWillplay = (TextView) v.findViewById(R.id.HNPlay);
+                    TextView sportField = (TextView) v.findViewById(R.id.HNPlayWhat);
+                    TextView ludicoins = (TextView) v.findViewById(R.id.ludicoinsHN);
+                    TextView points = (TextView) v.findViewById(R.id.pointsHN);
+                    TextView location = (TextView) v.findViewById(R.id.locationHN);
+                    ImageView imageViewBackground = (ImageView) v.findViewById(R.id.imageViewBackground);
+                    CircleImageView friends0 = (CircleImageView) v.findViewById(R.id.friends0HN);
+                    CircleImageView friends1 = (CircleImageView) v.findViewById(R.id.friends1HN);
+                    CircleImageView friends2 = (CircleImageView) v.findViewById(R.id.friends2HN);
+                    TextView allFriends = (TextView) v.findViewById(R.id.friendsNumberHN);
+                    checkinButton = (Button) v.findViewById(R.id.checkinHN);
 
-                final Event currentEvent = Persistance.getInstance().getHappeningNow(activity);
+                    final Event currentEvent = Persistance.getInstance().getHappeningNow(activity);
 
-                if(currentEvent == null) {
-                    ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
-                    params.height = 0;
-                    happeningNowLayout.setLayoutParams(params);
+                    if (currentEvent == null) {
+                        ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
+                        params.height = 0;
+                        happeningNowLayout.setLayoutParams(params);
 
-                    return;
-                }
+                        return;
+                    }
 
-                checkinButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (buttonState == 0) {
-                            if (checkedLocation(currentEvent)) {
-                                HashMap<String, String> params = new HashMap<String, String>();
-                                HashMap<String, String> headers = new HashMap<String, String>();
-                                headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
-                                params.put("eventId", currentEvent.id);
-                                HTTPResponseController.getInstance().checkin(params, headers, activity);
+                    checkinButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (buttonState == 0) {
+                                if (checkedLocation(currentEvent)) {
+                                    HashMap<String, String> params = new HashMap<String, String>();
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                                    params.put("eventId", currentEvent.id);
+                                    HTTPResponseController.getInstance().checkin(params, headers, activity);
 
-                                checkinDone = true;
+                                    checkinDone = true;
 
-                                buttonState = 1;
-                                buttonSetter = new CountDownTimer(7200000, 1000) {
-                                    int minutes = 0;
-                                    int seconds = 0;
+                                    buttonState = 1;
+                                    buttonSetter = new CountDownTimer(7200000, 1000) {
+                                        int minutes = 0;
+                                        int seconds = 0;
 
-                                    @Override
-                                    public void onTick(long l) {
-                                        System.out.println("ontick");
-                                        String minutesValue = "";
-                                        String secondsValue = "";
-                                        seconds++;
-                                        if (seconds == 60) {
-                                            seconds = 0;
-                                            minutes++;
+                                        @Override
+                                        public void onTick(long l) {
+                                            System.out.println("ontick");
+                                            String minutesValue = "";
+                                            String secondsValue = "";
+                                            seconds++;
+                                            if (seconds == 60) {
+                                                seconds = 0;
+                                                minutes++;
+                                            }
+                                            if (minutes > 9) {
+                                                minutesValue = String.valueOf(minutes);
+                                            } else {
+                                                minutesValue = "0" + String.valueOf(minutes);
+                                            }
+                                            if (seconds > 9) {
+                                                secondsValue = String.valueOf(seconds);
+                                            } else {
+                                                secondsValue = "0" + String.valueOf(seconds);
+                                            }
+                                            //System.out.println(isOnActivityPage + " booleana " + checkinButton);
+                                            if (isOnActivityPage) {
+                                                // checkinButton.setText("CHECK-OUT " + minutesValue + ":" + secondsValue);
+                                                checkinButton.setText("CHECK-OUT");
+                                            }
+
+
                                         }
-                                        if (minutes > 9) {
-                                            minutesValue = String.valueOf(minutes);
-                                        } else {
-                                            minutesValue = "0" + String.valueOf(minutes);
+
+                                        @Override
+                                        public void onFinish() {
+
                                         }
-                                        if (seconds > 9) {
-                                            secondsValue = String.valueOf(seconds);
-                                        } else {
-                                            secondsValue = "0" + String.valueOf(seconds);
-                                        }
-                                        //System.out.println(isOnActivityPage + " booleana " + checkinButton);
-                                        if (isOnActivityPage) {
-                                           // checkinButton.setText("CHECK-OUT " + minutesValue + ":" + secondsValue);
-                                            checkinButton.setText("CHECK-OUT");
-                                        }
+                                    }.start();
+
+                                    requestLocationUpdates();
+                                    happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
+                                } else {
+                                    Toast.makeText(activity, "Go to event location to start sweating on points!", Toast.LENGTH_LONG).show();
+                                }
 
 
-                                    }
-
-                                    @Override
-                                    public void onFinish() {
-
-                                    }
-                                }.start();
-
-                                requestLocationUpdates();
-                                happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
-                            } else {
-                                Toast.makeText(activity, "Go to event location to start sweating on points!", Toast.LENGTH_LONG).show();
-                            }
-
-
-                        } else
-                            if (buttonState == 1) {
+                            } else if (buttonState == 1) {
                                 final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),
                                         "fonts/Quicksand-Medium.ttf");
                                 final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold.ttf");
                                 final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
                                 confirmationDialog.show();
-                                confirmationDialog.title.setText("Confirm?");
+                                confirmationDialog.title.setText(CONFIRM);
                                 confirmationDialog.title.setTypeface(typeFaceBold);
                                 confirmationDialog.message.setText("Are you sure you want to stop sweating on points?");
                                 confirmationDialog.message.setTypeface(typeFace);
@@ -347,120 +335,117 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
 
                             }
-                    }
-                });
+                        }
+                    });
 
 
-                Sport sport = new Sport(currentEvent.sportCode);
-                String weWillPlayString = "";
-                String sportName = "";
+                    Sport sport = new Sport(currentEvent.sportCode);
+                    String weWillPlayString = "";
+                    String sportName = "";
 
-                if (currentEvent.sportCode.equalsIgnoreCase("JOG") || currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC")) {
-                    weWillPlayString = "Will go to ";
-                    sportName = sport.sportName;
-                } else {
-                    if (currentEvent.sportCode.equalsIgnoreCase("OTH")) {
-                        weWillPlayString = "Will play ";
-                        sportName = currentEvent.otherSportName;
-                    } else {
-                        weWillPlayString = "Will play ";
+                    if (currentEvent.sportCode.equalsIgnoreCase("JOG") || currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC")) {
+                        weWillPlayString = "Will go to ";
                         sportName = sport.sportName;
+                    } else {
+                        if (currentEvent.sportCode.equalsIgnoreCase("OTH")) {
+                            weWillPlayString = "Will play ";
+                            sportName = currentEvent.otherSportName;
+                        } else {
+                            weWillPlayString = "Will play ";
+                            sportName = sport.sportName;
+                        }
                     }
-                }
 
-                sportName = sportName.substring(0, 1).toUpperCase() + sportName.substring(1);
+                    sportName = sportName.substring(0, 1).toUpperCase() + sportName.substring(1);
 
-                weWillplay.setText(weWillPlayString);
-                sportField.setText(sportName);
-                ludicoins.setText(String.valueOf(currentEvent.ludicoins));
-                points.setText(String.valueOf(currentEvent.points));
-                location.setText(currentEvent.placeName);
-                switch (currentEvent.sportCode) {
-                case "FOT":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
-                    break;
-                case "BAS":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
-                    break;
-                case "VOL":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
-                    break;
-                case "JOG":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
-                    break;
-                case "GYM":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
-                    break;
-                case "CYC":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
-                    break;
-                case "TEN":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
-                    break;
-                case "PIN":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
-                    break;
-                case "SQU":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
-                    break;
-                case "OTH":
-                    imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
-                    break;
-                }
+                    weWillplay.setText(weWillPlayString);
+                    sportField.setText(sportName);
+                    ludicoins.setText(String.valueOf(currentEvent.ludicoins));
+                    points.setText(String.valueOf(currentEvent.points));
+                    location.setText(currentEvent.placeName);
+                    switch (currentEvent.sportCode) {
+                        case "FOT":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
+                            break;
+                        case "BAS":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
+                            break;
+                        case "VOL":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
+                            break;
+                        case "JOG":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
+                            break;
+                        case "GYM":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
+                            break;
+                        case "CYC":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
+                            break;
+                        case "TEN":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
+                            break;
+                        case "PIN":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
+                            break;
+                        case "SQU":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
+                            break;
+                        case "OTH":
+                            imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
+                            break;
+                    }
 
-                if (currentEvent.numberOfParticipants - 1 >= 1) {
-                    friends0.setVisibility(View.VISIBLE);
-                }
-                if (currentEvent.numberOfParticipants - 1 >= 2) {
-                    friends1.setVisibility(View.VISIBLE);
-                }
-                if (currentEvent.numberOfParticipants - 1 >= 3) {
-                    friends2.setVisibility(View.VISIBLE);
-                }
-                if (currentEvent.numberOfParticipants - 1 >= 4) {
-                    allFriends.setVisibility(View.VISIBLE);
-                    allFriends.setText("+" + String.valueOf(currentEvent.numberOfParticipants - 4));
+                    if (currentEvent.numberOfParticipants - 1 >= 1) {
+                        friends0.setVisibility(View.VISIBLE);
+                    }
+                    if (currentEvent.numberOfParticipants - 1 >= 2) {
+                        friends1.setVisibility(View.VISIBLE);
+                    }
+                    if (currentEvent.numberOfParticipants - 1 >= 3) {
+                        friends2.setVisibility(View.VISIBLE);
+                    }
+                    if (currentEvent.numberOfParticipants - 1 >= 4) {
+                        allFriends.setVisibility(View.VISIBLE);
+                        allFriends.setText("+" + String.valueOf(currentEvent.numberOfParticipants - 4));
 
-                }
-                for (int i = 0; i < currentEvent.participansProfilePicture.size(); i++) {
-                    if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 0) {
-                        Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
-                        friends0.setImageBitmap(bitmap);
-                    } else
-                        if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 1) {
+                    }
+                    for (int i = 0; i < currentEvent.participansProfilePicture.size(); i++) {
+                        if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 0) {
+                            Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
+                            friends0.setImageBitmap(bitmap);
+                        } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 1) {
                             Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
                             friends1.setImageBitmap(bitmap);
-                        } else
-                            if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 2) {
-                                Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
-                                friends2.setImageBitmap(bitmap);
-                            }
-                }
+                        } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 2) {
+                            Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
+                            friends2.setImageBitmap(bitmap);
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     //I don't know why the fuck i am here
                 }
 
-            } else
-                if (msg.what == 1) {
-                    System.out.println("eventStopped");
-                    buttonState = 0;
+            } else if (msg.what == 1) {
+                System.out.println("eventStopped");
+                buttonState = 0;
 
-                    happeningNowLayout = (RelativeLayout) v.findViewById(R.id.generalHappeningNowLayout);
-                    ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
-                    params.height = 0;
-                    happeningNowLayout.setLayoutParams(params);
-                    if (buttonSetter != null) {
-                        buttonSetter.cancel();
-                    }
-
-                    HPShouldBeVisible = false;
-
-                    if (googleApiClient.isConnected()) {
-                        googleApiClient.disconnect();
-                    }
-                    Persistance.getInstance().setHappeningNow(null, activity);
+                happeningNowLayout = (RelativeLayout) v.findViewById(R.id.generalHappeningNowLayout);
+                ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
+                params.height = 0;
+                happeningNowLayout.setLayoutParams(params);
+                if (buttonSetter != null) {
+                    buttonSetter.cancel();
                 }
+
+                HPShouldBeVisible = false;
+
+                if (googleApiClient.isConnected()) {
+                    googleApiClient.disconnect();
+                }
+                Persistance.getInstance().setHappeningNow(null, activity);
+            }
         }
     };
 
@@ -750,8 +735,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                                     handler.sendEmptyMessage(0);
                                 }
                                 return;
-                            }
-                            else{
+                            } else {
                                 Persistance.getInstance().setHappeningNow(null, activity);
                             }
                         } else {
@@ -771,17 +755,16 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                                     eventShouldHappen = Persistance.getInstance().getMyActivities(activity).get(0);
                                     timeToNextEvent = (Persistance.getInstance().getMyActivities(activity).get(0).eventDateTimeStamp - System.currentTimeMillis() / 1000);*/
 
-                                     if(myEventList.size() > 0) {
-                                         System.out.println("ajung aici 2, nume creator: " + myEventList.get(0).creatorName);
+                                    if (myEventList.size() > 0) {
+                                        System.out.println("ajung aici 2, nume creator: " + myEventList.get(0).creatorName);
 
-                                         pastEvent = myEventList.get(0).eventDateTimeStamp;
-                                         eventShouldHappen = myEventList.get(0);
-                                         timeToNextEvent = myEventList.get(0).eventDateTimeStamp - System.currentTimeMillis()
-                                                 / 1000;
-                                     }
-                                     else{
-                                         break;
-                                     }
+                                        pastEvent = myEventList.get(0).eventDateTimeStamp;
+                                        eventShouldHappen = myEventList.get(0);
+                                        timeToNextEvent = myEventList.get(0).eventDateTimeStamp - System.currentTimeMillis()
+                                                / 1000;
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
 
@@ -791,7 +774,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                                 if ((timeToNextEvent > -3600 && buttonState == 0) || (timeToNextEvent > -7200 && buttonState == 1)) {
                                     googleApiClient.connect();
                                     startedEventDate = pastEvent;
-                                    if (myEventList.size()>0 && pastEvent == myEventList.get(0).eventDateTimeStamp) {
+                                    if (myEventList.size() > 0 && pastEvent == myEventList.get(0).eventDateTimeStamp) {
                                         System.out.println("intra vreodata aici?");
                                         //myEventList.remove(0);
                                     }
@@ -873,7 +856,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if (!isFirstTimeAroundMe) {
                 layoutManagerAroundMe = new LinearLayoutManager(activity);
             }
-            if(fradapter == null){
+            if (fradapter == null) {
                 fradapter = new AroundMeAdapter(aroundMeEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
             }
 
@@ -882,7 +865,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if (!isFirstTimeAroundMe) {
                 frlistView = (RecyclerView) v.findViewById(R.id.events_listView2);
                 layoutManagerAroundMe.setOrientation(LinearLayoutManager.VERTICAL);
-                if(frlistView != null) {
+                if (frlistView != null) {
                     frlistView.setLayoutManager(layoutManagerAroundMe);
                 }
                 heartImageAroundMe = (ImageView) v.findViewById(R.id.heartImageAroundMe);
@@ -1182,7 +1165,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
                 Intent intent = new Intent(activity, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
             }
         } catch (JSONException e) {

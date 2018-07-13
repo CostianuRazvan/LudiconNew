@@ -35,11 +35,15 @@ import larc.ludiconprod.R;
 import static android.R.color.transparent;
 
 
-public class ProfileDetailsActivity extends Activity {
+public class ProfileDetailsActivity extends BasicActivity {
     View backButton;
     RadioButton male;
     RadioButton female;
     RadioGroup sexSwitch;
+    RadioButton romanian;
+    RadioButton english;
+    RadioGroup languageSwitch;
+
     ImageView chooseAPhoto;
     ImageView imgProfilePicture;
     private static final int PICK_IMAGE_ID = 234; // the number doesn't matter
@@ -83,7 +87,12 @@ public class ProfileDetailsActivity extends Activity {
         backButton = findViewById(R.id.backButton);
         backButton.setAlpha(0f);
         backButton.setClickable(false);
+
         male = (RadioButton) findViewById(R.id.male);
+
+        romanian = (RadioButton) findViewById(R.id.RadioBtnEditRo);
+        english = (RadioButton) findViewById(R.id.RadioBtnEditEn);
+        languageSwitch = (RadioGroup) findViewById(R.id.RadioBtnEditLang);
         female = (RadioButton) findViewById(R.id.female);
         TextView titleText = (TextView) findViewById(R.id.titleText);
         titleText.setText("Profile Details");
@@ -157,6 +166,8 @@ public class ProfileDetailsActivity extends Activity {
             female.setBackgroundResource(R.drawable.toggle_female);
             male.setTextColor(Color.parseColor("#ffffff"));
         }
+
+
         sexSwitch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -175,6 +186,25 @@ public class ProfileDetailsActivity extends Activity {
                 }
             }
         });
+
+        languageSwitch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                if (romanian.isChecked()) {
+                    romanian.setBackgroundResource(R.drawable.toggle_male);
+                    english.setBackgroundResource(transparent);
+                    romanian.setTextColor(Color.parseColor("#ffffff"));
+                    english.setTextColor(Color.parseColor("#1A0c3855"));
+
+                } else {
+                    english.setBackgroundResource(R.drawable.toggle_female);
+                    romanian.setBackgroundResource(transparent);
+                    romanian.setTextColor(Color.parseColor("#1A0c3855"));
+                    english.setTextColor(Color.parseColor("#ffffff"));
+                }
+            }
+        });
+
         chooseAPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

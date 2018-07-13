@@ -30,78 +30,93 @@ import me.anwarshahriar.calligrapher.Calligrapher;
  * Created by ancuta on 7/11/2017.
  */
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BasicActivity {
     RelativeLayout backButton;
     TextView forgotPasswordText;
+    TextView titleText;
     Button loginButton;
     EditText email;
     EditText password;
+    String language = "EN";
     public static ProgressBar progressBar;
     private static String TAG = LoginActivity.class.getSimpleName();
     Toast mToast;
+    Context mContext;
+    Typeface typeFace;
+    Typeface typeFaceBold;
 
 
+    public boolean checkFieldsConstraints() {
+        boolean isVerified = false;
 
-
-
-    public boolean checkFieldsConstraints(){
-        boolean isVerified=false;
-
-        if(email.getText().toString().length() == 0 || !email.getText().toString().contains("@") || !email.getText().toString().contains(".")){
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {
             Animation shake = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shake);
             email.startAnimation(shake);
             email.setBackgroundResource(R.drawable.rounded_edittext_red);
-            isVerified=true;
+            isVerified = true;
         }
-        if(password.getText().length() == 0){
+        if (password.getText().length() == 0) {
             Animation shake = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shake);
             password.startAnimation(shake);
             password.startAnimation(shake);
             password.setBackgroundResource(R.drawable.rounded_edittext_red);
-            isVerified=true;
+            isVerified = true;
         }
         return isVerified;
     }
 
-    // Hide soft keyboard
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.
-                INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText()) {
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
+    /* Switch languages */
 
-        return true;
+    public void translate() {
+
+        Toast.makeText(getApplicationContext(), "Limba mea este " + getLanguage(), Toast.LENGTH_SHORT).show();
+
+        language = getLanguage();
+        if (language.compareToIgnoreCase("en") == 0) {
+
+            titleText.setText(R.string.en_login);
+            email.setHint(R.string.en_email);
+            password.setHint(R.string.en_password);
+            forgotPasswordText.setText(R.string.en_forgot_password);
+            loginButton.setText(R.string.en_login);
+        } else {
+            titleText.setText(R.string.ro_login);
+            email.setHint(R.string.ro_email);
+            password.setHint(R.string.ro_password);
+            loginButton.setText(R.string.ro_login);
+            forgotPasswordText.setText(R.string.ro_forgot_password);
+
+        }
+        titleText.setTypeface(typeFace);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
-        final Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
+        typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+        typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
 
+        mContext = getBaseContext();
         RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.tool_bar);
-        TextView title = (TextView)toolbar.findViewById(R.id.titleText);
+        TextView title = (TextView) toolbar.findViewById(R.id.titleText);
         title.setTypeface(typeFace);
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
 
         backButton = (RelativeLayout) findViewById(R.id.backButton);
-        forgotPasswordText=(TextView) findViewById(R.id.forgotPasswordText);
-        TextView titleText=(TextView) findViewById(R.id.titleText);
-        titleText.setText("Login");
-        titleText.setTypeface(typeFace);
-        forgotPasswordText.setTypeface(typeFaceBold);
+        forgotPasswordText = (TextView) findViewById(R.id.forgotPasswordText);
+        titleText = (TextView) findViewById(R.id.titleText);
 
-        password=(EditText) findViewById(R.id.password) ;
+        forgotPasswordText.setTypeface(typeFaceBold);
+        password = (EditText) findViewById(R.id.password);
         password.setTypeface(typeFace);
-        email=(EditText) findViewById(R.id.email);
+        email = (EditText) findViewById(R.id.email);
         email.setTypeface(typeFace);
-        progressBar=(ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setAlpha(0f);
         email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,9 +151,9 @@ public class LoginActivity extends Activity {
         });
 
 
-        loginButton=(Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setTypeface(typeFaceBold);
-        backButton.setOnClickListener(new View.OnClickListener(){
+        backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -147,7 +162,7 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
             }
         });
-        forgotPasswordText.setOnClickListener(new View.OnClickListener(){
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -157,43 +172,43 @@ public class LoginActivity extends Activity {
         });
 
 
-
-
-
-        loginButton.setOnClickListener(new View.OnClickListener(){
+        loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 if (!checkFieldsConstraints()) {
-                try {
+                    try {
 
                         HashMap<String, String> params = new HashMap<String, String>();
                         params.put("email", email.getText().toString());
                         params.put("password", PasswordEncryptor.generateSHA255FromString(password.getText().toString()));//PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("apiKey", HTTPResponseController.API_KEY);
-                       // headers.put("Content-Type","application/json;charset=utf-8");
+                        // headers.put("Content-Type","application/json;charset=utf-8");
                         HTTPResponseController.getInstance().returnResponse(params, headers, LoginActivity.this, "http://207.154.236.13/api/login/");
                         progressBar.setIndeterminate(true);
                         progressBar.setAlpha(1f);
-                    }
-                catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else{
+                } else {
                     showAToast();
                 }
             }
         });
 
-
-
+        translate();
 
 
     }
 
-    public void showAToast (){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        translate();
+    }
+
+    public void showAToast() {
         if (mToast != null) {
             mToast.cancel();
         }

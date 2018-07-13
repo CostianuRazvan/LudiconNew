@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7f9fc">
+    android:background="#f7f9fc"
+    android:orientation="vertical">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:background="@drawable/shadow_top_to_bottom"/>
+        android:background="@drawable/shadow_top_to_bottom" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/editScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:fillViewport="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="72dp">
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="72dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,10 +45,9 @@
                         android:layout_width="35dp"
                         android:layout_height="10dp"
                         android:layout_centerHorizontal="true"
-                        android:alpha="0"/>
+                        android:alpha="0" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/editImage"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -55,15 +55,14 @@
                         android:clickable="false"
                         android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/editChoosePhoto"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:id="@+id/editChoosePhoto"
-                        android:clickable="true"
+                        android:layout_marginTop="70dp"
                         android:layout_toRightOf="@+id/imageView"
-                        android:src="@drawable/ic_image_edit"
-                        android:layout_marginTop="70dp"/>
+                        android:clickable="true"
+                        android:src="@drawable/ic_image_edit" />
                 </RelativeLayout>
 
                 <TextView
@@ -71,90 +70,131 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:textSize="16sp"
+                    android:fontFamily="@string/fontmedium"
+                    android:gravity="center"
                     android:inputType="text"
                     android:text="florin@bogdan.com"
-                    android:gravity="center"
                     android:textColor="#400c3855"
-                    android:fontFamily="@string/fontmedium"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/editFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edittext"
                     android:drawableLeft="@drawable/ic_bnav_user_selected"
                     android:ems="10"
-                    android:paddingLeft="15dp"
-                    android:textSize="16sp"
-                    android:maxLength="25"
-                    android:layout_marginTop="8dp"
+                    android:hint="First Name"
                     android:inputType="textCapWords"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="First Name"/>
+                    android:maxLength="25"
+                    android:paddingLeft="15dp"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/editLastName"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edittext"
                     android:drawableLeft="@drawable/ic_bnav_user_selected"
                     android:ems="10"
-                    android:maxLength="25"
-                    android:textSize="16sp"
-                    android:paddingLeft="15dp"
-                    android:layout_marginTop="8dp"
+                    android:hint="Last Name"
                     android:inputType="textCapWords"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Last Name"/>
+                    android:maxLength="25"
+                    android:paddingLeft="15dp"
+                    android:textSize="16sp" />
 
                 <RadioGroup
-                    android:checkedButton="@+id/male"
+                    android:id="@+id/RadioBtnEditLang"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:checkedButton="@+id/RadioBtnEditEn"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/RadioBtnEditRo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="Romanian"
+                        android:textColor="#1A0c3855"
+                        android:textSize="16sp" />
+
+                    <RadioButton
+                        android:id="@+id/RadioBtnEditEn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="English"
+                        android:textColor="#1A0c3855"
+                        android:textSize="16sp" />
+                </RadioGroup>
+
+                <RadioGroup
                     android:id="@+id/editSexSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_edittext"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:checkedButton="@+id/male"
+                    android:orientation="horizontal">
 
                     <RadioButton
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="1dp"
                         android:id="@+id/editMale"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
                         android:button="@null"
                         android:gravity="center"
                         android:text="Male"
-                        android:textSize="16sp"
-                        android:textColor="#1A0c3855"/>
+                        android:textColor="#1A0c3855"
+                        android:textSize="16sp" />
+
                     <RadioButton
-                        android:layout_marginRight="1dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
                         android:id="@+id/editFemale"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
                         android:layout_weight="1"
                         android:button="@null"
                         android:gravity="center"
                         android:text="Female"
-                        android:textSize="16sp"
-                        android:textColor="#1A0c3855"/>
+                        android:textColor="#1A0c3855"
+                        android:textSize="16sp" />
                 </RadioGroup>
+
                 <EditText
                     android:id="@+id/editDate"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edittext"
                     android:drawableLeft="@drawable/ic_calendar"
                     android:ems="10"
-                    android:textSize="16sp"
+                    android:hint="Age"
+                    android:inputType="numberDecimal"
                     android:maxLength="3"
                     android:paddingLeft="15dp"
-                    android:layout_marginTop="8dp"
-                    android:inputType="numberDecimal"
-                    android:background="@drawable/rounded_edittext"
-                    android:hint="Age"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/editPasswordButton"
@@ -167,46 +207,49 @@
 
                 <RelativeLayout
                     android:id="@+id/editPasswordLayout"
-                    android:layout_height="0dp"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
                     <EditText
                         android:id="@+id/oldPassword"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext"
                         android:drawableLeft="@drawable/ic_lock"
                         android:ems="10"
-                        android:textSize="16sp"
-                        android:paddingLeft="15dp"
-                        android:layout_marginTop="8dp"
+                        android:hint="Old password"
                         android:inputType="textPassword"
-                        android:background="@drawable/rounded_edittext"
-                        android:hint="Old password"/>
+                        android:paddingLeft="15dp"
+                        android:textSize="16sp" />
+
                     <EditText
                         android:id="@+id/newPassword"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_below="@+id/oldPassword"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext"
                         android:drawableLeft="@drawable/ic_lock"
                         android:ems="10"
-                        android:textSize="16sp"
-                        android:paddingLeft="15dp"
-                        android:layout_marginTop="8dp"
-                        android:inputType="textPassword"
-                        android:background="@drawable/rounded_edittext"
                         android:hint="New password"
-                        android:layout_below="@+id/oldPassword"/>
+                        android:inputType="textPassword"
+                        android:paddingLeft="15dp"
+                        android:textSize="16sp" />
+
                     <EditText
                         android:id="@+id/editPasswordRepeat"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_below="@+id/newPassword"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext"
                         android:drawableLeft="@drawable/ic_lock"
                         android:ems="10"
-                        android:textSize="16sp"
-                        android:paddingLeft="15dp"
-                        android:layout_marginTop="8dp"
-                        android:inputType="textPassword"
-                        android:background="@drawable/rounded_edittext"
                         android:hint="Retype Password"
-                        android:layout_below="@+id/newPassword"/>
+                        android:inputType="textPassword"
+                        android:paddingLeft="15dp"
+                        android:textSize="16sp" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -217,14 +260,14 @@
         android:id="@+id/saveChangesButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="SAVE CHANGES"
-        android:textSize="14sp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/pink_button_selector"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        android:alpha="0"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0"
+        android:background="@drawable/pink_button_selector"
+        android:text="SAVE CHANGES"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
 </RelativeLayout>
