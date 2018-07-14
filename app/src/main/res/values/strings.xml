@@ -28,7 +28,23 @@
     <string name="ro_location_services">Eroare la serverul de locatie</string>
     <string name="ro_not_enough_points">Nu ai destule ludicions pentru a primi cuponul</string>
     <string name="ro_no_internet_connection">Nu exista conexiune la internet</string>
-
+    <string name="ro_other_sport_name">Te rog sa introduci alt sport!</string>
+    <string name="ro_enter_date">Te rog sa introduci o data!</string>
+    <string name="ro_enter_time">Te rog sa introduci o ora!</string>
+    <string name="ro_select_location">Alege o locatie!</string>
+    <string name="ro_too_much_participants">Prea multi participanti!</string>
+    <string name="ro_creating_activity">Se creeaza...</string>
+    <string name="ro_saving_activity">Se salveaza...</string>
+    <string name="ro_maximum_length">Ai atins limita maxima pentru acest camp</string>
+    <string name="ro_create_activity">Creeaza activitate</string>
+    <string name="ro_edit_activity">Editeaza activitatea</string>
+    <string name="ro_tap_here_select_location">Apasa aici ca sa selectezi locatia</string>
+    <string name="ro_private_activity">Aceasta activitate este privata si nu este vizibila in lista de activitati. Invita-ti prietenii pentru a participa la aceasta.</string>
+    <string name="ro_type_and_number">Tipul &amp; numarul jucatorilor</string>
+    <string name="ro_date_and_time">Data &amp; ora</string>
+    <string name="ro_description">Descriere</string>
+    <string name="ro_location">Locatie</string>
+    <string name="ro_activity">Activitate</string>
 
     <string name="en_forgot_password">Forgot your password?</string>
     <string name="en_email_address">Email Adress</string>
@@ -51,6 +67,23 @@
     <string name="en_location_services">No location services available</string>
     <string name="en_not_enough_points">You do not have enough ludicoins to redeem the coupon.</string>
     <string name="en_no_internet_connection">No internet connection</string>
+    <string name="en_other_sport_name">Please enter other sport name!</string>
+    <string name="en_enter_time">Please enter a time!</string>
+    <string name="en_enter_date">Please enter a date!</string>
+    <string name="en_select_location">Please select a location!</string>
+    <string name="en_too_much_participants">Too much participants for this capacity!</string>
+    <string name="en_creating_activity">Creating...</string>
+    <string name="en_saving_activity">Saving...</string>
+    <string name="en_maximum_length">You have reached maximum length for this field!</string>
+    <string name="en_create_activity">Create Activity</string>
+    <string name="en_edit_activity">Edit Activity</string>
+    <string name="en_tap_here_select_location">Tap here to Select Location</string>
+    <string name="en_private_activity">This activity is set as Private and will not be visible in the Activity List.Invite your friends to Join this activity</string>
+    <string name="en_type_and_number">Type &amp; number of players</string>
+    <string name="en_date_and_time">Date &amp; time</string>
+    <string name="en_description">Description</string>
+    <string name="en_location">Location</string>
+    <string name="en_activity">Activity</string>
 
     <string name="app_name">Ludicon</string>
     <string name="title_activity_main">MainActivity</string>

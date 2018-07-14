@@ -1,22 +1,14 @@
 package larc.ludiconprod.Activities;
 
 
-import android.content.Context;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.io.ByteArrayOutputStream;
-
-import larc.ludiconprod.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -26,6 +18,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class BasicFragment extends android.support.v4.app.Fragment {
 
     private final String MY_LANGUAGE = "LANGUAGE";
+    private final String LANGUAGE_KEY = "com.example.ludicon.language";
 
     public BasicFragment() {
         // Required empty public constructor
@@ -44,7 +37,7 @@ public class BasicFragment extends android.support.v4.app.Fragment {
 
     public String getLanguage() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(MY_LANGUAGE, MODE_PRIVATE);
-        return sharedPref.getString("com.example.ludicon.language", "ATATATA");
+        return sharedPref.getString(LANGUAGE_KEY, "ATATATA");
     }
 
     public void setLanguage(String language) {
@@ -53,8 +46,8 @@ public class BasicFragment extends android.support.v4.app.Fragment {
         try {
             SharedPreferences sharedPref = getActivity().getSharedPreferences(MY_LANGUAGE, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.remove("com.example.ludicon.language");
-            editor.putString("com.example.ludicon.language", language);
+            editor.remove(LANGUAGE_KEY);
+            editor.putString(LANGUAGE_KEY, language);
             editor.apply();
         } catch (NullPointerException e) {
             e.printStackTrace();

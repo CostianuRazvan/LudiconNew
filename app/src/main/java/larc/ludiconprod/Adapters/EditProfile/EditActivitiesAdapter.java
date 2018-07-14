@@ -1,11 +1,11 @@
 package larc.ludiconprod.Adapters.EditProfile;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import larc.ludiconprod.Activities.ActivitiesActivity;
 import larc.ludiconprod.Activities.ActivityDetailsActivity;
+import larc.ludiconprod.Activities.BasicActivity;
 import larc.ludiconprod.Activities.EditProfileActivity;
 import larc.ludiconprod.Adapters.MainActivity.MyAdapter;
 import larc.ludiconprod.R;
@@ -37,6 +37,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
         public CircleImageView profileImage;
         public TextView creatorName;
         public TextView sportName;
+        public TextView sportNameLabel;
         public TextView ludicoinsNumber;
         public TextView pointsNumber;
         public TextView eventDate;
@@ -51,25 +52,66 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
 
     }
 
-    private ArrayList<Event> list = new ArrayList<>();
+    //TODO RO-EN
+
+    private ArrayList<Event> list;
     private Context context;
-    private Activity activity;
-    private Resources resources;
-    private EditProfileActivity fragment;
+    private BasicActivity activity;
     final ListView listView;
 
-    public EditActivitiesAdapter(ArrayList<Event> list, Context context, Activity activity, Resources resources, EditProfileActivity fragment) {
+    public EditActivitiesAdapter(ArrayList<Event> list, Context context, BasicActivity activity, Resources resources, EditProfileActivity fragment) {
         this.list = list;
         this.context = context;
         this.activity = activity;
-        this.resources = resources;
-        this.fragment = fragment;
 
         this.listView = (ListView) activity.findViewById(R.id.events_listView1); // era v.
     }
 
+    public String translateDate(String date) {
+        String ro = "";
+        Log.d("DEBUG", date);
+        String[] words = date.split(" ");
+        if (words[0].equalsIgnoreCase("today"))
+            ro = "Azi";
+        else if (words[0].equalsIgnoreCase("tomorrow"))
+            ro = "Maine";
+        else if (words[0].equalsIgnoreCase("monday,"))
+            ro = "Luni,";
+        else if (words[0].equalsIgnoreCase("tuesday,"))
+            ro = "Marti,";
+        else if (words[0].equalsIgnoreCase("wednesday,"))
+            ro = "Miercuri,";
+        else if (words[0].equalsIgnoreCase("thursday,"))
+            ro = "Joi,";
+        else if (words[0].equalsIgnoreCase("friday,"))
+            ro = "Vineri,";
+        else if (words[0].equalsIgnoreCase("saturday,"))
+            ro = "Saturday,";
+        else if (words[0].equalsIgnoreCase("sunday,"))
+            ro = "Sunday,";
+        else
+            ro = words[0];
 
-    public void setListOfEvents(ArrayList<Event> newList){
+        if (words.length <= 3) {
+            ro = ro + " la ";
+            ro = ro + words[2].split(",")[0];
+
+        } else {
+            ro += " " + words[1] + " " + words[2] + " " + words[3];
+            ro += " la " + words[5];
+        }
+        return ro;
+    }
+
+    public void translate(EditActivitiesAdapter.ViewHolder holder) {
+        if (activity.getLanguage().equalsIgnoreCase("ro")) {
+            holder.sportNameLabel.setText(R.string.ro_will_play);
+        } else {
+            holder.sportNameLabel.setText(R.string.en_will_play);
+        }
+    }
+
+    public void setListOfEvents(ArrayList<Event> newList) {
         this.list = newList;
         this.notifyDataSetChanged();
     }
@@ -92,7 +134,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             EditActivitiesAdapter.ViewHolder holder;
 
             final Event currentEvent = list.get(position);
@@ -106,6 +148,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
                 holder = new EditActivitiesAdapter.ViewHolder();
                 holder.profileImage = (CircleImageView) view.findViewById(R.id.profileImage);
                 holder.creatorName = (TextView) view.findViewById(R.id.creatorName);
+                holder.sportNameLabel = (TextView) view.findViewById(R.id.sportNameLabel);
                 holder.sportName = (TextView) view.findViewById(R.id.sportName);
                 holder.ludicoinsNumber = (TextView) view.findViewById(R.id.ludicoinsNumber);
                 holder.pointsNumber = (TextView) view.findViewById(R.id.pointsNumber);
@@ -117,8 +160,9 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
                 holder.friends2 = (CircleImageView) view.findViewById(R.id.friends2);
                 holder.friendsNumber = (TextView) view.findViewById(R.id.friendsNumber);
                 holder.imageViewBackground = (ImageView) view.findViewById(R.id.imageViewBackground);
-                holder.creatorLevelMyActivity=(TextView)view.findViewById(R.id.creatorLevelMyActivity);
+                holder.creatorLevelMyActivity = (TextView) view.findViewById(R.id.creatorLevelMyActivity);
 
+                translate(holder);
 
                 view.setTag(holder);
             } else {
@@ -280,7 +324,11 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 date = MyAdapter.getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
             }
-            holder.eventDate.setText(date);
+            if (activity.getLanguage().equalsIgnoreCase("ro"))
+                holder.eventDate.setText(translateDate(date));
+            else
+                holder.eventDate.setText(date);
+
 
         }
         return view;
