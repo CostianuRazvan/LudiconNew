@@ -4,34 +4,21 @@ package larc.ludiconprod.Adapters.MainActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -42,7 +29,6 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Activities.ActivitiesActivity;
-import larc.ludiconprod.Activities.ActivityDetailsActivity;
 import larc.ludiconprod.Activities.UserProfileActivity;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
@@ -64,7 +50,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return date.substring(0, 1).toUpperCase().concat(date.substring(1, 3));
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    private final String MY_LANGUAGE = "LANGUAGE";
+    private final String LANGUAGE_KEY = "com.example.ludicon.language";
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public CircleImageView profileImage;
         public TextView creatorName;
@@ -73,6 +62,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView ludicoinsNumber;
         public TextView pointsNumber;
         public TextView eventDate;
+        TextView playerLabel;
+        TextView perHourLabel;
+        TextView dateLabel;
+        TextView youGainLabel;
+        TextView locationLabel;
         public TextView locationEvent;
         public TextView playersNumber;
         public CircleImageView friends0;
@@ -87,6 +81,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             this.view = view;
+            this.youGainLabel = (TextView) view.findViewById(R.id.youGain);
+            this.dateLabel = (TextView) view.findViewById(R.id.date);
+            this.playerLabel = (TextView) view.findViewById(R.id.players);
+            this.perHourLabel = (TextView) view.findViewById(R.id.perHour);
+            this.locationLabel = (TextView) view.findViewById(R.id.location);
             this.profileImage = (CircleImageView) view.findViewById(R.id.profileImage);
             this.creatorName = (TextView) view.findViewById(R.id.creatorName);
             this.sportName = (TextView) view.findViewById(R.id.sportName);
@@ -114,6 +113,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.sportLabel.setTypeface(typeFace);
             this.ludicoinsNumber.setTypeface(typeFace);
             this.pointsNumber.setTypeface(typeFace);
+            this.youGainLabel.setTypeface(typeFace);
+            this.perHourLabel.setTypeface(typeFace);
+            this.playerLabel.setTypeface(typeFace);
+            this.dateLabel.setTypeface(typeFace);
+            this.locationLabel.setTypeface(typeFace);
             this.eventDate.setTypeface(typeFace);
             this.locationEvent.setTypeface(typeFace);
             this.playersNumber.setTypeface(typeFace);
@@ -142,27 +146,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-   /* public class ViewHolderSponsors extends RecyclerView.ViewHolder{
-
-        public LinearLayout sponsors;
-        View view;
-
-        public ViewHolderSponsors(View view) {
-            super(view);
-            this.view = view;
-            this.sponsors =(LinearLayout) view.findViewById(R.id.sponsors);
-
-
-
-            // Set name and picture for the first user of the event
-            //view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            final View currView = view;
-
-
-        }
-
-    }*/
 
     private ArrayList<Event> list = new ArrayList<>();
     private ArrayList<Sponsors> sponsorsList = new ArrayList<>();
@@ -179,7 +162,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.activity = activity;
         this.resources = resources;
         this.fragment = fragment;
-        this.sponsorsList=sponsorList;
+        this.sponsorsList = sponsorList;
 
         this.listView = (ListView) activity.findViewById(R.id.events_listView1); // era v.
     }
@@ -188,7 +171,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.list = newList;
         this.notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -205,7 +187,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 1:
 
                 view = inflater.inflate(R.layout.my_activity_card, null);
-                viewHolder=new ViewHolder(view);
+                viewHolder = new ViewHolder(view);
                 break;
 
         }
@@ -214,7 +196,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder,final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         // Clean up layout
         switch (holder.getItemViewType()) {
@@ -236,188 +218,248 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
                 break;*/
             case 1:
-                ((ViewHolder)holder).friends0.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friends1.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friends2.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friendsNumber.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).profileImage.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends0.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends1.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends2.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends0.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friends1.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friends2.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friendsNumber.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).profileImage.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends0.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends1.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends2.setImageResource(R.drawable.ph_user);
 
-            final Event currentEvent = list.get(position);
+                final Event currentEvent = list.get(position);
 
-            // Event details redirect
-                ((ViewHolder)holder).view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //holder.view.setBackgroundColor(Color.parseColor("#f5f5f5"));
-                    //getEventDetails & show progress bar when loading data
-                    ((ViewHolder)holder).progressBar.setAlpha(1);
-                    progressBarCard = ((ViewHolder)holder).progressBar;
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    HashMap<String, String> urlParams = new HashMap<String, String>();
-                    headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                // Event details redirect
+                ((ViewHolder) holder).view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //holder.view.setBackgroundColor(Color.parseColor("#f5f5f5"));
+                        //getEventDetails & show progress bar when loading data
+                        ((ViewHolder) holder).progressBar.setAlpha(1);
+                        progressBarCard = ((ViewHolder) holder).progressBar;
+                        HashMap<String, String> params = new HashMap<String, String>();
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        HashMap<String, String> urlParams = new HashMap<String, String>();
+                        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
 
-                    //set urlParams
-
-
-                    urlParams.put("eventId", currentEvent.id);
-                    System.out.println(currentEvent.id + "eventId");
-                    urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
-                    HTTPResponseController.getInstance().getEventDetails(params, headers, activity, urlParams);
+                        //set urlParams
 
 
-                }
-            });
+                        urlParams.put("eventId", currentEvent.id);
+                        System.out.println(currentEvent.id + "eventId");
+                        urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+                        HTTPResponseController.getInstance().getEventDetails(params, headers, activity, urlParams);
 
-            // Set user event creator name and picture
-                ((ViewHolder)holder).creatorName.setText(currentEvent.creatorName);
-            if (!currentEvent.creatorProfilePicture.equals("")) {
-                Bitmap bitmap = decodeBase64(currentEvent.creatorProfilePicture);
-                ((ViewHolder)holder).profileImage.setImageBitmap(bitmap);
 
-            }
-
-            // Redirect to user profile on picture tap
-                ((ViewHolder)holder).profileImage.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    String id = currentEvent.creatorId;
-                    if (Persistance.getInstance().getUserInfo(activity).id.equals(id)) {
-                        Toast.makeText(activity, "It's you :)", Toast.LENGTH_SHORT).show();
-                        return;
                     }
+                });
 
-                    Intent intent = new Intent(activity, UserProfileActivity.class);
-                    intent.putExtra("UserId", id);
-                    activity.startActivity(intent);
+                // Set user event creator name and picture
+                ((ViewHolder) holder).creatorName.setText(currentEvent.creatorName);
+                if (!currentEvent.creatorProfilePicture.equals("")) {
+                    Bitmap bitmap = decodeBase64(currentEvent.creatorProfilePicture);
+                    ((ViewHolder) holder).profileImage.setImageBitmap(bitmap);
+
                 }
-            });
+
+                // Redirect to user profile on picture tap
+                ((ViewHolder) holder).profileImage.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        String id = currentEvent.creatorId;
+                        if (Persistance.getInstance().getUserInfo(activity).id.equals(id)) {
+                            Toast.makeText(activity, "It's you :)", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        Intent intent = new Intent(activity, UserProfileActivity.class);
+                        intent.putExtra("UserId", id);
+                        activity.startActivity(intent);
+                    }
+                });
 
 
-            // Event details set message for sport played
-            Sport sport = new Sport(currentEvent.sportCode);
+                // Event details set message for sport played
+                String language = activity.getSharedPreferences(MY_LANGUAGE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en");
+                Sport sport = new Sport(currentEvent.sportCode, language);
 
-            String weWillPlayString = "";
-            String sportName = "";
+                String weWillPlayString = "";
+                String sportName = "";
 
-            if (currentEvent.sportCode.equalsIgnoreCase("JOG") || currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC")) {
-                weWillPlayString = "Will go to ";
-                sportName = sport.sportName;
-            } else {
-                if (currentEvent.sportCode.equalsIgnoreCase("OTH")) {
-                    weWillPlayString = "Will play ";
-                    sportName = currentEvent.otherSportName;
-                } else {
-                    weWillPlayString = "Will play ";
+                if (currentEvent.sportCode.equalsIgnoreCase("JOG") || currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC")) {
+                    if (language.equalsIgnoreCase("ro"))
+                        weWillPlayString = activity.getResources().getString(R.string.ro_will_go_to);
+                    else
+                        weWillPlayString = activity.getResources().getString(R.string.en_will_go_to);
                     sportName = sport.sportName;
+                } else {
+                    if (currentEvent.sportCode.equalsIgnoreCase("OTH")) {
+                        sportName = currentEvent.otherSportName;
+                    } else {
+                        sportName = sport.sportName;
+                    }
+                    if (language.equalsIgnoreCase("ro"))
+                        weWillPlayString = activity.getResources().getString(R.string.ro_will_play);
+                    else
+                        weWillPlayString = activity.getResources().getString(R.string.en_will_play);
                 }
-            }
 
-            sportName = sportName.substring(0, 1).toUpperCase() + sportName.substring(1);
+                sportName = sportName.substring(0, 1).toUpperCase() + sportName.substring(1);
 
-                ((ViewHolder)holder).sportLabel.setText(weWillPlayString);
-                ((ViewHolder)holder).sportName.setText(sportName);
+                ((ViewHolder) holder).sportLabel.setText(weWillPlayString);
+                ((ViewHolder) holder).sportName.setText(sportName);
 
-                ((ViewHolder)holder).ludicoinsNumber.setText("  +" + String.valueOf(currentEvent.ludicoins));
-                ((ViewHolder)holder).pointsNumber.setText("  +" + String.valueOf(currentEvent.points));
+                ((ViewHolder) holder).ludicoinsNumber.setText("  +" + String.valueOf(currentEvent.ludicoins));
+                ((ViewHolder) holder).pointsNumber.setText("  +" + String.valueOf(currentEvent.points));
 
 
-                ((ViewHolder)holder).locationEvent.setText(currentEvent.placeName);
-                ((ViewHolder)holder).playersNumber.setText(currentEvent.numberOfParticipants + "/" + currentEvent.capacity);
-            int counter = 0;
-            if (currentEvent.numberOfParticipants - 1 >= 1) {
-                ((ViewHolder)holder).friends0.setVisibility(View.VISIBLE);
-            }
-            if (currentEvent.numberOfParticipants - 1 >= 2) {
-                ((ViewHolder)holder).friends1.setVisibility(View.VISIBLE);
-            }
-            if (currentEvent.numberOfParticipants - 1 >= 3) {
-                ((ViewHolder)holder).friends2.setVisibility(View.VISIBLE);
-            }
-            if (currentEvent.numberOfParticipants - 1 >= 4) {
-                ((ViewHolder)holder).friendsNumber.setVisibility(View.VISIBLE);
-                ((ViewHolder)holder).friendsNumber.setText("+" + String.valueOf(currentEvent.numberOfParticipants - 4));
-
-            }
-            for (int i = 0; i < currentEvent.participansProfilePicture.size(); i++) {
-                if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 0) {
-                    Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
-                    ((ViewHolder)holder).friends0.setImageBitmap(bitmap);
-                } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 1) {
-                    Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
-                    ((ViewHolder)holder).friends1.setImageBitmap(bitmap);
-                } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 2) {
-                    Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
-                    ((ViewHolder)holder).friends2.setImageBitmap(bitmap);
+                ((ViewHolder) holder).locationEvent.setText(currentEvent.placeName);
+                ((ViewHolder) holder).playersNumber.setText(currentEvent.numberOfParticipants + "/" + currentEvent.capacity);
+                int counter = 0;
+                if (currentEvent.numberOfParticipants - 1 >= 1) {
+                    ((ViewHolder) holder).friends0.setVisibility(View.VISIBLE);
                 }
-            }
+                if (currentEvent.numberOfParticipants - 1 >= 2) {
+                    ((ViewHolder) holder).friends1.setVisibility(View.VISIBLE);
+                }
+                if (currentEvent.numberOfParticipants - 1 >= 3) {
+                    ((ViewHolder) holder).friends2.setVisibility(View.VISIBLE);
+                }
+                if (currentEvent.numberOfParticipants - 1 >= 4) {
+                    ((ViewHolder) holder).friendsNumber.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friendsNumber.setText("+" + String.valueOf(currentEvent.numberOfParticipants - 4));
 
-            switch (currentEvent.sportCode) {
-                case "FOT":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
-                    break;
-                case "BAS":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
-                    break;
-                case "VOL":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
-                    break;
-                case "JOG":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
-                    break;
-                case "GYM":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
-                    break;
-                case "CYC":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
-                    break;
-                case "TEN":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
-                    break;
-                case "PIN":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
-                    break;
-                case "SQU":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
-                    break;
-                case "OTH":
-                    ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
-                    break;
-            }
+                }
+                for (int i = 0; i < currentEvent.participansProfilePicture.size(); i++) {
+                    if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 0) {
+                        Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
+                        ((ViewHolder) holder).friends0.setImageBitmap(bitmap);
+                    } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 1) {
+                        Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
+                        ((ViewHolder) holder).friends1.setImageBitmap(bitmap);
+                    } else if (!currentEvent.participansProfilePicture.get(i).equals("") && i == 2) {
+                        Bitmap bitmap = decodeBase64(currentEvent.participansProfilePicture.get(i));
+                        ((ViewHolder) holder).friends2.setImageBitmap(bitmap);
+                    }
+                }
 
-                ((ViewHolder)holder).creatorLevelMyActivity.setText(String.valueOf(currentEvent.creatorLevel));
+                switch (currentEvent.sportCode) {
+                    case "FOT":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
+                        break;
+                    case "BAS":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
+                        break;
+                    case "VOL":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
+                        break;
+                    case "JOG":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
+                        break;
+                    case "GYM":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
+                        break;
+                    case "CYC":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
+                        break;
+                    case "TEN":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
+                        break;
+                    case "PIN":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
+                        break;
+                    case "SQU":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
+                        break;
+                    case "OTH":
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
+                        break;
+                }
 
-            // Event details set message for date and time
-            Calendar c = Calendar.getInstance();
-            Date today = c.getTime();
-            int todayDay = General.getDayOfMonth(today);
-            int todayMonth = today.getMonth();
-            int todayYear = c.get(Calendar.YEAR);
-            String displayDate = "";
-            String[] stringDateAndTime = currentEvent.eventDate.split(" ");
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                displayDate = formatter.format(formatter.parse(stringDateAndTime[0]));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            String[] stringDate = displayDate.split("-");
-            int year = Integer.parseInt(stringDate[0]);
-            String date = "";
-            if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
-                date = "Today, " + stringDateAndTime[1].substring(0, 5);
-            } else if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
-                date = "Tomorrow, " + stringDateAndTime[1].substring(0, 5);
-            } else if (year <= todayYear) {
-                date = getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
-            } else {
-                date = stringDate[2] + " " + getMonth(Integer.parseInt(stringDate[1])) + " " + year + ", " + stringDateAndTime[1].substring(0, 5);
-            }
-                ((ViewHolder)holder).eventDate.setText(date);
+                ((ViewHolder) holder).creatorLevelMyActivity.setText(String.valueOf(currentEvent.creatorLevel));
+
+                // Event details set message for date and time
+                Calendar c = Calendar.getInstance();
+                Date today = c.getTime();
+                int todayDay = General.getDayOfMonth(today);
+                int todayMonth = today.getMonth();
+                int todayYear = c.get(Calendar.YEAR);
+                String displayDate = "";
+                String[] stringDateAndTime = currentEvent.eventDate.split(" ");
+                try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    displayDate = formatter.format(formatter.parse(stringDateAndTime[0]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String[] stringDate = displayDate.split("-");
+                int year = Integer.parseInt(stringDate[0]);
+                String date = "";
+                if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
+                    date = "Today, " + stringDateAndTime[1].substring(0, 5);
+                } else if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
+                    date = "Tomorrow, " + stringDateAndTime[1].substring(0, 5);
+                } else if (year <= todayYear) {
+                    date = getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
+                } else {
+                    date = stringDate[2] + " " + getMonth(Integer.parseInt(stringDate[1])) + " " + year + ", " + stringDateAndTime[1].substring(0, 5);
+                }
+                date = translateDate(date);
+                translate(language, (ViewHolder) holder);
+                ((ViewHolder) holder).eventDate.setText(date);
                 break;
         }
+    }
+
+    public void translate(String language, MyAdapter.ViewHolder holder) {
+        if (language.equalsIgnoreCase("ro")) {
+            holder.youGainLabel.setText(R.string.ro_will_gain);
+            holder.locationLabel.setText(R.string.ro_location);
+            holder.dateLabel.setText(R.string.ro_date_and_time);
+            holder.playerLabel.setText(R.string.ro_players);
+            holder.perHourLabel.setText(R.string.ro_hour);
+        } else {
+            holder.locationLabel.setText(R.string.en_location);
+            holder.dateLabel.setText(R.string.en_date_and_time);
+            holder.playerLabel.setText(R.string.en_players);
+            holder.perHourLabel.setText(R.string.en_hour);
+            holder.youGainLabel.setText(R.string.en_will_gain);
+
+        }
+    }
+
+    public String translateDate(String date) {
+        String ro = "";
+        Log.d("DEBUG", date);
+        String[] words = date.split(" ");
+        if (words[0].equalsIgnoreCase("today,"))
+            ro = "Azi,";
+        else if (words[0].equalsIgnoreCase("tomorrow,"))
+            ro = "Maine,";
+        else if (words[0].equalsIgnoreCase("monday,"))
+            ro = "Luni,";
+        else if (words[0].equalsIgnoreCase("tuesday,"))
+            ro = "Marti,";
+        else if (words[0].equalsIgnoreCase("wednesday,"))
+            ro = "Miercuri,";
+        else if (words[0].equalsIgnoreCase("thursday,"))
+            ro = "Joi,";
+        else if (words[0].equalsIgnoreCase("friday,"))
+            ro = "Vineri,";
+        else if (words[0].equalsIgnoreCase("saturday,"))
+            ro = "Sambata,";
+        else if (words[0].equalsIgnoreCase("sunday,"))
+            ro = "Duminica,";
+        else
+            ro = words[0];
+
+        if (words.length <= 2) {
+            ro = ro + " " + words[1];
+        } else {
+            ro += " " + words[1] + " " + words[2];
+        }
+
+        return ro;
+
     }
 
     @Override
@@ -439,8 +481,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return 0;
         }
         else{*/
-            return 1;
-       // }
+        return 1;
+        // }
     }
 
 }

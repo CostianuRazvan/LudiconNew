@@ -1,7 +1,5 @@
 package larc.ludiconprod.Utils.util;
 
-import android.support.annotation.NonNull;
-
 import java.util.TreeMap;
 
 /**
@@ -13,51 +11,38 @@ public class Sport {
     public static final String GENERAL = "GEN";
 
     static {
-        SPORT_MAP.put("BAS", "basketball");
-        SPORT_MAP.put("CYC", "cycling");
-        SPORT_MAP.put("FOT", "football");
-        SPORT_MAP.put("GYM", "gym");
-        SPORT_MAP.put("JOG", "jogging");
-        SPORT_MAP.put("OTH", "other");
-        SPORT_MAP.put("PIN", "ping-pong");
-        SPORT_MAP.put("SQU", "squash");
-        SPORT_MAP.put("TEN", "tennis");
-        SPORT_MAP.put("VOL", "volleyball");
+        SPORT_MAP.put("BAS_en", "basketball");
+        SPORT_MAP.put("CYC_en", "cycling");
+        SPORT_MAP.put("FOT_en", "football");
+        SPORT_MAP.put("GYM_en", "gym");
+        SPORT_MAP.put("JOG_en", "jogging");
+        SPORT_MAP.put("OTH_en", "other");
+        SPORT_MAP.put("PIN_en", "ping-pong");
+        SPORT_MAP.put("SQU_en", "squash");
+        SPORT_MAP.put("TEN_en", "tennis");
+        SPORT_MAP.put("VOL_en", "volleyball");
+
+        SPORT_MAP.put("BAS_ro", "baschet");
+        SPORT_MAP.put("CYC_ro", "mers cu bicicleta");
+        SPORT_MAP.put("FOT_ro", "fotbal");
+        SPORT_MAP.put("GYM_ro", "sala");
+        SPORT_MAP.put("JOG_ro", "alergat");
+        SPORT_MAP.put("OTH_ro", "altele");
+        SPORT_MAP.put("PIN_ro", "ping-pong");
+        SPORT_MAP.put("SQU_ro", "squash");
+        SPORT_MAP.put("TEN_ro", "tenis");
+        SPORT_MAP.put("VOL_ro", "volei");
     }
+
+
     public final String sportName;
     public final String code;
 
+    public Sport(String code, String language) {
 
-    public Sport(String code){
+        this.code = code;
 
-        this.code=code;
-        /*switch (code){
-           case "BAS":this.sportName="basketball";
-               break;
-            case "CYC":this.sportName="cycling";
-                break;
-            case "FOT":this.sportName="football";
-                break;
-            case "GYM":this.sportName="gym";
-                break;
-            case "JOG":this.sportName="jogging";
-                break;
-            case "OTH":this.sportName="other";
-                break;
-            case "PIN":this.sportName="ping-pong";
-                break;
-            case "SQU":this.sportName="squash";
-                break;
-            case "TEN":this.sportName="tennis";
-                break;
-            case "VOL":this.sportName="volleyball";
-                break;
-            default: this.sportName="";
-                break;
-
-        }*/
-
-        String temp = SPORT_MAP.get(this.code);
+        String temp = SPORT_MAP.get(this.code + "_" + language);
         if (temp != null) {
             this.sportName = temp;
         } else {

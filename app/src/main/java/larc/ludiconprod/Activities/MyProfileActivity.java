@@ -1,27 +1,21 @@
 package larc.ludiconprod.Activities;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,14 +23,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +36,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
@@ -66,7 +56,7 @@ import larc.ludiconprod.Utils.util.Sport;
  * Created by alex_ on 10.08.2017.
  */
 
-public class MyProfileActivity extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener, Runnable {
+public class MyProfileActivity extends BasicFragment implements Response.Listener<JSONObject>, Response.ErrorListener, Runnable {
 
     protected Context mContext;
     protected View v;
@@ -155,29 +145,29 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                     confirmationDialog.message.setText("Are you sure you want to logout?");
                     confirmationDialog.message.setTypeface(typeFace);
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
-                                userNode.child("activeToken").setValue(false);
-                                Persistance.getInstance().deleteUserProfileInfo(activity);
-                                Log.v("logout", "am dat logout");
-                                SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
-                                preferences.edit().remove("ProfileImage").apply();
-                                activity.finish();
-                                Intent intent = new Intent(mContext, IntroActivity.class);
-                                startActivity(intent);
-                                confirmationDialog.dismiss();
-                                Persistance.getInstance().setHappeningNow(null, getActivity());
-                            }
-                        });
+                        @Override
+                        public void onClick(View view) {
+                            DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+                            userNode.child("activeToken").setValue(false);
+                            Persistance.getInstance().deleteUserProfileInfo(activity);
+                            Log.v("logout", "am dat logout");
+                            SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
+                            preferences.edit().remove("ProfileImage").apply();
+                            activity.finish();
+                            Intent intent = new Intent(mContext, IntroActivity.class);
+                            startActivity(intent);
+                            confirmationDialog.dismiss();
+                            Persistance.getInstance().setHappeningNow(null, getActivity());
+                        }
+                    });
 
-                        confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                confirmationDialog.dismiss();
-                            }
-                        });
-                    }
+                    confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            confirmationDialog.dismiss();
+                        }
+                    });
+                }
 
             });
         } catch (Exception e) {
@@ -191,7 +181,6 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
 
             }
         });*/
-
 
 
         return v;
@@ -214,6 +203,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
         super.onPause();
         this.runningTime = 0;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -431,26 +421,26 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
 
     public static int findSportImageResource(String sportCode) {
         switch (sportCode) {
-        case "BAS":
-            return R.drawable.ic_sport_basketball_large;
-        case "CYC":
-            return R.drawable.ic_sport_cycling_large;
-        case "FOT":
-            return R.drawable.ic_sport_football_large;
-        case "GYM":
-            return R.drawable.ic_sport_gym_large;
-        case "JOG":
-            return R.drawable.ic_sport_jogging_large;
-        case "PIN":
-            return R.drawable.ic_sport_pingpong_large;
-        case "SQU":
-            return R.drawable.ic_sport_squash_large;
-        case "TEN":
-            return R.drawable.ic_sport_tennis_large;
-        case "VOL":
-            return R.drawable.ic_sport_voleyball_large;
-        default:
-            return R.drawable.ic_sport_others_large;
+            case "BAS":
+                return R.drawable.ic_sport_basketball_large;
+            case "CYC":
+                return R.drawable.ic_sport_cycling_large;
+            case "FOT":
+                return R.drawable.ic_sport_football_large;
+            case "GYM":
+                return R.drawable.ic_sport_gym_large;
+            case "JOG":
+                return R.drawable.ic_sport_jogging_large;
+            case "PIN":
+                return R.drawable.ic_sport_pingpong_large;
+            case "SQU":
+                return R.drawable.ic_sport_squash_large;
+            case "TEN":
+                return R.drawable.ic_sport_tennis_large;
+            case "VOL":
+                return R.drawable.ic_sport_voleyball_large;
+            default:
+                return R.drawable.ic_sport_others_large;
             //return R.drawable.ic_sport_darts_large;
         }
     }
@@ -483,7 +473,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             JSONArray sports = jsonObject.getJSONArray("sports");
             u.sports.clear();
             for (int i = 0; i < sports.length(); ++i) {
-                u.sports.add(new Sport(sports.getString(i)));
+                u.sports.add(new Sport(sports.getString(i), getLanguage()));
             }
 
             JSONObject stat = jsonObject.getJSONObject("statistics");
@@ -540,6 +530,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
     private final ArrayList<Iterable> animations = new ArrayList<>();
     private float runningTime;
     private Thread animation;
+
     @Override
     public void run() {
         runningTime = 2;

@@ -1,6 +1,7 @@
 package larc.ludiconprod.Controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -74,6 +75,8 @@ public class HTTPResponseController {
     String prodServer = "http://207.154.236.13/";
     public static final String firebaseRefference = "https://ludicon-chat-cf900.firebaseio.com/";
     public static final String API_KEY = "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33";
+    private final String MY_LANGUAGE = "LANGUAGE";
+    private final String LANGUAGE_KEY = "com.example.ludicon.language";
 
     private static HTTPResponseController instance = null;
 
@@ -145,7 +148,7 @@ public class HTTPResponseController {
                         }
                         ArrayList<Sport> sports = new ArrayList<Sport>();
                         for (int i = 0; i < listOfSports.size(); i++) {
-                            Sport sport = new Sport(listOfSports.get(i));
+                            Sport sport = new Sport(listOfSports.get(i), activity.getSharedPreferences(MY_LANGUAGE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en"));
                             sports.add(sport);
                         }
                         System.out.println(jsonObject.getJSONObject("user").getString("firstName"));
@@ -198,24 +201,22 @@ public class HTTPResponseController {
                         Intent intent = new Intent(activity, IntroActivity.class);
                         activity.startActivity(intent);
                     }
-                } else
-                    if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
+                } else if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(activity, ResetPasswordFinalActivity.class);
-                                intent.putExtra("from", "register");
-                                activity.startActivity(intent);
-                            }
-                        }, 3000);
-                    } else
-                        if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
-                            Intent intent = new Intent(activity, Main.class);
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("FirstTime", true);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(activity, ResetPasswordFinalActivity.class);
+                            intent.putExtra("from", "register");
                             activity.startActivity(intent);
                         }
+                    }, 3000);
+                } else if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
+                    Intent intent = new Intent(activity, Main.class);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("FirstTime", true);
+                    activity.startActivity(intent);
+                }
             }
         };
     }
@@ -486,7 +487,7 @@ public class HTTPResponseController {
                     if (!ActivitiesActivity.startHappeningNow.isAlive() && ActivitiesActivity.startHappeningNow.getState() == Thread.State.NEW) {
                         ActivitiesActivity.startHappeningNow.start();
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -988,15 +989,13 @@ public class HTTPResponseController {
             LoginManager.getInstance().logOut();
             Intent intent = new Intent(activity, IntroActivity.class);
             activity.startActivity(intent);
-        } else
-            if (activity.getLocalClassName().toString().equals("Activities.CreateNewActivity")) {
-                CreateNewActivity.createActivityButton.setEnabled(true);
-            }
-            else{
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(activity, IntroActivity.class);
-                activity.startActivity(intent);
-            }
+        } else if (activity.getLocalClassName().toString().equals("Activities.CreateNewActivity")) {
+            CreateNewActivity.createActivityButton.setEnabled(true);
+        } else {
+            LoginManager.getInstance().logOut();
+            Intent intent = new Intent(activity, IntroActivity.class);
+            activity.startActivity(intent);
+        }
     }
 
     public JSONObject returnResponse(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, String url) {

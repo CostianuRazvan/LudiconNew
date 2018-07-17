@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,7 @@ import larc.ludiconprod.R;
 import larc.ludiconprod.User;
 import larc.ludiconprod.Utils.util.Sport;
 
-public class UserProfileActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class UserProfileActivity extends BasicActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     private User user = new User();
     private final HashMap<String, Integer> youPoints = new HashMap<>();
@@ -173,7 +172,7 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
             JSONArray sports = jsonObject.getJSONArray("sports");
             u.sports.clear();
             for (int i = 0; i < sports.length(); ++i) {
-                u.sports.add(new Sport(sports.getString(i)));
+                u.sports.add(new Sport(sports.getString(i), getLanguage()));
             }
 
             boolean friend = jsonObject.getBoolean("isFriend");

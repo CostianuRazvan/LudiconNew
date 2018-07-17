@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,16 +47,16 @@ import larc.ludiconprod.Utils.General;
 import larc.ludiconprod.Utils.util.Sponsors;
 import larc.ludiconprod.Utils.util.Sport;
 
-import static android.view.View.OVER_SCROLL_NEVER;
-
 
 public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private int scrollMax;
-    private int scrollPos =	0;
-    private Timer scrollTimer	=	null;
+    private int scrollPos = 0;
+    private Timer scrollTimer = null;
     private TimerTask scrollerSchedule;
-    Boolean right=true;
+    Boolean right = true;
+    private final String MY_LANGUAGE = "LANGUAGE";
+    private final String LANGUAGE_KEY = "com.example.ludicon.language";
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedBytes = Base64.decode(input, 0);
@@ -79,6 +78,11 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView ludicoinsNumber;
         TextView pointsNumber;
         TextView eventDate;
+        TextView playerLabel;
+        TextView perHourLabel;
+        TextView dateLabel;
+        TextView youGainLabel;
+        TextView locationLabel;
         TextView locationEvent;
         TextView playersNumber;
         CircleImageView friends0;
@@ -95,6 +99,11 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ViewHolder(View view) {
             super(view);
             this.view = view;
+            this.youGainLabel = (TextView) view.findViewById(R.id.youGain);
+            this.dateLabel = (TextView) view.findViewById(R.id.date);
+            this.playerLabel = (TextView) view.findViewById(R.id.players);
+            this.perHourLabel = (TextView) view.findViewById(R.id.perHour);
+            this.locationLabel = (TextView) view.findViewById(R.id.location);
             this.profileImage = (CircleImageView) view.findViewById(R.id.profileImage);
             this.creatorName = (TextView) view.findViewById(R.id.creatorName);
             this.sportName = (TextView) view.findViewById(R.id.sportName);
@@ -112,7 +121,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.imageViewBackground = (ImageView) view.findViewById(R.id.imageViewBackground);
             this.creatorLevelAroundMe = (TextView) view.findViewById(R.id.creatorLevelAroundMe);
             this.progressBar = (ProgressBar) view.findViewById(R.id.cardProgressBar);
-            this.friendsNumberLayout=(RelativeLayout)view.findViewById(R.id.friendsNumberLayout) ;
+            this.friendsNumberLayout = (RelativeLayout) view.findViewById(R.id.friendsNumberLayout);
             this.progressBar.setAlpha(0);
 
             Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");
@@ -124,6 +133,11 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.ludicoinsNumber.setTypeface(typeFace);
             this.pointsNumber.setTypeface(typeFace);
             this.eventDate.setTypeface(typeFace);
+            this.youGainLabel.setTypeface(typeFace);
+            this.perHourLabel.setTypeface(typeFace);
+            this.playerLabel.setTypeface(typeFace);
+            this.dateLabel.setTypeface(typeFace);
+            this.locationLabel.setTypeface(typeFace);
             this.locationEvent.setTypeface(typeFace);
             this.playersNumber.setTypeface(typeFace);
             this.friendsNumber.setTypeface(typeFace);
@@ -153,7 +167,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public class ViewHolderSponsors extends RecyclerView.ViewHolder{
+    public class ViewHolderSponsors extends RecyclerView.ViewHolder {
 
         public LinearLayout sponsors;
         public HorizontalScrollView scrollView;
@@ -162,9 +176,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ViewHolderSponsors(View view) {
             super(view);
             this.view = view;
-            this.sponsors =(LinearLayout) view.findViewById(R.id.sponsors);
-            this.scrollView =(HorizontalScrollView) view.findViewById(R.id.scrollView);
-
+            this.sponsors = (LinearLayout) view.findViewById(R.id.sponsors);
+            this.scrollView = (HorizontalScrollView) view.findViewById(R.id.scrollView);
 
 
             // Set name and picture for the first user of the event
@@ -186,23 +199,23 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     final RecyclerView listView;
     public static ProgressBar progressBarCard;
 
-    public AroundMeAdapter(ArrayList<Event> list,ArrayList<Sponsors> sponsorList, Context context, Activity activity, Resources resources, ActivitiesActivity fragment) {
+    public AroundMeAdapter(ArrayList<Event> list, ArrayList<Sponsors> sponsorList, Context context, Activity activity, Resources resources, ActivitiesActivity fragment) {
         this.list = list;
         this.context = context;
         this.activity = activity;
         this.resources = resources;
         this.fragment = fragment;
-        this.sponsorsList=sponsorList;
+        this.sponsorsList = sponsorList;
 
         this.listView = (RecyclerView) activity.findViewById(R.id.events_listView2); // era v.
     }
 
-    public AroundMeAdapter(ArrayList<Event> list,ArrayList<Sponsors> sponsorList, Context context, Activity activity, Resources resources) {
+    public AroundMeAdapter(ArrayList<Event> list, ArrayList<Sponsors> sponsorList, Context context, Activity activity, Resources resources) {
         this.list = list;
         this.context = context;
         this.activity = activity;
         this.resources = resources;
-        this.sponsorsList=sponsorList;
+        this.sponsorsList = sponsorList;
         this.listView = (RecyclerView) activity.findViewById(R.id.events_listView2); // era v.
     }
 
@@ -221,17 +234,72 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             case 0:
                 view = inflater.inflate(R.layout.activities_sponsors_card, null);
-                viewHolder=new AroundMeAdapter.ViewHolderSponsors(view);
+                viewHolder = new AroundMeAdapter.ViewHolderSponsors(view);
                 break;
             case 1:
 
                 view = inflater.inflate(R.layout.around_me_card, null);
-                viewHolder=new AroundMeAdapter.ViewHolder(view);
+                viewHolder = new AroundMeAdapter.ViewHolder(view);
                 break;
 
         }
         return viewHolder;
     }
+
+    public void translate(String language, ViewHolder holder) {
+        if (language.equalsIgnoreCase("ro")) {
+            holder.youGainLabel.setText(R.string.ro_will_gain);
+            holder.joinButton.setText(R.string.ro_join);
+            holder.locationLabel.setText(R.string.ro_location);
+            holder.dateLabel.setText(R.string.ro_date_and_time);
+            holder.playerLabel.setText(R.string.ro_players);
+            holder.perHourLabel.setText(R.string.ro_hour);
+        } else {
+            holder.joinButton.setText(R.string.en_join);
+            holder.locationLabel.setText(R.string.en_location);
+            holder.dateLabel.setText(R.string.en_date_and_time);
+            holder.playerLabel.setText(R.string.en_players);
+            holder.perHourLabel.setText(R.string.en_hour);
+            holder.youGainLabel.setText(R.string.en_will_gain);
+
+        }
+    }
+
+    public String translateDate(String date) {
+        String ro = "";
+        Log.d("DEBUG", date);
+        String[] words = date.split(" ");
+        if (words[0].equalsIgnoreCase("today,"))
+            ro = "Azi,";
+        else if (words[0].equalsIgnoreCase("tomorrow,"))
+            ro = "Maine,";
+        else if (words[0].equalsIgnoreCase("monday,"))
+            ro = "Luni,";
+        else if (words[0].equalsIgnoreCase("tuesday,"))
+            ro = "Marti,";
+        else if (words[0].equalsIgnoreCase("wednesday,"))
+            ro = "Miercuri,";
+        else if (words[0].equalsIgnoreCase("thursday,"))
+            ro = "Joi,";
+        else if (words[0].equalsIgnoreCase("friday,"))
+            ro = "Vineri,";
+        else if (words[0].equalsIgnoreCase("saturday,"))
+            ro = "Sambata,";
+        else if (words[0].equalsIgnoreCase("sunday,"))
+            ro = "Duminica,";
+        else
+            ro = words[0];
+
+        if (words.length <= 2) {
+            ro = ro + " " + words[1];
+        } else {
+            ro += " " + words[1] + " " + words[2];
+        }
+
+        return ro;
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -241,12 +309,13 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (holder.getItemViewType()) {
             case 0:
-                ((ViewHolderSponsors)holder).sponsors.removeAllViews();
-                for(int i=0;i < sponsorsList.size();i++){
+                ((ViewHolderSponsors) holder).sponsors.removeAllViews();
+                for (int i = 0; i < sponsorsList.size(); i++) {
                     int margins = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, activity.getResources().getDisplayMetrics());
-                    ImageView imageView=new ImageView(activity);
-                    Bitmap bitmap=decodeBase64(sponsorsList.get(i).logo);
+                    ImageView imageView = new ImageView(activity);
+                    Bitmap bitmap = decodeBase64(sponsorsList.get(i).logo);
                     imageView.setImageBitmap(bitmap);
+
 
                     LinearLayout.LayoutParams layoutMargins = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     if (i == sponsorsList.size() - 1) {
@@ -254,8 +323,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     } else {
                         layoutMargins.setMargins(0, 0, margins, 0);
                     }
-                    ((ViewHolderSponsors)holder).sponsors.addView(imageView,layoutMargins);
-                    ((ViewHolderSponsors)holder).scrollView.setOnTouchListener(new View.OnTouchListener() {
+                    ((ViewHolderSponsors) holder).sponsors.addView(imageView, layoutMargins);
+                    ((ViewHolderSponsors) holder).scrollView.setOnTouchListener(new View.OnTouchListener() {
 
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
@@ -265,13 +334,13 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     });
                 }
 
-                ViewTreeObserver vto 		=	((ViewHolderSponsors)holder).sponsors.getViewTreeObserver();
+                ViewTreeObserver vto = ((ViewHolderSponsors) holder).sponsors.getViewTreeObserver();
                 vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        ((ViewHolderSponsors)holder).sponsors.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        getScrollMaxAmount(((ViewHolderSponsors)holder).scrollView);
-                        startAutoScrolling(((ViewHolderSponsors)holder).scrollView);
+                        ((ViewHolderSponsors) holder).sponsors.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        getScrollMaxAmount(((ViewHolderSponsors) holder).scrollView);
+                        startAutoScrolling(((ViewHolderSponsors) holder).scrollView);
                     }
                 });
 
@@ -279,28 +348,28 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case 1:
                 final int pos;
-                if(sponsorsList.size() >= 1){
-                    pos=position-1;
+                if (sponsorsList.size() >= 1) {
+                    pos = position - 1;
 
-                }else{
-                    pos=position;
+                } else {
+                    pos = position;
                 }
-                ((ViewHolder)holder).friends0.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friends1.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friends2.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friendsNumber.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).friendsNumberLayout.setVisibility(View.INVISIBLE);
-                ((ViewHolder)holder).profileImage.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends0.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends1.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).friends2.setImageResource(R.drawable.ph_user);
-                ((ViewHolder)holder).joinButton.setEnabled(true);
-                ((ViewHolder)holder).view.setOnClickListener(new View.OnClickListener() {
+                ((ViewHolder) holder).friends0.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friends1.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friends2.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friendsNumber.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).friendsNumberLayout.setVisibility(View.INVISIBLE);
+                ((ViewHolder) holder).profileImage.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends0.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends1.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).friends2.setImageResource(R.drawable.ph_user);
+                ((ViewHolder) holder).joinButton.setEnabled(true);
+                ((ViewHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //getEventDetails & show progress bar when loading data
-                        ((ViewHolder)holder).progressBar.setAlpha(1);
-                        progressBarCard = ((ViewHolder)holder).progressBar;
+                        ((ViewHolder) holder).progressBar.setAlpha(1);
+                        progressBarCard = ((ViewHolder) holder).progressBar;
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
                         HashMap<String, String> urlParams = new HashMap<String, String>();
@@ -316,10 +385,10 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 // Set user event creator name and picture
-                ((ViewHolder)holder).creatorName.setText(list.get(pos).creatorName);
+                ((ViewHolder) holder).creatorName.setText(list.get(pos).creatorName);
                 if (!list.get(pos).creatorProfilePicture.equals("")) {
                     Bitmap bitmap = decodeBase64(list.get(pos).creatorProfilePicture);
-                    ((ViewHolder)holder).profileImage.setImageBitmap(bitmap);
+                    ((ViewHolder) holder).profileImage.setImageBitmap(bitmap);
                 }
 
                 // Card color for Ludicon Bucharest
@@ -333,7 +402,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 */
 
                 // Redirect to user profile on picture tap
-                ((ViewHolder)holder).profileImage.setOnClickListener(new View.OnClickListener() {
+                ((ViewHolder) holder).profileImage.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         String id = list.get(pos).creatorId;
                         if (Persistance.getInstance().getUserInfo(activity).id.equals(id)) {
@@ -349,97 +418,105 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 // Event details set message for sport played
-                Sport sport = new Sport(list.get(pos).sportCode);
+                String language = activity.getSharedPreferences(MY_LANGUAGE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en");
+                Sport sport = new Sport(list.get(pos).sportCode, language);
                 String weWillPlayString = "";
                 String sportName = "";
 
                 if (list.get(pos).sportCode.equalsIgnoreCase("JOG") || list.get(pos).sportCode.equalsIgnoreCase("GYM") || list.get(position).sportCode.equalsIgnoreCase("CYC")) {
-                    weWillPlayString = "Will go to ";
+                    if (language.equalsIgnoreCase("ro"))
+                        weWillPlayString = activity.getResources().getString(R.string.ro_will_go_to);
+                    else
+                        weWillPlayString = activity.getResources().getString(R.string.en_will_go_to);
                     sportName = sport.sportName;
                 } else {
                     if (list.get(pos).sportCode.equalsIgnoreCase("OTH")) {
-                        weWillPlayString = "Will play ";
                         sportName = list.get(pos).otherSportName;
                     } else {
-                        weWillPlayString = "Will play ";
                         sportName = sport.sportName;
                     }
+                    if (language.equalsIgnoreCase("ro"))
+                        weWillPlayString = activity.getResources().getString(R.string.ro_will_play);
+                    else
+                        weWillPlayString = activity.getResources().getString(R.string.en_will_play);
                 }
+
+                weWillPlayString += " ";
 
                 sportName = sportName.substring(0, 1).toUpperCase() + sportName.substring(1);
 
-                ((ViewHolder)holder).sportLabel.setText(weWillPlayString);
-                ((ViewHolder)holder).sportName.setText(sportName);
+                ((ViewHolder) holder).sportLabel.setText(weWillPlayString);
+                ((ViewHolder) holder).sportName.setText(sportName);
 
 
-                ((ViewHolder)holder).ludicoinsNumber.setText("  +" + String.valueOf(list.get(pos).ludicoins));
-                ((ViewHolder)holder).pointsNumber.setText("  +" + String.valueOf(list.get(pos).points));
+                ((ViewHolder) holder).ludicoinsNumber.setText("  +" + String.valueOf(list.get(pos).ludicoins));
+                ((ViewHolder) holder).pointsNumber.setText("  +" + String.valueOf(list.get(pos).points));
 
 
-                ((ViewHolder)holder).locationEvent.setText(list.get(pos).placeName);
-                ((ViewHolder)holder).playersNumber.setText(list.get(pos).numberOfParticipants + "/" + list.get(pos).capacity);
+                ((ViewHolder) holder).locationEvent.setText(list.get(pos).placeName);
+                ((ViewHolder) holder).playersNumber.setText(list.get(pos).numberOfParticipants + "/" + list.get(pos).capacity);
                 if (list.get(pos).numberOfParticipants - 1 >= 1) {
-                    ((ViewHolder)holder).friends0.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friends0.setVisibility(View.VISIBLE);
                 }
                 if (list.get(pos).numberOfParticipants - 1 >= 2) {
-                    ((ViewHolder)holder).friends1.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friends1.setVisibility(View.VISIBLE);
                 }
                 if (list.get(pos).numberOfParticipants - 1 >= 3) {
-                    ((ViewHolder)holder).friends2.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friends2.setVisibility(View.VISIBLE);
                 }
                 if (list.get(pos).numberOfParticipants - 1 >= 4) {
-                    ((ViewHolder)holder).friendsNumber.setVisibility(View.VISIBLE);
-                    ((ViewHolder)holder).friendsNumberLayout.setVisibility(View.VISIBLE);
-                    ((ViewHolder)holder).friendsNumber.setText("+" + String.valueOf(list.get(pos).numberOfParticipants - 4));
+                    ((ViewHolder) holder).friendsNumber.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friendsNumberLayout.setVisibility(View.VISIBLE);
+                    ((ViewHolder) holder).friendsNumber.setText("+" + String.valueOf(list.get(pos).numberOfParticipants - 4));
 
                 }
                 for (int i = 0; i < list.get(pos).participansProfilePicture.size(); i++) {
                     if (!list.get(pos).participansProfilePicture.get(i).equals("") && i == 0) {
                         Bitmap bitmap = decodeBase64(list.get(pos).participansProfilePicture.get(i));
-                        ((ViewHolder)holder).friends0.setImageBitmap(bitmap);
+                        ((ViewHolder) holder).friends0.setImageBitmap(bitmap);
                     } else if (!list.get(pos).participansProfilePicture.get(i).equals("") && i == 1) {
                         Bitmap bitmap = decodeBase64(list.get(pos).participansProfilePicture.get(i));
-                        ((ViewHolder)holder).friends1.setImageBitmap(bitmap);
+                        ((ViewHolder) holder).friends1.setImageBitmap(bitmap);
                     } else if (!list.get(pos).participansProfilePicture.get(i).equals("") && i == 2) {
                         Bitmap bitmap = decodeBase64(list.get(pos).participansProfilePicture.get(i));
-                        ((ViewHolder)holder).friends2.setImageBitmap(bitmap);
+                        ((ViewHolder) holder).friends2.setImageBitmap(bitmap);
                     }
                 }
 
                 switch (list.get(pos).sportCode) {
                     case "FOT":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_football);
                         break;
                     case "BAS":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_basketball);
                         break;
                     case "VOL":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_volleyball);
                         break;
                     case "JOG":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_jogging);
                         break;
                     case "GYM":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_gym);
                         break;
                     case "CYC":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_cycling);
                         break;
                     case "TEN":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_tennis);
                         break;
                     case "PIN":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_pingpong);
                         break;
                     case "SQU":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_squash);
                         break;
                     case "OTH":
-                        ((ViewHolder)holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
+                        ((ViewHolder) holder).imageViewBackground.setBackgroundResource(R.drawable.bg_sport_others);
                         break;
                 }
 
-                ((ViewHolder)holder).creatorLevelAroundMe.setText(String.valueOf(list.get(pos).creatorLevel));
+                ((ViewHolder) holder).creatorLevelAroundMe.setText(String.valueOf(list.get(pos).creatorLevel));
 
                 // Event details set message for date and time
                 Calendar c = Calendar.getInstance();
@@ -467,10 +544,16 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 } else {
                     date = stringDate[2] + " " + getMonth(Integer.parseInt(stringDate[1])) + " " + year + ", " + stringDateAndTime[1].substring(0, 5);
                 }
-                ((ViewHolder)holder).eventDate.setText(date);
+
+                if (language.equalsIgnoreCase("ro"))
+                    date = translateDate(date);
+
+                translate(language, (ViewHolder) holder);
+
+                ((ViewHolder) holder).eventDate.setText(date);
 
                 // Event details set action on join button
-                ((ViewHolder)holder).joinButton.setOnClickListener(new View.OnClickListener() {
+                ((ViewHolder) holder).joinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         HashMap<String, String> params = new HashMap<String, String>();
@@ -479,7 +562,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         params.put("eventId", list.get(pos).id);
                         params.put("userId", Persistance.getInstance().getUserInfo(activity).id);
                         HTTPResponseController.getInstance().joinEvent(activity, params, headers, list.get(pos).id, fragment);
-                        ((ViewHolder)holder).joinButton.setEnabled(false);
+                        ((ViewHolder) holder).joinButton.setEnabled(false);
                     }
                 });
 
@@ -503,36 +586,35 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        if(position == 0 && sponsorsList.size() >= 1){
+        if (position == 0 && sponsorsList.size() >= 1) {
             return 0;
-        }
-        else{
+        } else {
             return 1;
         }
     }
 
-    public void getScrollMaxAmount(HorizontalScrollView horizontalScrollView){
+    public void getScrollMaxAmount(HorizontalScrollView horizontalScrollView) {
         int actualWidth = (horizontalScrollView.getMaxScrollAmount());
 
-        scrollMax   = actualWidth;
+        scrollMax = actualWidth;
     }
 
-    public void startAutoScrolling(final HorizontalScrollView horizontalScrollView){
+    public void startAutoScrolling(final HorizontalScrollView horizontalScrollView) {
         if (scrollTimer == null) {
-            scrollTimer					=	new Timer();
-            final Runnable Timer_Tick 	= 	new Runnable() {
+            scrollTimer = new Timer();
+            final Runnable Timer_Tick = new Runnable() {
                 public void run() {
                     moveScrollView(horizontalScrollView);
                 }
             };
 
-            if(scrollerSchedule != null){
+            if (scrollerSchedule != null) {
                 scrollerSchedule.cancel();
                 scrollerSchedule = null;
             }
-            scrollerSchedule = new TimerTask(){
+            scrollerSchedule = new TimerTask() {
                 @Override
-                public void run(){
+                public void run() {
                     activity.runOnUiThread(Timer_Tick);
                 }
             };
@@ -541,22 +623,22 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void moveScrollView(HorizontalScrollView horizontalScrollView){
+    public void moveScrollView(HorizontalScrollView horizontalScrollView) {
 
-        if(scrollPos < scrollMax && right){
+        if (scrollPos < scrollMax && right) {
             scrollPos = (int) (horizontalScrollView.getScrollX() + 1.0);
 
         }
-        if(scrollPos > 0 && !right){
+        if (scrollPos > 0 && !right) {
             scrollPos = (int) (horizontalScrollView.getScrollX() - 1.0);
 
         }
         horizontalScrollView.scrollTo(scrollPos, 0);
-        if(scrollPos == scrollMax){
-            right =false;
+        if (scrollPos == scrollMax) {
+            right = false;
         }
-        if(scrollPos == 0){
-            right =true;
+        if (scrollPos == 0) {
+            right = true;
         }
 
     }

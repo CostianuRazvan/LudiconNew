@@ -218,7 +218,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
 
 
             // Event details set message for sport played
-            Sport sport = new Sport(currentEvent.sportCode);
+            Sport sport = new Sport(currentEvent.sportCode, activity.getLanguage());
 
             String weWillPlayString = "";
 

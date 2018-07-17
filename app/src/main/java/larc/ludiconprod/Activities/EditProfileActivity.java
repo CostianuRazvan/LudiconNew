@@ -1,16 +1,12 @@
 package larc.ludiconprod.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,7 +24,6 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -168,7 +163,7 @@ public class EditProfileActivity extends BasicActivity implements View.OnClickLi
 
         old.sports.clear();
         for (int i = 0; i < sports.size(); ++i) {
-            Sport sport = new Sport(sports.get(i));
+            Sport sport = new Sport(sports.get(i), getLanguage());
             old.sports.add(sport);
         }
 
@@ -314,7 +309,7 @@ public class EditProfileActivity extends BasicActivity implements View.OnClickLi
         user.sports.clear();
         for (int i = 0; i < sports.size(); ++i) {
             params.put("sports[" + i + "]", sports.get(i));
-            Sport sport = new Sport(sports.get(i));
+            Sport sport = new Sport(sports.get(i), getLanguage());
             user.sports.add(sport);
         }
 
@@ -397,7 +392,7 @@ public class EditProfileActivity extends BasicActivity implements View.OnClickLi
         t.range = 1 + this.range.getProgress() + "";
         t.sports.clear();
         for (int i = 0; i < sports.size(); ++i) {
-            Sport sport = new Sport(sports.get(i));
+            Sport sport = new Sport(sports.get(i), getLanguage());
             t.sports.add(sport);
         }
         Persistance.getInstance().setUserInfo(this, t);

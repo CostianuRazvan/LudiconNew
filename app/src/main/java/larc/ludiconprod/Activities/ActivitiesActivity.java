@@ -339,7 +339,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
                     });
 
 
-                    Sport sport = new Sport(currentEvent.sportCode);
+                    Sport sport = new Sport(currentEvent.sportCode, getLanguage());
                     String weWillPlayString = "";
                     String sportName = "";
 

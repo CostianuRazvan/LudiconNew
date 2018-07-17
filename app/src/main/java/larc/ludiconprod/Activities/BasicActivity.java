@@ -1,6 +1,5 @@
 package larc.ludiconprod.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 public class BasicActivity extends AppCompatActivity {
 
@@ -34,12 +32,12 @@ public class BasicActivity extends AppCompatActivity {
 
     public String getLanguage() {
         SharedPreferences sharedPref = getSharedPreferences(MY_LANGUAGE, MODE_PRIVATE);
-        return sharedPref.getString(LANGUAGE_KEY, "ATATATA");
+        return sharedPref.getString(LANGUAGE_KEY, "en");
     }
 
     public void setLanguage(String language) {
 
-        Log.d("LANGUAGE", language);
+        Log.d(MY_LANGUAGE, language);
         try {
             SharedPreferences sharedPref = getSharedPreferences(MY_LANGUAGE, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();

@@ -29,16 +29,12 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginBehavior;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -63,7 +59,7 @@ import me.anwarshahriar.calligrapher.Calligrapher;
  * Created by ancuta on 7/10/2017.
  */
 
-public class IntroActivity extends Activity {
+public class IntroActivity extends BasicActivity {
     int i = 0;
 
     Button loginButton;
@@ -163,8 +159,7 @@ public class IntroActivity extends Activity {
         System.out.println(Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId + " fbid");
         if (Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId != null && Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId.equals("")) {
             goToActivity();
-        } else
-        if (!go) {
+        } else if (!go) {
             final GraphRequest request = new GraphRequest(
                     AccessToken.getCurrentAccessToken(),
                     "/me/friends",
@@ -175,7 +170,7 @@ public class IntroActivity extends Activity {
                             final ArrayList<String> friends = new ArrayList<String>();
                             JSONArray friendsList;
                             try {
-                                if(response != null && response.getJSONObject() != null) {
+                                if (response != null && response.getJSONObject() != null) {
                                     friendsList = response.getJSONObject().getJSONArray("data");
                                     for (int l = 0; l < friendsList.length(); l++) {
                                         friends.add(friendsList.getJSONObject(l).getString("id"));
@@ -192,7 +187,7 @@ public class IntroActivity extends Activity {
                                 params.put("email", email);
                                 params.put("password", password);
                                 params.put("isCustom", "1");
-                                if(response != null && response.getJSONObject() != null) {
+                                if (response != null && response.getJSONObject() != null) {
                                     for (int i = 0; i < friends.size(); i++) {
                                         params.put("fbFriends[" + i + "]", friends.get(i));
                                     }
@@ -317,7 +312,7 @@ public class IntroActivity extends Activity {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-                            /* handle the result */
+                        /* handle the result */
                         try {
                             JSONArray friendsList = response.getJSONObject().getJSONArray("data");
 
@@ -394,7 +389,7 @@ public class IntroActivity extends Activity {
                 registerButton.setVisibility(View.VISIBLE);
                 infoTextView.setVisibility(View.VISIBLE);
                 termsAndPrivacyPolicy.setVisibility(View.VISIBLE);
-        }
+            }
         });
     }
 
@@ -402,8 +397,8 @@ public class IntroActivity extends Activity {
         String firstName = profile.getFirstName();
         String lastName = profile.getLastName();
         String email = "";
-        if(object != null) {
-           email = object.optString("email");
+        if (object != null) {
+            email = object.optString("email");
         }
         String password = loginResult.getAccessToken().getUserId();
         final HashMap<String, String> params = new HashMap<String, String>();
@@ -425,7 +420,7 @@ public class IntroActivity extends Activity {
                         image = bitmap;
                         String imageString = ProfileDetailsActivity.encodeToBase64(image, Bitmap.CompressFormat.JPEG, 100);
                         setImageForProfile(IntroActivity.this, imageString);
-                        Log.v("poza",imageString);
+                        Log.v("poza", imageString);
                         logo.animate().translationY(300f);
                         logo.animate().translationY(-300f).setDuration(1000);
                         betaText.animate().translationY(300f);

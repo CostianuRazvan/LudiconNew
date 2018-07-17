@@ -304,7 +304,7 @@ public class ActivityDetailsActivity extends BasicActivity implements OnMapReady
         }
 
         creatorName.setText(eventDetails.creatorName);
-        Sport sport = new Sport(eventDetails.sportName);
+        Sport sport = new Sport(eventDetails.sportName, getLanguage());
         String weWillPlayString = "";
 
         if (sport.code.equalsIgnoreCase("JOG") ||
