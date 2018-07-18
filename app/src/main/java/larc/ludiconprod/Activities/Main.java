@@ -5,11 +5,9 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import larc.ludiconprod.BottomBarHelper.BottomBar;
-import larc.ludiconprod.BottomBarHelper.OnTabReselectListener;
 import larc.ludiconprod.BottomBarHelper.OnTabSelectListener;
 import larc.ludiconprod.Dialogs.PointsReceivedDialog;
 import larc.ludiconprod.Layer.DataPersistence.ChatPersistence;
@@ -31,7 +29,7 @@ public class Main extends BasicActivity {
 
         // Initialize bottom bar
         this.bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-
+        translate();
         // Go to chat list activity when notification is thrown
         ChatPersistence chatPersistence = ChatPersistence.getInstance();
         String chatNotificationStatus = chatPersistence.getChatNotificationStatus(this);
@@ -115,6 +113,22 @@ public class Main extends BasicActivity {
             bundle.putInt("level", 1);
             dialog.setArguments(bundle);
             dialog.show(this.getFragmentManager(), "tag");
+        }
+    }
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            bottomBar.getTabAtPosition(0).setTitle(getResources().getString(R.string.ro_activities));
+            bottomBar.getTabAtPosition(1).setTitle(getResources().getString(R.string.ro_coupons));
+            bottomBar.getTabAtPosition(2).setTitle(getResources().getString(R.string.ro_leaderboard));
+            bottomBar.getTabAtPosition(3).setTitle(getResources().getString(R.string.ro_friends_chat));
+            bottomBar.getTabAtPosition(4).setTitle(getResources().getString(R.string.ro_my_profile));
+        } else {
+            bottomBar.getTabAtPosition(0).setTitle(getResources().getString(R.string.en_activities));
+            bottomBar.getTabAtPosition(1).setTitle(getResources().getString(R.string.en_coupons));
+            bottomBar.getTabAtPosition(2).setTitle(getResources().getString(R.string.en_leaderboard));
+            bottomBar.getTabAtPosition(3).setTitle(getResources().getString(R.string.en_friends_chat));
+            bottomBar.getTabAtPosition(4).setTitle(getResources().getString(R.string.en_my_profile));
         }
     }
 

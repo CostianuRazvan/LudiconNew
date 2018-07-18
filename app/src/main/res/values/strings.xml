@@ -45,6 +45,33 @@
     <string name="ro_description">Descriere</string>
     <string name="ro_location">Locatie</string>
     <string name="ro_activity">Activitate</string>
+    <string name="ro_register_success">Înregistrare reușită</string>
+    <string name="ro_email_sent_instructions">V-am trimis un mail cu instrucțiuni</string>
+    <string name="ro_check_your_inbox">Vă rugăm să vă verificați căsuța electronică și să urmați pașii din mail</string>
+    <string name="ro_return_to_login">ÎNTOARCERE LA PAGINA PRINCIPALĂ</string>
+    <string name="ro_reset_password">Reseteaza Parola</string>
+    <string name="ro_enter_email_for_instructions">Introdu email-ul tau si iti vom trimite mai multe detalii pentru resetarea parolei</string>
+    <string name="ro_profile_details">Detalii profil</string>
+    <string name="ro_new_out_here">Esti nou aici </string>
+    <string name="ro_cool">Super!</string>
+    <string name="ro_take_a_moment">Ia-ti un moment si seteaza-ti profilul si incepe sa folosesti aplicatia. Vei putea sa intalesti alti sportivi cat de curand.</string>
+    <string name="ro_male">Masculin</string>
+    <string name="ro_female">Femimin</string>
+    <string name="ro_how_old">Ce varsta ai</string>
+    <string name="ro_save_and_continue">SALVEAZA &amp; CONTINUA</string>
+    <string name="ro_sport_follow">Alege sporturile pe care ai dori sa le practici</string>
+    <string name="ro_sport_details">Detalii despre sporturi</string>
+    <string name="ro_area_range">Alege distanta maxima de cautat activitati</string>
+    <string name="ro_save_preferences">SALVEAZA PREFERINTE</string>
+    <string name="ro_activities">Activitati</string>
+    <string name="ro_coupons">Cupoane</string>
+    <string name="ro_leaderboard">Clasament</string>
+    <string name="ro_friends_chat">Chat cu prietenii</string>
+    <string name="ro_my_profile">Profilul meu</string>
+    <string name="ro_no_activities">Nu exista activitati in jurul tau</string>
+    <string name="ro_press_plus_button">Apasa pe Plus pentru a crea o noua activitate</string>
+    <string name="ro_discover_plus_button">Descopera &amp; participa la alte activitatir Create a new one by pressing the “Plus Button”</string>
+
 
     <string name="en_forgot_password">Forgot your password?</string>
     <string name="en_email_address">Email Adress</string>
@@ -84,6 +111,33 @@
     <string name="en_description">Description</string>
     <string name="en_location">Location</string>
     <string name="en_activity">Activity</string>
+    <string name="en_register_success">Register Success</string>
+    <string name="en_email_sent_instructions">We’ve sent you an email with instructions</string>
+    <string name="en_check_your_inbox">Please check your inbox and follow the directions</string>
+    <string name="en_return_to_login">RETURN TO LOGIN</string>
+    <string name="en_reset_password">Reset password</string>
+    <string name="en_enter_email_for_instructions">Enter your email address below and we’ll send you password reset instructions</string>
+    <string name="en_profile_details">Profile Details</string>
+    <string name="en_new_out_here">New out here </string>
+    <string name="en_cool">Cool!</string>
+    <string name="en_take_a_moment">Take a moment, set up your profile and get going. You will be able to meet sport people around you very soon.</string>
+    <string name="en_male">Male</string>
+    <string name="en_female">Female</string>
+    <string name="en_how_old">How old are you?</string>
+    <string name="en_save_and_continue">SAVE &amp; CONTINUE</string>
+    <string name="en_sport_follow">Select what sports you would like to follow</string>
+    <string name="en_sport_details">Sport Details</string>
+    <string name="en_area_range">Select the area range for activities around</string>
+    <string name="en_save_preferences">SAVE PREFERENCES</string>
+    <string name="en_activities">Activities</string>
+    <string name="en_coupons">Coupons</string>
+    <string name="en_leaderboard">Leaderboard</string>
+    <string name="en_friends_chat">Chat Friends</string>
+    <string name="en_my_profile">My Profile</string>
+    <string name="en_no_activities">No activities around you</string>
+    <string name="en_press_plus_button">Press the “Plus Button” to Create a New Activity</string>
+    <string name="en_discover_plus_button">Discover &amp; Join Activities or Create a new one by pressing the “Plus Button”</string>
+
 
     <string name="app_name">Ludicon</string>
     <string name="title_activity_main">MainActivity</string>

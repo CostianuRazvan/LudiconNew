@@ -35,8 +35,16 @@ public class Sport {
     }
 
 
-    public final String sportName;
-    public final String code;
+    public String sportName;
+    public String code;
+
+    public Sport() {
+
+    }
+
+    public String getSportName(String code, String language) {
+        return SPORT_MAP.get(this.code + "_" + language);
+    }
 
     public Sport(String code, String language) {
 

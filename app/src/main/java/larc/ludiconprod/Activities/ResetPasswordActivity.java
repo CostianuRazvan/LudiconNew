@@ -1,6 +1,5 @@
 package larc.ludiconprod.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -28,11 +27,14 @@ import me.anwarshahriar.calligrapher.Calligrapher;
  * Created by ancuta on 7/11/2017.
  */
 
-public class ResetPasswordActivity extends Activity {
+public class ResetPasswordActivity extends BasicActivity {
 
     RelativeLayout backButton;
     Button resetPassword;
     EditText email;
+    TextView titleText;
+    TextView enterEmailText;
+
 
     public boolean checkFieldsConstraints() {
         boolean isVerified = false;
@@ -45,6 +47,7 @@ public class ResetPasswordActivity extends Activity {
 
         return isVerified;
     }
+
     // Hide soft keyboard
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -64,13 +67,14 @@ public class ResetPasswordActivity extends Activity {
         setContentView(R.layout.reset_password_activity);
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
-        TextView titleText = (TextView) findViewById(R.id.titleText);
+        titleText = (TextView) findViewById(R.id.titleText);
         titleText.setText("Reset Password");
         titleText.setTypeface(typeFace);
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
         backButton = (RelativeLayout) findViewById(R.id.backButton);
+        enterEmailText = (TextView) findViewById(R.id.textView2);
         resetPassword = (Button) findViewById(R.id.resetPasswordButton);
         resetPassword.setTypeface(typeFaceBold);
         email = (EditText) findViewById(R.id.emailAdress);
@@ -96,7 +100,7 @@ public class ResetPasswordActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-               finish();
+                finish();
             }
         });
         resetPassword.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +115,24 @@ public class ResetPasswordActivity extends Activity {
             }
         });
 
+        translate();
+
+    }
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            resetPassword.setText(R.string.ro_reset_password);
+            titleText.setText(R.string.ro_reset_password);
+            resetPassword.setAllCaps(true);
+            enterEmailText.setText(R.string.ro_enter_email_for_instructions);
+            email.setHint(R.string.ro_email_address);
+        } else {
+            resetPassword.setText(R.string.en_reset_password);
+            titleText.setText(R.string.en_reset_password);
+            enterEmailText.setText(R.string.en_enter_email_for_instructions);
+            resetPassword.setAllCaps(true);
+            email.setHint(R.string.en_email_address);
+        }
     }
 
     private void resetPassword() {

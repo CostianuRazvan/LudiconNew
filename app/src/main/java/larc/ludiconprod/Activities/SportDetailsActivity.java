@@ -54,14 +54,18 @@ public class SportDetailsActivity extends BasicActivity {
     ArrayList<String> sports = new ArrayList<>();
 
     private final String API = "http://207.154.236.13/api/user/";
+    TextView titleText;
+    TextView sportFollow;
+    TextView areaRangeText;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.sport_details_activity);
         football = (RadioButton) findViewById(R.id.football);
-        TextView titleText = (TextView) findViewById(R.id.titleText);
+        titleText = (TextView) findViewById(R.id.titleText);
         titleText.setText("Sport Details");
+        Sport sportClass = new Sport();
         backButton = (RelativeLayout) findViewById(R.id.backButton);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         seekBar.setMax(19);
@@ -73,6 +77,8 @@ public class SportDetailsActivity extends BasicActivity {
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
         titleText.setTypeface(typeFace);
+        sportFollow = (TextView) findViewById(R.id.textView4);
+        areaRangeText = (TextView) findViewById(R.id.textViewRange);
         savePreferincesButton.setTypeface(typeFaceBold);
         for (int i = 0; i < sportsArray.length; i++) {
             sports.add(sportsArray[i]);
@@ -111,6 +117,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
 
+        football.setText(sportClass.getSportName("FOT", getLanguage()));
         football.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +142,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         basketball = (RadioButton) findViewById(R.id.basketball);
+        basketball.setText(sportClass.getSportName("BAS", getLanguage()));
         basketball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +167,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         volleyball = (RadioButton) findViewById(R.id.volleyball);
+        volleyball.setText(sportClass.getSportName("VOL", getLanguage()));
         volleyball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,6 +192,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         jogging = (RadioButton) findViewById(R.id.jogging);
+        jogging.setText(sportClass.getSportName("JOG", getLanguage()));
         jogging.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,6 +217,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         gym = (RadioButton) findViewById(R.id.gym);
+        gym.setText(sportClass.getSportName("GYM", getLanguage()));
         gym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,6 +242,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         cycling = (RadioButton) findViewById(R.id.cycling);
+        cycling.setText(sportClass.getSportName("CYC", getLanguage()));
         cycling.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,6 +291,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         pingPong = (RadioButton) findViewById(R.id.pingPong);
+        pingPong.setText(sportClass.getSportName("PIN", getLanguage()));
         pingPong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -303,6 +316,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         squash = (RadioButton) findViewById(R.id.squash);
+        squash.setText(sportClass.getSportName("SQU", getLanguage()));
         squash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,6 +341,7 @@ public class SportDetailsActivity extends BasicActivity {
             }
         });
         others = (RadioButton) findViewById(R.id.others);
+        others.setText(sportClass.getSportName("OTH", getLanguage()));
         others.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -388,6 +403,20 @@ public class SportDetailsActivity extends BasicActivity {
         });
 
 
+    }
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            areaRangeText.setText(R.string.ro_area_range);
+            sportFollow.setText(R.string.ro_sport_follow);
+            titleText.setText(R.string.ro_sport_details);
+            savePreferincesButton.setText(R.string.ro_save_preferences);
+        } else {
+            areaRangeText.setText(R.string.en_area_range);
+            sportFollow.setText(R.string.en_sport_follow);
+            titleText.setText(R.string.en_sport_details);
+            savePreferincesButton.setText(R.string.en_save_preferences);
+        }
     }
 
     @Override

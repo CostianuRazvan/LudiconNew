@@ -1,6 +1,5 @@
 package larc.ludiconprod.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -50,9 +49,40 @@ public class ProfileDetailsActivity extends BasicActivity {
     String myBase64Image;
     Button saveAndContinueButton;
     TextView introText;
+    TextView titleText;
+    TextView descriptionText;
 
     int sex = 0;
     EditText age;
+
+    private void translate(String name) {
+        String introTextString;
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            introTextString = getResources().getString(R.string.ro_new_out_here);
+            introTextString += " " + name + "?";
+            introTextString += getResources().getString(R.string.ro_cool);
+            titleText.setText(R.string.ro_profile_details);
+            descriptionText.setText(R.string.ro_take_a_moment);
+            age.setHint(R.string.ro_how_old);
+            saveAndContinueButton.setText(R.string.ro_save_and_continue);
+            saveAndContinueButton.setAllCaps(true);
+            male.setText(R.string.ro_male);
+            female.setText(R.string.ro_female);
+        } else {
+            titleText.setText(R.string.en_profile_details);
+            introTextString = getResources().getString(R.string.en_new_out_here);
+            introTextString += " " + name + "?";
+            introTextString += getResources().getString(R.string.en_cool);
+            descriptionText.setText(R.string.en_take_a_moment);
+            age.setHint(R.string.en_how_old);
+            saveAndContinueButton.setText(R.string.en_save_and_continue);
+            saveAndContinueButton.setAllCaps(true);
+            male.setText(R.string.en_male);
+            female.setText(R.string.en_female);
+        }
+        introText.setText(introTextString);
+
+    }
 
     public String getImageForProfile() {
         SharedPreferences sharedPreferences = ProfileDetailsActivity.this.getSharedPreferences("ProfileImage", 0);
@@ -81,7 +111,7 @@ public class ProfileDetailsActivity extends BasicActivity {
         final Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
 
         RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.tool_bar);
-        TextView title = (TextView)toolbar.findViewById(R.id.titleText);
+        TextView title = (TextView) toolbar.findViewById(R.id.titleText);
         title.setTypeface(typeFace);
 
         backButton = findViewById(R.id.backButton);
@@ -94,13 +124,12 @@ public class ProfileDetailsActivity extends BasicActivity {
         english = (RadioButton) findViewById(R.id.RadioBtnEditEn);
         languageSwitch = (RadioGroup) findViewById(R.id.RadioBtnEditLang);
         female = (RadioButton) findViewById(R.id.female);
-        TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText("Profile Details");
+        titleText = (TextView) findViewById(R.id.titleText);
         sexSwitch = (RadioGroup) findViewById(R.id.sexSwitch);
         chooseAPhoto = (ImageView) findViewById(R.id.chooseAPhoto);
         chooseAPhoto.setImageResource(R.drawable.ic_image_add);
         imgProfilePicture = (ImageView) findViewById(R.id.imgProfilePicture);
-        TextView descriptionText = (TextView) findViewById(R.id.textView5);
+        descriptionText = (TextView) findViewById(R.id.textView5);
 
         descriptionText.setTypeface(typeFace);
         male.setTypeface(typeFace);
@@ -117,7 +146,7 @@ public class ProfileDetailsActivity extends BasicActivity {
         saveAndContinueButton = (Button) findViewById(R.id.saveAndContinueButton);
         saveAndContinueButton.setTypeface(typeFaceBold);
         introText = (TextView) findViewById(R.id.introText);
-        introText.setText("First time here, " + Persistance.getInstance().getUserInfo(this).firstName + "? Cool!");
+        String name = Persistance.getInstance().getUserInfo(this).firstName;
         introText.setTypeface(typeFace);
         age = (EditText) findViewById(R.id.age);
         age.setTypeface(typeFace);
@@ -134,11 +163,10 @@ public class ProfileDetailsActivity extends BasicActivity {
             if (getIntent().getStringExtra("gender").equals("0")) {
                 male.setChecked(true);
                 male.setTextColor(Color.parseColor("#ffffff"));
-            } else
-                if (getIntent().getStringExtra("gender").equals("1")) {
-                    female.setChecked(true);
-                    female.setTextColor(Color.parseColor("#ffffff"));
-                }
+            } else if (getIntent().getStringExtra("gender").equals("1")) {
+                female.setChecked(true);
+                female.setTextColor(Color.parseColor("#ffffff"));
+            }
         }
         age.addTextChangedListener(new TextWatcher() {
             @Override
@@ -233,23 +261,25 @@ public class ProfileDetailsActivity extends BasicActivity {
                 }
             }
         });
+
+        translate(name);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-        case PICK_IMAGE_ID:
-            Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-            if (bitmap != null) {
-                imgProfilePicture.setImageBitmap(bitmap);
-                myBase64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 50);
-                chooseAPhoto.setImageResource(R.drawable.ic_image_edit);
-                System.out.println("dimensiunea este:" + myBase64Image.length());
-            }
-            break;
-        default:
-            super.onActivityResult(requestCode, resultCode, data);
-            break;
+            case PICK_IMAGE_ID:
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                if (bitmap != null) {
+                    imgProfilePicture.setImageBitmap(bitmap);
+                    myBase64Image = encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 50);
+                    chooseAPhoto.setImageResource(R.drawable.ic_image_edit);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
         }
     }
 

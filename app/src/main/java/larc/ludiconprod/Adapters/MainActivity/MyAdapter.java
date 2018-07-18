@@ -146,7 +146,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-
     private ArrayList<Event> list = new ArrayList<>();
     private ArrayList<Sponsors> sponsorsList = new ArrayList<>();
     private Context context;
