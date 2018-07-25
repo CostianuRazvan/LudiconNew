@@ -33,7 +33,7 @@
                     android:id="@+id/noLocationText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/there_is_no_authorised_location_available_yet_for_this_sport"
+                    android:text="there_is_no_authorised_location_available_yet_for_this_sport"
                     android:textStyle="italic"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
@@ -42,8 +42,6 @@
                     android:layout_centerVertical="true"
                     />
             </RelativeLayout>
-
-
 
 
 

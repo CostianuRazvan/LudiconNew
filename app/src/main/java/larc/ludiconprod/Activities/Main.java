@@ -133,6 +133,12 @@ public class Main extends BasicActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        translate();
+    }
+
+    @Override
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame);
         if (currentFragment.getClass().equals(ActivitiesActivity.class)) {

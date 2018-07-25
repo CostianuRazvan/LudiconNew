@@ -250,9 +250,8 @@ public class UserProfileActivity extends BasicActivity implements Response.Liste
 
                     @Override
                     public void onClick(View view) {
-                        final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this);
+                        final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this, getLanguage());
                         confirmationDialog.show();
-                        confirmationDialog.title.setText("Confirm?");
                         confirmationDialog.title.setTypeface(typeFaceBold);
                         confirmationDialog.message.setText("Are you sure you want to unfollow " + firstName + "?");
                         confirmationDialog.message.setTypeface(typeFace);
@@ -441,9 +440,8 @@ public class UserProfileActivity extends BasicActivity implements Response.Liste
 
             @Override
             public void onClick(View view) {
-                final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this);
+                final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this, getLanguage());
                 confirmationDialog.show();
-                confirmationDialog.title.setText("Confirm?");
                 confirmationDialog.title.setTypeface(typeFaceBold);
                 confirmationDialog.message.setText("Are you sure you want to unfollow " + firstName + "?");
                 confirmationDialog.message.setTypeface(typeFace);

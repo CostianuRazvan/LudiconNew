@@ -138,9 +138,8 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
 
                 @Override
                 public void onClick(View view) {
-                    confirmationDialog = new ConfirmationDialog(getActivity());
+                    confirmationDialog = new ConfirmationDialog(getActivity(), getLanguage());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
                     confirmationDialog.title.setTypeface(typeFaceBold);
                     confirmationDialog.message.setText("Are you sure you want to logout?");
                     confirmationDialog.message.setTypeface(typeFace);

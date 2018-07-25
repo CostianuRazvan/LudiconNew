@@ -18,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,7 +53,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +79,6 @@ import larc.ludiconprod.Utils.util.Sport;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 import static larc.ludiconprod.Activities.Main.bottomBar;
-import static larc.ludiconprod.Utils.Constants.CONFIRM;
 
 /**
  * Created by ancuta on 7/26/2017.
@@ -93,7 +90,9 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     private Context mContext;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"AROUND ME", "MY ACTIVITIES"};
+    CharSequence EN_TITLES[] = {"AROUND ME", "MY ACTIVITIES"};
+    CharSequence RO_TITLES[] = {"IN JURUL MEU", "ACTIVITATILE MELE"};
+
     int Numboftabs = 2;
     private View v;
     boolean addedSwipeAroundMe = false;
@@ -300,9 +299,8 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
                                 final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),
                                         "fonts/Quicksand-Medium.ttf");
                                 final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold.ttf");
-                                final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
+                                final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity(), getLanguage());
                                 confirmationDialog.show();
-                                confirmationDialog.title.setText(CONFIRM);
                                 confirmationDialog.title.setTypeface(typeFaceBold);
                                 confirmationDialog.message.setText("Are you sure you want to stop sweating on points?");
                                 confirmationDialog.message.setTypeface(typeFace);
@@ -594,7 +592,12 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             super.onCreate(savedInstanceState);
 
             // Creating ViewPager Adapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs
-            adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), Titles, Numboftabs);
+
+            if (getLanguage().equalsIgnoreCase("ro"))
+                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), RO_TITLES, Numboftabs);
+            else
+                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), EN_TITLES, Numboftabs);
+
 
             // Assigning ViewPager View and setting the adapter
             pager = (ViewPager) v.findViewById(R.id.pager);
@@ -1148,7 +1151,10 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             }
             Log.d("Response", error.toString());
             if (error instanceof NetworkError) {
-                this.prepareError("No internet connection!");
+                if (getLanguage().equalsIgnoreCase("ro"))
+                    this.prepareError(getResources().getString(R.string.ro_no_internet_connection));
+                else
+                    this.prepareError(getResources().getString(R.string.en_no_internet_connection));
             }
         } catch (NullPointerException e) {
             e.printStackTrace();

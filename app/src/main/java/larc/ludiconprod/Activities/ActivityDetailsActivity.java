@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.content.IntentCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -604,9 +603,8 @@ public class ActivityDetailsActivity extends BasicActivity implements OnMapReady
                 @Override
                 public void onClick(View view) {
 
-                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity, getLanguage());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
                     confirmationDialog.title.setTypeface(typeFaceBold);
                     confirmationDialog.message.setText("Are you sure you want to delete this event?");
                     confirmationDialog.message.setTypeface(typeFace);
@@ -666,9 +664,8 @@ public class ActivityDetailsActivity extends BasicActivity implements OnMapReady
             joinOrUnjoinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity, getLanguage());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
                     confirmationDialog.title.setTypeface(typeFaceBold);
                     confirmationDialog.message.setText("Are you sure you want to unjoin this event?");
                     confirmationDialog.message.setTypeface(typeFace);

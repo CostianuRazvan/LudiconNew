@@ -14,9 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +45,7 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
         TextView description;
         TextView validDate;
         TextView ludicoinsCode;
+        TextView getItNow;
     }
 
     public CouponsAdapter(ArrayList<Coupon> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
@@ -92,6 +90,8 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
 
                 holder = new CouponsAdapter.ViewHolder();
                 holder.locationImage = (ImageView) view.findViewById(R.id.locationImage);
+                holder.getItNow = (TextView) view.findViewById(R.id.getItText);
+                holder.getItNow.setTypeface(typeFace);
                 holder.title = (TextView) view.findViewById(R.id.title);
                 holder.title.setTypeface(typeFace);
                 holder.location = (TextView) view.findViewById(R.id.location);
@@ -119,12 +119,13 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                 public void onClick(View v) {
                     currView.setBackgroundColor(Color.parseColor("#f5f5f5"));
 
-                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity, fragment.getLanguage());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
+
                     confirmationDialog.title.setTypeface(typeFaceBold);
-                    confirmationDialog.message.setText("Are you sure you want to reedem this coupon?");
                     confirmationDialog.message.setTypeface(typeFace);
+                    confirmationDialog.confirm.setTypeface(typeFace);
+                    confirmationDialog.dismiss.setTypeface(typeFace);
 
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -139,8 +140,6 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                             confirmationDialog.dismiss();
                         }
                     });
-
-
 
 
                     confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
@@ -166,10 +165,25 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
             holder.description.setText(currentCoupon.description);
 
             Date date = new Date(currentCoupon.expiryDate * 1000);
-            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
-            holder.validDate.setText("Valid till " + fmt.format(date));
+            translate(holder, date);
         }
 
+
         return view;
+    }
+
+    private void translate(ViewHolder holder, Date date) {
+        String text;
+        SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        text = fmt.format(date);
+        if (fragment.getLanguage().equalsIgnoreCase("ro")) {
+            text = fragment.getResources().getString(R.string.ro_valid_til) + " " + text;
+            holder.getItNow.setText(R.string.ro_get_it_now);
+        } else {
+            text = fragment.getResources().getString(R.string.en_valid_til) + " " + text;
+            holder.getItNow.setText(R.string.en_get_it_now);
+        }
+
+        holder.validDate.setText(text);
     }
 }

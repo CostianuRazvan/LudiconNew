@@ -19,9 +19,11 @@ public class ConfirmationDialog extends Dialog {
     public TextView message;
     public Button confirm;
     public Button dismiss;
+    private String language;
 
-    public ConfirmationDialog(Activity activity) {
+    public ConfirmationDialog(Activity activity, String language) {
         super(activity);
+        this.language = language;
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
     }
 
@@ -34,5 +36,21 @@ public class ConfirmationDialog extends Dialog {
         message = (TextView) findViewById(R.id.message);
         confirm = (Button) findViewById(R.id.cofirm);
         dismiss = (Button) findViewById(R.id.dismiss);
+
+        translate();
+    }
+
+    private void translate() {
+        if (language.equalsIgnoreCase("ro")) {
+            title.setText(R.string.ro_confirm);
+            message.setText(R.string.ro_coupons_message);
+            confirm.setText(R.string.ro_yes);
+            dismiss.setText(R.string.ro_no);
+        } else {
+            title.setText(R.string.en_confirm);
+            title.setText(R.string.en_coupons_message);
+            confirm.setText(R.string.en_yes);
+            dismiss.setText(R.string.en_no);
+        }
     }
 }

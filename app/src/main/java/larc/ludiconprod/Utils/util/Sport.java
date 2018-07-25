@@ -43,7 +43,7 @@ public class Sport {
     }
 
     public String getSportName(String code, String language) {
-        return SPORT_MAP.get(this.code + "_" + language);
+        return SPORT_MAP.get(code + "_" + language);
     }
 
     public Sport(String code, String language) {

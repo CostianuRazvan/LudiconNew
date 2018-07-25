@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
@@ -49,7 +48,9 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 
 public class CouponsActivity extends BasicFragment implements Response.ErrorListener, Response.Listener<JSONObject> {
 
-    private static final CharSequence TITLES[] = {"COUPONS", "MY COUPONS"};
+    private static final String EN_TITLES[] = {"COUPONS", "MY COUPONS"};
+    private static final String RO_TITLES[] = {"CUPOANE", "CUPOANELE MELE"};
+
 
     private Context mContext;
     private int tabsNumber = 2;
@@ -421,7 +422,6 @@ public class CouponsActivity extends BasicFragment implements Response.ErrorList
         TextView ludicoins = (TextView) v.findViewById(R.id.cuponsLudicoins);
         Typeface typeFace = Typeface.createFromAsset(super.getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
         ludicoins.setTypeface(typeFace);
-        //int ludicoinsS = Persistance.getInstance().getProfileInfo(getActivity()).ludicoins;
         int ludicoinsS = Persistance.getInstance().getUserInfo(getActivity()).ludicoins;
         ludicoins.setText(String.valueOf(ludicoinsS));
         while (activity == null) {
@@ -430,8 +430,14 @@ public class CouponsActivity extends BasicFragment implements Response.ErrorList
 
         try {
             super.onCreate(savedInstanceState);
+            String coupons_name[];
 
-            this.adapter = new CouponsPagerAdapter(this.getFragmentManager(), CouponsActivity.TITLES, this.tabsNumber, this);
+            if (getLanguage().equalsIgnoreCase("ro"))
+                coupons_name = CouponsActivity.RO_TITLES;
+            else
+                coupons_name = CouponsActivity.EN_TITLES;
+
+            this.adapter = new CouponsPagerAdapter(this.getFragmentManager(), coupons_name, this.tabsNumber, this);
 
             pager = (ViewPager) v.findViewById(R.id.couponsPager);
             pager.setAdapter(adapter);
@@ -538,6 +544,10 @@ public class CouponsActivity extends BasicFragment implements Response.ErrorList
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void translate() {
+
     }
 
     @Override

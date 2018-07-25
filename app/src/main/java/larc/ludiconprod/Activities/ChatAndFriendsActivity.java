@@ -31,7 +31,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -42,7 +41,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 
@@ -57,7 +55,6 @@ import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.ui.SlidingTabLayout;
 
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
-import static larc.ludiconprod.Activities.ChatActivity.isOnChat1to1;
 import static larc.ludiconprod.Activities.Main.bottomBar;
 
 /**
@@ -74,6 +71,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     public static ArrayList<Friend> friends = new ArrayList<>();
     private View v;
     CharSequence Titles[] = {"CONVERSATIONS", "FOLLOWING"};
+    CharSequence RO_TITLES[] = {"CONVERSATII", "URMARIRI"};
     int Numboftabs = 2;
     ArrayList<Chat> chatList = new ArrayList<>();
     static public ChatAndFriendsActivity currentFragment;
@@ -192,11 +190,11 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                         } else {
                             names = "";
                         }
-                        int counterOfNames=0;
+                        int counterOfNames = 0;
                         for (DataSnapshot users : dataSnapshot.child("users").getChildren()) {
 
                             if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                if(counterOfNames == 0) {
+                                if (counterOfNames == 0) {
                                     if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
                                         names += users.child("name").getValue().toString() + ",";
                                         counterOfNames++;
@@ -204,18 +202,18 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                         names += "Unknown" + ",";
                                         counterOfNames++;
                                     }
-                                }else if(counterOfNames == 1){
+                                } else if (counterOfNames == 1) {
                                     if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                        if(dataSnapshot.child("users").getChildrenCount() > 3) {
+                                        if (dataSnapshot.child("users").getChildrenCount() > 3) {
                                             names += users.child("name").getValue().toString() + "....";
-                                        }else{
+                                        } else {
                                             names += users.child("name").getValue().toString() + ",";
                                         }
                                         counterOfNames++;
                                     } else {
-                                        if(dataSnapshot.child("users").getChildrenCount() > 3) {
+                                        if (dataSnapshot.child("users").getChildrenCount() > 3) {
                                             names += "Unknown" + "....";
-                                        }else{
+                                        } else {
                                             names += "Unknown" + ",";
                                         }
                                         counterOfNames++;
@@ -280,11 +278,11 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                             } else {
                                 names = "";
                             }
-                            int counterOfNames=0;
+                            int counterOfNames = 0;
                             for (DataSnapshot users : dataSnapshot.child("users").getChildren()) {
 
                                 if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                    if(counterOfNames == 0) {
+                                    if (counterOfNames == 0) {
                                         if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
                                             names += users.child("name").getValue().toString() + ",";
                                             counterOfNames++;
@@ -292,18 +290,18 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                             names += "Unknown" + ",";
                                             counterOfNames++;
                                         }
-                                    }else if(counterOfNames == 1){
+                                    } else if (counterOfNames == 1) {
                                         if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                            if(dataSnapshot.child("users").getChildrenCount() > 3) {
+                                            if (dataSnapshot.child("users").getChildrenCount() > 3) {
                                                 names += users.child("name").getValue().toString() + "....";
-                                            }else{
+                                            } else {
                                                 names += users.child("name").getValue().toString() + ",";
                                             }
                                             counterOfNames++;
                                         } else {
-                                            if(dataSnapshot.child("users").getChildrenCount() > 3) {
+                                            if (dataSnapshot.child("users").getChildrenCount() > 3) {
                                                 names += "Unknown" + "....";
-                                            }else{
+                                            } else {
                                                 names += "Unknown" + ",";
                                             }
                                             counterOfNames++;
@@ -333,12 +331,11 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                         chatList.add(0, chat);
                                         setAdapter();
                                         isAlreadyProcess = false;
-                                    } else
-                                        if (chatList.size() == 0) {
-                                            chatList.add(0, chat);
-                                            setAdapter();
-                                            isAlreadyProcess = false;
-                                        }
+                                    } else if (chatList.size() == 0) {
+                                        chatList.add(0, chat);
+                                        setAdapter();
+                                        isAlreadyProcess = false;
+                                    }
                                 }
 
                                 @Override
@@ -419,15 +416,15 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                 chatImage.setVisibility(View.INVISIBLE);
                 chatListView.setVisibility(View.VISIBLE);
             }
-            shouldRequestPage=true;
-            if(isLastPage){
-                ArrayList<String> unseenChats=new ArrayList<>();
-                for(int i=0;i<chatList.size();i++){
-                   if(!chatList.get(i).lastMessageId.equals(chatList.get(i).lastMessageSeen)) {
-                       unseenChats.add(chatList.get(i).chatId);
-                   }
+            shouldRequestPage = true;
+            if (isLastPage) {
+                ArrayList<String> unseenChats = new ArrayList<>();
+                for (int i = 0; i < chatList.size(); i++) {
+                    if (!chatList.get(i).lastMessageId.equals(chatList.get(i).lastMessageSeen)) {
+                        unseenChats.add(chatList.get(i).chatId);
+                    }
                 }
-                Persistance.getInstance().setUnseenChats(activity,unseenChats);
+                Persistance.getInstance().setUnseenChats(activity, unseenChats);
             }
             if (chatListView != null && shouldRequestPage) {
                 chatListView.setOnTouchListener(new View.OnTouchListener() {
@@ -566,7 +563,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 numberOfTotalChatsArrived = 0;
                 for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                    if(chats.hasChild("last_message_date")){
+                    if (chats.hasChild("last_message_date")) {
                         numberOfTotalChatsArrived++;
                     }
                 }
@@ -577,10 +574,10 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                         if (chats.hasChild("event_id")) {
                             chat.eventId = chats.child("event_id").getValue().toString();
                         }
-                        String names ="";
+                        String names = "";
 
-                        int counterOfNames=0;
-                        if(chats.hasChild("event_info")){
+                        int counterOfNames = 0;
+                        if (chats.hasChild("event_info")) {
                             // Format date
                             String dateShort = chats.child("event_info").child("date").getValue().toString();
                             long dateShortInt = 0;
@@ -590,10 +587,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                 TimeZone tz = TimeZone.getDefault();
                                 formatter.setTimeZone(tz);
 
-                                java.util.Date date = new java.util.Date( dateShortInt * 1000);
+                                java.util.Date date = new java.util.Date(dateShortInt * 1000);
                                 dateShort = formatter.format(date);
-                            }
-                            catch (NumberFormatException ex){
+                            } catch (NumberFormatException ex) {
                                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -610,13 +606,12 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                             }
                             // Format sport
                             String sport = chats.child("event_info").child("sport_code").getValue().toString();
-                            if(sport.compareToIgnoreCase("OTH") == 0){
+                            if (sport.compareToIgnoreCase("OTH") == 0) {
                                 sport = chats.child("event_info").child("other_sport_name").getValue().toString();
                             }
 
                             chat.participantName = dateShort + " - " + sport + " ";
-                        }
-                        else {
+                        } else {
                             for (DataSnapshot users : chats.child("users").getChildren()) {
 
                                 if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
@@ -693,7 +688,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                 }
                                 if (numberOfTotalChatsArrived == counterOfChats) {
                                     setAdapter();
-                                    Persistance.getInstance().setConversation(activity,chatList);
+                                    Persistance.getInstance().setConversation(activity, chatList);
                                 }
                             }
 
@@ -702,7 +697,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
 
                             }
                         });
-                    }else{
+                    } else {
 
                         if (numberOfTotalChatsArrived == counterOfChats) {
                             isLastPage = true;
@@ -710,9 +705,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                         }
                     }
                 }
-                if(numberOfTotalChatsArrived == 0){
+                if (numberOfTotalChatsArrived == 0) {
                     setAdapter();
-                    isLastPage=true;
+                    isLastPage = true;
                 }
             }
 
@@ -735,7 +730,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     numberOfTotalChatsArrived = 0;
                     for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                        if(chats.hasChild("last_message_date")){
+                        if (chats.hasChild("last_message_date")) {
                             numberOfTotalChatsArrived++;
                         }
                     }
@@ -747,7 +742,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                 chat.eventId = chats.child("event_id").getValue().toString();
                             }
 
-                            if(chats.hasChild("event_info")){
+                            if (chats.hasChild("event_info")) {
                                 // Format date
                                 String dateShort = chats.child("event_info").child("date").getValue().toString();
                                 long dateShortInt = 0;
@@ -757,10 +752,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                     TimeZone tz = TimeZone.getDefault();
                                     formatter.setTimeZone(tz);
 
-                                    java.util.Date date = new java.util.Date( dateShortInt * 1000);
+                                    java.util.Date date = new java.util.Date(dateShortInt * 1000);
                                     dateShort = formatter.format(date);
-                                }
-                                catch (NumberFormatException ex){
+                                } catch (NumberFormatException ex) {
                                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -778,13 +772,12 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                 }
                                 // Format sport
                                 String sport = chats.child("event_info").child("sport_code").getValue().toString();
-                                if(sport.compareToIgnoreCase("OTH") == 0){
+                                if (sport.compareToIgnoreCase("OTH") == 0) {
                                     sport = chats.child("event_info").child("other_sport_name").getValue().toString();
                                 }
 
                                 chat.participantName = dateShort + " - " + sport + " ";
-                            }
-                            else {
+                            } else {
                                 String names;
                                 if (chat.eventId != null) {
                                     names = "Group:";
@@ -832,50 +825,50 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                             if (chats.hasChild("seen")) {
                                 chat.lastMessageSeen = chats.child("seen").getValue().toString();
                             }
-                                chat.lastMessageTime = Double.valueOf(chats.child("last_message_date").getValue().toString());
-                                DatabaseReference lastMessageRef = chats.child("messages").getRef();
-                                Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
-                                lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                            chat.lastMessage = child.child("message").getValue().toString();
-                                            chat.lastMessageId = child.getKey().toString();
-                                        }
-                                        if (counterOfChats > 0 || numberOfTotalChatsArrived < 16) {
-                                            chatList.add(numberOfChatsPage * 15, chat);
-                                            counterOfChats++;
-                                        } else {
-                                            counterOfChats++;
-                                            keyOfLastChat = chat.chatId;
-                                            valueOfLastChat = chat.lastMessageTime;
-                                        }
-                                        if (counterOfChats == 16) {
-                                            numberOfChatsPage++;
-                                        }
-                                        if (numberOfTotalChatsArrived < 16) {
-                                            if (numberOfTotalChatsArrived == counterOfChats) {
-                                                isLastPage = true;
-                                            }
-                                        }
+                            chat.lastMessageTime = Double.valueOf(chats.child("last_message_date").getValue().toString());
+                            DatabaseReference lastMessageRef = chats.child("messages").getRef();
+                            Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
+                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                        chat.lastMessage = child.child("message").getValue().toString();
+                                        chat.lastMessageId = child.getKey().toString();
+                                    }
+                                    if (counterOfChats > 0 || numberOfTotalChatsArrived < 16) {
+                                        chatList.add(numberOfChatsPage * 15, chat);
+                                        counterOfChats++;
+                                    } else {
+                                        counterOfChats++;
+                                        keyOfLastChat = chat.chatId;
+                                        valueOfLastChat = chat.lastMessageTime;
+                                    }
+                                    if (counterOfChats == 16) {
+                                        numberOfChatsPage++;
+                                    }
+                                    if (numberOfTotalChatsArrived < 16) {
                                         if (numberOfTotalChatsArrived == counterOfChats) {
-                                            setAdapter();
+                                            isLastPage = true;
                                         }
                                     }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                    if (numberOfTotalChatsArrived == counterOfChats) {
+                                        setAdapter();
                                     }
-                                });
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
 
 
-                    }else{
+                        } else {
                             if (numberOfTotalChatsArrived == counterOfChats) {
                                 isLastPage = true;
                                 setAdapter();
                             }
 
-                    }
+                        }
                     }
                 }
 
@@ -947,9 +940,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-            if(trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")){
+            if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
-                Intent intent =new Intent(activity,LoginActivity.class);
+                Intent intent = new Intent(activity, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
             }
@@ -963,7 +956,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        if(error.getMessage() != null) {
+        if (error.getMessage() != null) {
             if (error.getMessage().contains("error")) {
                 String json = trimMessage(error.getMessage(), "error");
                 if (json != null) {

@@ -62,6 +62,7 @@
                 android:layout_height="56dp">
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/filterText"
                     android:layout_height="match_parent"
                     android:text="Filter"
                     android:textSize="20sp"

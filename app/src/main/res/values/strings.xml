@@ -66,12 +66,28 @@
     <string name="ro_activities">Activitati</string>
     <string name="ro_coupons">Cupoane</string>
     <string name="ro_leaderboard">Clasament</string>
-    <string name="ro_friends_chat">Chat cu prietenii</string>
+    <string name="ro_friends_chat">Chat prieteni</string>
     <string name="ro_my_profile">Profilul meu</string>
     <string name="ro_no_activities">Nu exista activitati in jurul tau</string>
     <string name="ro_press_plus_button">Apasa pe Plus pentru a crea o noua activitate</string>
     <string name="ro_discover_plus_button">Descopera &amp; participa la alte activitatir Create a new one by pressing the “Plus Button”</string>
-
+    <string name="ro_there_is_no_authorised_location_available_yet_for_this_sport">Inca nu exist o locatie autorizata pentru acest sport</string>
+    <string name="ro_as_event_creator">Ca si organizator, trebuie sa te asiguri ca selectezi intervalul orar corespunzator pentru activitatea selectata</string>
+    <string name="ro_top_text">Fii in Top 50 jucatori si castiga Ludicoins</string>
+    <string name="ro_days_left"> zile ramase</string>
+    <string name="ro_day_left"> zi ramasa</string>
+    <string name="ro_get_it_now">Acceseaza-l acum! doar </string>
+    <string name="ro_valid_til"> Valabil pana la </string>
+    <string name="ro_values_refresh">Valorile se calculeaza la un interval de timp \n asa ca rezultatele nu sunt in timp real!</string>
+    <string name="ro_yes">Da</string>
+    <string name="ro_no">Nu</string>
+    <string name="ro_confirm">Confirmare?</string>
+    <string name="ro_coupons_message">Esti sigur ca vrei sa accesezi acest cupon?</string>
+    <string name="ro_filter">Filtru</string>
+    <string name="ro_clear_filter">Curata filtrele</string>
+    <string name="ro_general">General</string>
+    <string name="ro_following">Urmareste</string>
+    <string name="ro_apply">Aplica</string>
 
     <string name="en_forgot_password">Forgot your password?</string>
     <string name="en_email_address">Email Adress</string>
@@ -137,6 +153,23 @@
     <string name="en_no_activities">No activities around you</string>
     <string name="en_press_plus_button">Press the “Plus Button” to Create a New Activity</string>
     <string name="en_discover_plus_button">Discover &amp; Join Activities or Create a new one by pressing the “Plus Button”</string>
+    <string name="en_there_is_no_authorised_location_available_yet_for_this_sport">There is no authorised location available yet for this sport</string>
+    <string name="en_as_event_creator">As event creator, please make sure you book the desired interval of the selected sport venue!</string>
+    <string name="en_top_text">Be on Top 50 at the end of the month and earn Ludicoins</string>
+    <string name="en_days_left"> days left</string>
+    <string name="en_day_left"> day left</string>
+    <string name="en_get_it_now">Get it now! only </string>
+    <string name="en_valid_til"> Valid till </string>
+    <string name="en_values_refresh">Values are computed periodically, so ranks are \n not real-time!</string>
+    <string name="en_yes">Yes</string>
+    <string name="en_no">No</string>
+    <string name="en_confirm">Confirm?</string>
+    <string name="en_coupons_message">Are you sure you want to redeem this coupon?</string>
+    <string name="en_filter">Filter</string>
+    <string name="en_clear_filter">Clear filter</string>
+    <string name="en_general">General</string>
+    <string name="en_following">Following</string>
+    <string name="en_apply">Apply</string>
 
 
     <string name="app_name">Ludicon</string>
@@ -214,5 +247,4 @@
     <string name="title_activity_rankings">RankingsActivity</string>
 
     <string name="title_activity_edit_event">EditEventActivity</string>
-    <string name="there_is_no_authorised_location_available_yet_for_this_sport">There is no authorised location available yet for this sport</string>
 </resources>

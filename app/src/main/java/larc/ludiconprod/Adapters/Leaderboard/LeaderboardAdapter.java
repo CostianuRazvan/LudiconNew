@@ -7,11 +7,8 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Handler;
 import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +19,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +38,9 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<UserPosition> list = new ArrayList<>();
     private LeaderboardActivity fragment;
     private final ListView listView;
+    TextView daysLeft;
+    TextView valuesRefresh;
+    TextView topText;
 
     public LeaderboardAdapter(ArrayList<UserPosition> list, View v, LeaderboardActivity fragment) {
         this.list = list;
@@ -76,34 +74,34 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
             LayoutInflater inflater = (LayoutInflater) this.fragment.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.leaderboard_top_card, null);
 
-            TextView daysLeft = (TextView) view.findViewById(R.id.daysLeft);
+            daysLeft = (TextView) view.findViewById(R.id.daysLeft);
             Calendar day = Calendar.getInstance();
-            TextView valuesRefresh =(TextView)view.findViewById(R.id.valuesRefresh);
+            valuesRefresh = (TextView) view.findViewById(R.id.valuesRefresh);
+            topText = (TextView) view.findViewById(R.id.topText);
 
 
             int left = day.getActualMaximum(Calendar.DAY_OF_MONTH) - day.get(Calendar.DAY_OF_MONTH);
-            daysLeft.setText(left + " days left");
 
             AssetManager assets = inflater.getContext().getAssets();// Is this the right asset?
             Typeface typeFace = Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
-            valuesRefresh.setTypeface(typeFace);
 
+            valuesRefresh.setTypeface(typeFace);
             daysLeft.setTypeface(typeFace);
-            ((TextView) view.findViewById(R.id.topText)).setTypeface(typeFace);
+            topText.setTypeface(typeFace);
 
             SpannableStringBuilder spanTxt = new SpannableStringBuilder("");
             spanTxt.append("Be on ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 6,0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 6, 0);
             spanTxt.append("Top 50 ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 12,0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 12, 0);
 
             spanTxt.append("at the end of the month\nand earn");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 12, 45,0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 12, 45, 0);
             spanTxt.append(" Ludicoins");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 45, 55,0);
-            ((TextView) view.findViewById(R.id.topText)).setText(spanTxt, TextView.BufferType.SPANNABLE);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 45, 55, 0);
+            topText.setText(spanTxt, TextView.BufferType.SPANNABLE);
 
-
+            translate(left);
 
             view.setTag(null);
             return view;
@@ -162,18 +160,18 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
 
         holder.position.setText("" + currentPosition.rank);
         switch (currentPosition.rank) {
-        case 1:
-            holder.position.setTextColor(0xfffcb851);
-            break;
-        case 2:
-            holder.position.setTextColor(0xffa7c7e1);
-            break;
-        case 3:
-            holder.position.setTextColor(0xffd98966);
-            break;
-        default:
-            holder.position.setTextColor(0xffacb8c1);
-            break;
+            case 1:
+                holder.position.setTextColor(0xfffcb851);
+                break;
+            case 2:
+                holder.position.setTextColor(0xffa7c7e1);
+                break;
+            case 3:
+                holder.position.setTextColor(0xffd98966);
+                break;
+            default:
+                holder.position.setTextColor(0xffacb8c1);
+                break;
         }
         if (currentPosition.userId.equals(Persistance.getInstance().getUserInfo(fragment.getActivity()).id)) {
             view.setBackgroundColor(0xffffffff);
@@ -214,6 +212,27 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
         });
 
         return view;
+    }
+
+    private void translate(int left) {
+        String days = "" + left + " ";
+        if (getFragment().getLanguage().equalsIgnoreCase("ro")) {
+            valuesRefresh.setText(R.string.ro_values_refresh);
+            topText.setText(R.string.ro_top_text);
+            if (left != 1)
+                days = days + getFragment().getResources().getString(R.string.ro_days_left);
+            else
+                days = days + getFragment().getResources().getString(R.string.ro_day_left);
+        } else {
+            valuesRefresh.setText(R.string.ro_values_refresh);
+            topText.setText(R.string.en_top_text);
+            if (left != 1)
+                days = days + getFragment().getResources().getString(R.string.en_days_left);
+            else
+                days = days + getFragment().getResources().getString(R.string.en_day_left);
+
+        }
+        daysLeft.setText(days);
     }
 
     public class ViewHolder {
