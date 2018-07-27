@@ -37,26 +37,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
+        if(remoteMessage != null & remoteMessage.getData() != null && remoteMessage.getData().get("type") != null) {
+            if (remoteMessage.getData().get("type").equalsIgnoreCase("chat")) {
 
-
-        if(remoteMessage.getData().get("type").equalsIgnoreCase("chat")) {
-            ArrayList<String> numberOfChatUnseen = Persistance.getInstance().getUnseenChats(getApplicationContext());
-            Boolean chatIsAlreadyUnseen = false;
-            for (int i = 0; i < numberOfChatUnseen.size(); i++) {
-                if (remoteMessage.getData().get("chat").equalsIgnoreCase(numberOfChatUnseen.get(i))) {
-                    chatIsAlreadyUnseen = true;
-                    break;
+                ArrayList<String> numberOfChatUnseen = Persistance.getInstance().getUnseenChats(getApplicationContext());
+                Boolean chatIsAlreadyUnseen = false;
+                for (int i = 0; i < numberOfChatUnseen.size(); i++) {
+                    if (remoteMessage.getData().get("chat").equalsIgnoreCase(numberOfChatUnseen.get(i))) {
+                        chatIsAlreadyUnseen = true;
+                        break;
+                    }
                 }
-            }
-            if (!chatIsAlreadyUnseen) {
-                numberOfChatUnseen.add(remoteMessage.getData().get("chat"));
+                if (!chatIsAlreadyUnseen) {
+                    numberOfChatUnseen.add(remoteMessage.getData().get("chat"));
+                }
+
+                Persistance.getInstance().setUnseenChats(getApplicationContext(), numberOfChatUnseen);
             }
 
-            Persistance.getInstance().setUnseenChats(getApplicationContext(), numberOfChatUnseen);
-        }
-
-        if(!isAppRunning(getApplicationContext())){
-            sendNotification(remoteMessage.getData().get("title"),remoteMessage.getData().get("body"),remoteMessage.getData().get("chat"));
+            if (!isAppRunning(getApplicationContext())) {
+                sendNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("body"), remoteMessage.getData().get("chat"));
+            }
         }
     }
 

@@ -110,11 +110,15 @@ public class TopGraph extends View implements Iterable {
     }
 
     public void setText(int index, String text) throws IndexOutOfBoundsException {
-        this.text[index] = text;
+        if(this.text != null) {
+            this.text[index] = text;
+        }
     }
 
     public void setProgress(int index, float progress) throws IndexOutOfBoundsException {
-        this.progress[index] = progress;
+        if(this.progress != null) {
+            this.progress[index] = progress;
+        }
     }
 
     private static final Random rand = new Random();

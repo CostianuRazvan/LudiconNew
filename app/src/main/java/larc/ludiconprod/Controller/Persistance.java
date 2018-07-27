@@ -245,16 +245,22 @@ public class Persistance {
     }
 
     public HappeningNowLocation getLocation(Activity activity){
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(this.locationString, 0);
-        String json = sharedPreferences.getString(this.locationString, "0");
-        HappeningNowLocation locationsList;
+        try {
+            SharedPreferences sharedPreferences = activity.getSharedPreferences(this.locationString, 0);
+            String json = sharedPreferences.getString(this.locationString, "0");
+            HappeningNowLocation locationsList;
 
-        if (json.equals("0")) {
-            locationsList = new HappeningNowLocation();
-        } else {
-            locationsList = new Gson().fromJson(json, HappeningNowLocation.class);
+            if (json.equals("0")) {
+                locationsList = new HappeningNowLocation();
+            } else {
+                Type type = new TypeToken<HappeningNowLocation>() {}.getType();
+                locationsList = new Gson().fromJson(json, type);
+            }
+            return locationsList;
         }
-        return  locationsList;
+        catch (Exception ex){
+            return new HappeningNowLocation();
+        }
     }
 
     public ArrayList<Coupon> getCouponsCache(Activity activity) {

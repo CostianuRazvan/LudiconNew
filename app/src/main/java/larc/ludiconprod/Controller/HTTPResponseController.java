@@ -60,7 +60,7 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 import static larc.ludiconprod.Activities.ActivitiesActivity.fradapter;
 import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageAroundMe;
 import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageMyActivity;
-import static larc.ludiconprod.Activities.ActivitiesActivity.happeningNowLocation;
+import static larc.ludiconprod.Activities.ActivitiesActivity.myAdapter;
 import static larc.ludiconprod.Activities.ActivitiesActivity.myEventList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.sponsorsList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.startedEventDate;
@@ -254,7 +254,7 @@ public class HTTPResponseController {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if (!deleteAnotherUser) {
-                    Toast.makeText(activity, "You leave the event successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "You left the event successfully!", Toast.LENGTH_SHORT).show();
 
                     HashMap<String, String> params = new HashMap<String, String>();
                     HashMap<String, String> headers = new HashMap<String, String>();
@@ -270,12 +270,9 @@ public class HTTPResponseController {
 
                     oldActivity = activity;
 
-                    myEventList.clear();
-                    ActivitiesActivity.currentFragment.getMyEvents("0");
-
                     Intent intent = new Intent(activity, Main.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(intent);
-                    activity.finish();
                 } else {
                     Toast.makeText(activity, "You successfully removed the user from event!", Toast.LENGTH_SHORT).show();
                     HashMap<String, String> params = new HashMap<String, String>();
@@ -363,7 +360,6 @@ public class HTTPResponseController {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onResponse(JSONObject jsonObject) {
-                System.out.println(jsonObject + " ceva");
                 if (getFirstPageAroundMe) {
                     aroundMeEventList.clear();
                     sponsorsList.clear();
@@ -407,19 +403,19 @@ public class HTTPResponseController {
                         }
                     }
 
-                    ActivitiesActivity.currentFragment.updateListOfEventsAroundMe(false);
+                    ActivitiesActivity.currentFragment.updateListOfEventsAroundMe();
                     if (jsonObject.getJSONArray("aroundMe").length() >= 1) {
                         ActivitiesActivity.NumberOfRefreshAroundMe++;
                     }
+
                     if (getFirstPageAroundMe) {
                         Persistance.getInstance().setSponsors(activity, sponsorsList);
-                        Persistance.getInstance().setAroundMeActivities(activity, aroundMeEventList);
+                        //Persistance.getInstance().setAroundMeActivities(activity, aroundMeEventList);
                     }
                     getFirstPageAroundMe = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                ActivitiesActivity.v1.setAlpha(0);
             }
         };
     }
@@ -469,7 +465,7 @@ public class HTTPResponseController {
                             myEventList.add(event);
 
                         }
-                        ActivitiesActivity.currentFragment.updateListOfMyEvents(false);
+                        ActivitiesActivity.currentFragment.updateListOfMyEvents();
                         if (jsonObject.getJSONArray("myEvents").length() >= 1) {
                             ActivitiesActivity.NumberOfRefreshMyEvents++;
                         }
@@ -482,6 +478,7 @@ public class HTTPResponseController {
                         e.printStackTrace();
                     }
                 }
+                /*
                 try {
                     if (!ActivitiesActivity.startHappeningNow.isAlive() && ActivitiesActivity.startHappeningNow.getState() == Thread.State.NEW) {
                         ActivitiesActivity.startHappeningNow.start();
@@ -489,6 +486,7 @@ public class HTTPResponseController {
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
+                */
             }
         };
     }
@@ -774,13 +772,14 @@ public class HTTPResponseController {
         };
     }*/
 
-    private Response.Listener<JSONObject> createJoinEventSuccesListener() {
+    private Response.Listener<JSONObject> createJoinEventSuccesListener(final String eventId) {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
                     if (activity.getLocalClassName().toString().equals("Activities.ActivityDetailsActivity")) {
                         Toast.makeText(activity, "Join was successful!", Toast.LENGTH_SHORT).show();
+
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
                         HashMap<String, String> urlParams = new HashMap<String, String>();
@@ -788,40 +787,36 @@ public class HTTPResponseController {
 
                         //set urlParams
 
-                        urlParams.put("eventId", eventid);
+                        urlParams.put("eventId", eventId);
                         urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
                         flag = true;
                         HTTPResponseController.getInstance().getEventDetails(params, headers, activity, urlParams);
 
                         oldActivity = activity;
 
-                        myEventList.clear();
-                        ActivitiesActivity.currentFragment.getMyEvents("0");
                         for (int i = 0; i < aroundMeEventList.size(); i++) {
-                            if (aroundMeEventList.get(i).id.equals(eventid)) {
+                            if (aroundMeEventList.get(i).id.equals(eventId)) {
                                 aroundMeEventList.remove(i);
                             }
                         }
-                        fradapter.notifyDataSetChanged();
+                        Persistance.getInstance().setAroundMeActivities(activity, aroundMeEventList);
+                        ActivitiesActivity.currentFragment.updateListOfEventsAroundMe();
 
-                        if (!ActivitiesActivity.startHappeningNow.isAlive()) {
-                            ActivitiesActivity.startHappeningNow.start();
-                        }
-                    } else {
                         myEventList.clear();
                         ActivitiesActivity.currentFragment.getMyEvents("0");
+                    } else {
+                        Toast.makeText(activity, "Join was successful!", Toast.LENGTH_SHORT).show();
+
                         for (int i = 0; i < aroundMeEventList.size(); i++) {
-                            if (aroundMeEventList.get(i).id.equals(eventid)) {
+                            if (aroundMeEventList.get(i).id.equals(eventId)) {
                                 aroundMeEventList.remove(i);
                             }
                         }
-                        fradapter.notifyDataSetChanged();
-                        //Persistance.getInstance().setHappeningNow(myEventList.get(0), activity);
-                        //Persistance.getInstance().setMyActivities(activity, myEventList);
-                        Toast.makeText(activity, "Join was successful!", Toast.LENGTH_SHORT).show();
-                        if (!ActivitiesActivity.startHappeningNow.isAlive() && ActivitiesActivity.startHappeningNow.getState() == Thread.State.NEW) {
-                            ActivitiesActivity.startHappeningNow.start();
-                        }
+                        Persistance.getInstance().setAroundMeActivities(activity, aroundMeEventList);
+                        ActivitiesActivity.currentFragment.updateListOfEventsAroundMe();
+
+                        myEventList.clear();
+                        ActivitiesActivity.currentFragment.getMyEvents("0");
                     }
 
                 } catch (Exception e) {
@@ -857,8 +852,8 @@ public class HTTPResponseController {
                     editor = activity.getSharedPreferences("locationsList", 0).edit();
                     editor.clear();
                     editor.commit();
-                    happeningNowLocation = null;
-                    happeningNowLocation = new HappeningNowLocation();
+                    //happeningNowLocation = null;
+                    //happeningNowLocation = new HappeningNowLocation();
                     startedEventDate = Integer.MAX_VALUE;
                     ArrayList<Event> recacheList = new ArrayList<>();
                     for (int i = 0; i < myEventList.size(); i++) {
@@ -1028,8 +1023,9 @@ public class HTTPResponseController {
     public void joinEvent(Activity activity, HashMap<String, String> params, HashMap<String, String> headers, String eventId, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         eventid = eventId;
+
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/joinEvent", params, headers, this.createJoinEventSuccesListener(), this.createRequestErrorListener());
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/joinEvent", params, headers, this.createJoinEventSuccesListener(eventId), this.createRequestErrorListener());
         requestQueue.add(jsObjRequest);
 
     }

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import larc.ludiconprod.Adapters.MainActivity.AroundMeAdapter;
 import larc.ludiconprod.Adapters.MainActivity.SimpleDividerItemDecoration;
@@ -43,16 +44,15 @@ public class Tab1 extends Fragment {
         ArrayList<Sponsors> sponsorsList=new ArrayList<>();
         //sponsorsList=Persistance.getInstance().getSponsors(getActivity());
         fradapter = new AroundMeAdapter(aroundMeEventList,sponsorsList, getActivity().getApplicationContext(), getActivity(), getResources());
-        updateListOfEventsAroundMe();
+        configureLayout();
         Typeface typeFace = Typeface.createFromAsset(super.getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
         noActivitiesTextFieldAroundMe.setTypeface(typeFace);
         pressPlusButtonTextFieldAroundMe.setTypeface(typeFace);
 
-
         return v;
     }
 
-    public void updateListOfEventsAroundMe() {
+    public void configureLayout() {
         fradapter.notifyDataSetChanged();
         frlistView = (RecyclerView) v.findViewById(R.id.events_listView2);
         frlistView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
@@ -68,5 +68,10 @@ public class Tab1 extends Fragment {
         noActivitiesTextFieldAroundMe.setVisibility(View.INVISIBLE);
         pressPlusButtonTextFieldAroundMe.setVisibility(View.INVISIBLE);
 
+    }
+
+    public void updateListOfEv(ArrayList<Event> events){
+        fradapter.setListOfEvents(events);
+        fradapter.notifyDataSetChanged();
     }
 }

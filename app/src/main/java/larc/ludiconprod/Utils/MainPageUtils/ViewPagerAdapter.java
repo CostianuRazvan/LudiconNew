@@ -11,8 +11,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when EditViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the EditViewPagerAdapter is created
-    Tab1 tab1;
-    Tab2 tab2;
+    public Tab1 tab1;
+    public Tab2 tab2;
     boolean t1=false, t2=false;
 
 

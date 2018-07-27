@@ -281,7 +281,7 @@
 
     </LinearLayout>
 
-    <ProgressBar
+    <!--ProgressBar
         android:id="@+id/activityProgressBar"
         style="@android:style/Widget.Holo.ProgressBar"
         android:layout_width="wrap_content"
@@ -289,7 +289,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="56dp"
-        android:indeterminate="true"/>
+        android:indeterminate="true"/-->
 
     <ImageView
         android:layout_marginTop="56dp"
