@@ -56,22 +56,26 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
     private ChatAndFriendsActivity fragment;
     final ListView listView;
     Activity activity;
+    private String language;
 
-    public ConversationsAdapter(ArrayList<Chat> list, Context context, Activity activity, Resources resources, ChatAndFriendsActivity fragment) {
+    public ConversationsAdapter(ArrayList<Chat> list, Context context, Activity activity, Resources resources, ChatAndFriendsActivity fragment, String language) {
         this.list = list;
         this.context = context;
         this.activity = activity;
         this.resources = resources;
         this.fragment = fragment;
+        this.language = language;
 
         this.listView = (ListView) activity.findViewById(R.id.events_listView2); // era v.
     }
 
-    public ConversationsAdapter(ArrayList<Chat> list, Context context, Activity activity, Resources resources) {
+    public ConversationsAdapter(ArrayList<Chat> list, Context context, Activity activity, Resources resources, String language) {
         this.list = list;
         this.context = context;
         this.activity = activity;
         this.resources = resources;
+        this.language = language;
+
 
         this.listView = (ListView) activity.findViewById(R.id.events_listView2); // era v.
     }
@@ -138,12 +142,12 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
             if (currentChat.image != null && currentChat.image.size() >= 1 && currentChat.eventId == null) {
                 Bitmap bitmap = decodeBase64(currentChat.image.get(0));
                 holder.chatParticipantImage.setImageBitmap(bitmap);
-            } else if(currentChat.eventId != null) {
+            } else if (currentChat.eventId != null) {
                 holder.chatParticipantImage.setImageResource(R.drawable.ph_group);
             }
 
             // Edge case, no participants any more
-            if (currentChat.participantName.compareTo("No participants in group ") == 0){
+            if (currentChat.participantName.compareTo("No participants in group ") == 0) {
                 holder.chatParticipantImage.setImageResource(R.drawable.ph_group);
             }
 
@@ -189,7 +193,7 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                     intent.putExtra("otherParticipantName", currentChat.participantName);
 
                     // This is set only for one-to-one conversations
-                    if(currentChat.image.size() == 1) {
+                    if (currentChat.image.size() == 1) {
                         intent.putExtra("otherParticipantImage", currentChat.image);
                     }
 
@@ -238,28 +242,50 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
         }.start());
     }
 
-    public void setTime(int timeElapsed, ViewHolder holder, Chat currentChat) {
-        if (timeElapsed == 0) {
-            holder.timeElapsed.setText("less than a min ago");
+    private String translate(String time) {
+
+        String basicTime = "Acum ";
+
+        if (language.equalsIgnoreCase("ro")) {
+            if (time.equalsIgnoreCase("less than a min ago"))
+                return "Acum mai putin de un minut";
+            else if (time.contains("min"))
+                return basicTime + time.split(" ")[0] + " minute";
+            else if (time.contains("hour"))
+                return basicTime + time.split(" ")[0] + " ore";
+            else if (time.contains("yesterday"))
+                return "Ieri";
+            else
+                return time;
         } else
-            if (timeElapsed < 60) {
-                holder.timeElapsed.setText(Integer.valueOf(timeElapsed) + " min ago");
-            } else
-                if (timeElapsed < 1440) {
-                    holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 60) + " hour ago");
-                } else
-                    if (timeElapsed < 10080) {
-                        holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 1440) + " days ago");
-                    } else {
-                        String displayDate = "";
-                        try {
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
-                            java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
-                            displayDate = formatter.format(date);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        holder.timeElapsed.setText(displayDate);
-                    }
+            return time;
+
+    }
+
+    private void setTime(int timeElapsed, ViewHolder holder, Chat currentChat) {
+
+        String time = "";
+
+        if (timeElapsed == 0) {
+            time = "less than a min ago";
+        } else if (timeElapsed < 60) {
+            time = Integer.valueOf(timeElapsed) + " min ago";
+        } else if (timeElapsed < 1440) {
+            time = Integer.valueOf(timeElapsed / 60) + " hour ago";
+        } else if (timeElapsed < 10080) {
+            time = (Integer.valueOf(timeElapsed / 1440) + " days ago");
+        } else {
+            String displayDate = "";
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
+                java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
+                displayDate = formatter.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            time = displayDate;
+        }
+        time = translate(time);
+        holder.timeElapsed.setText(time);
     }
 }

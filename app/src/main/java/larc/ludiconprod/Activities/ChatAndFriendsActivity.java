@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
@@ -61,7 +60,7 @@ import static larc.ludiconprod.Activities.Main.bottomBar;
  * Created by ancuta on 8/18/2017.
  */
 
-public class ChatAndFriendsActivity extends Fragment implements Response.ErrorListener {
+public class ChatAndFriendsActivity extends BasicFragment implements Response.ErrorListener {
     ViewPager pager;
     private Context mContext;
     ChatAndFriendsViewPagerAdapter adapter;
@@ -99,6 +98,23 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     private int dp56;
     ProgressBar chatLoading;
     public boolean shouldRequestPage = false;
+
+    TextView noConversationTV;
+    TextView joinActivitiesTV;
+    Button discoverActivitiesBtn;
+
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            joinActivitiesTV.setText(R.string.ro_join_activities);
+            noConversationTV.setText(R.string.ro_no_conversations);
+            discoverActivitiesBtn.setText(R.string.ro_discover_activities);
+        } else {
+            joinActivitiesTV.setText(R.string.en_join_activities);
+            noConversationTV.setText(R.string.en_no_conversations);
+            discoverActivitiesBtn.setText(R.string.en_discover_activities);
+        }
+    }
 
     public ChatAndFriendsActivity() {
         currentFragment = this;
@@ -142,7 +158,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
 
             // Setting the ViewPager For the SlidingTabsLayout
             tabs.setViewPager(pager);
-            chatAdapter = new ConversationsAdapter(chatList, activity.getApplicationContext(), activity, getResources(), currentFragment);
+            chatAdapter = new ConversationsAdapter(chatList, activity.getApplicationContext(), activity, getResources(), currentFragment, getLanguage());
 
 
             final float scale = mContext.getResources().getDisplayMetrics().density;
@@ -393,15 +409,15 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                 chatListView.setAdapter(chatAdapter);
                 isFirstTimeSetChat = true;
             }
-            TextView noConversationTV = (TextView) v.findViewById(R.id.noConversationTV);
-            TextView joinActivitiesTV = (TextView) v.findViewById(R.id.joinActivitiesTV);
-            Button discoverActivitiesButton = (Button) v.findViewById(R.id.discoverActivitiesButton);
+            noConversationTV = (TextView) v.findViewById(R.id.noConversationTV);
+            joinActivitiesTV = (TextView) v.findViewById(R.id.joinActivitiesTV);
+            discoverActivitiesBtn = (Button) v.findViewById(R.id.discoverActivitiesButton);
             ImageView chatImage = (ImageView) v.findViewById(R.id.chatImage);
             if (chatList.size() == 0) {
                 noConversationTV.setVisibility(View.VISIBLE);
                 joinActivitiesTV.setVisibility(View.VISIBLE);
-                discoverActivitiesButton.setVisibility(View.VISIBLE);
-                discoverActivitiesButton.setOnClickListener(new View.OnClickListener() {
+                discoverActivitiesBtn.setVisibility(View.VISIBLE);
+                discoverActivitiesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         bottomBar.setDefaultTab(R.id.tab_activities);
@@ -412,7 +428,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
             } else {
                 noConversationTV.setVisibility(View.INVISIBLE);
                 joinActivitiesTV.setVisibility(View.INVISIBLE);
-                discoverActivitiesButton.setVisibility(View.INVISIBLE);
+                discoverActivitiesBtn.setVisibility(View.INVISIBLE);
                 chatImage.setVisibility(View.INVISIBLE);
                 chatListView.setVisibility(View.VISIBLE);
             }
@@ -470,10 +486,12 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                     }
                 });
                 addedSwipe = true;
+                translate();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void setFriendsAdapter() {

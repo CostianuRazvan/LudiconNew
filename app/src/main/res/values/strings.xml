@@ -88,6 +88,9 @@
     <string name="ro_general">General</string>
     <string name="ro_following">Urmareste</string>
     <string name="ro_apply">Aplica</string>
+    <string name="ro_no_conversations">Nu ai nicio conversație încă!</string>
+    <string name="ro_join_activities">Descoperă &amp; participă la activități, întâlnelște oameni și începe să conversezi</string>
+    <string name="ro_discover_activities">DESCOPERĂ ACTIVITĂȚI</string>
 
     <string name="en_forgot_password">Forgot your password?</string>
     <string name="en_email_address">Email Adress</string>
@@ -170,6 +173,9 @@
     <string name="en_general">General</string>
     <string name="en_following">Following</string>
     <string name="en_apply">Apply</string>
+    <string name="en_no_conversations">No conversations, yet!</string>
+    <string name="en_discover_activities">DISCOVER ACTIVITIES</string>
+    <string name="en_join_activities">Discover &amp; join activities, meet people and start chatting</string>
 
 
     <string name="app_name">Ludicon</string>

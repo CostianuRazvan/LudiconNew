@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import larc.ludiconprod.Activities.BasicFragment;
 import larc.ludiconprod.Adapters.ChatAndFriends.ConversationsAdapter;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
@@ -24,7 +25,7 @@ import larc.ludiconprod.Utils.Chat;
  * Created by ancuta on 8/18/2017.
  */
 
-public class ChatAndFriendTab1 extends Fragment {
+public class ChatAndFriendTab1 extends BasicFragment {
     View v;
     ConversationsAdapter chatAdapter;
     public ListView chatListView;
@@ -33,7 +34,7 @@ public class ChatAndFriendTab1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v =inflater.inflate(R.layout.chat_tab,container,false);
         chatList= Persistance.getInstance().getConversation(getActivity());
-        chatAdapter = new ConversationsAdapter(chatList, getActivity().getApplicationContext(), getActivity(), getResources());
+        chatAdapter = new ConversationsAdapter(chatList, getActivity().getApplicationContext(), getActivity(), getResources(), getLanguage());
         setAdapter();
         return v;
     }
