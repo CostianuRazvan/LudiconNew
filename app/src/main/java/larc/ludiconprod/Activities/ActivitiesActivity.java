@@ -79,6 +79,7 @@ import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.Location.GPSTracker;
+import larc.ludiconprod.Utils.Location.LocationCheckState;
 import larc.ludiconprod.Utils.Location.LocationInfo;
 import larc.ludiconprod.Utils.MainPageUtils.ViewPagerAdapter;
 import larc.ludiconprod.Utils.ui.SlidingTabLayout;
@@ -92,7 +93,7 @@ import static larc.ludiconprod.Activities.Main.bottomBar;
  * Created by ancuta on 7/26/2017.
  */
 
-public class ActivitiesActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Response.ErrorListener {
+public class ActivitiesActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, LocationListener,  Response.ErrorListener {
 
     ViewPager pager;
     Context mContext;
@@ -177,32 +178,40 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     }
 
 
-    public boolean checkedLocation(Event currentEvent) {
-        Boolean isInLocation = false;
-
-        if (!googleApiClient.isConnected()) {
-            googleApiClient.connect();
-        }
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if(location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
-            Location eventLocation = new Location(LocationManager.GPS_PROVIDER);
-            eventLocation.setLatitude(currentEvent.latitude);
-            eventLocation.setLongitude(currentEvent.longitude);
-
-            System.out.println(location.distanceTo(eventLocation) + " distanta");
-
-            float distanceToEvent = location.distanceTo(eventLocation);
-            if (distanceToEvent < 1000) {
-                isInLocation = true;
+    public LocationCheckState checkedLocation(Event currentEvent) {
+        try {
+            if (!googleApiClient.isConnected()) {
+                googleApiClient.connect();
             }
-            return isInLocation;
+            Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                Location eventLocation = new Location(LocationManager.GPS_PROVIDER);
+                eventLocation.setLatitude(currentEvent.latitude);
+                eventLocation.setLongitude(currentEvent.longitude);
+
+                System.out.println(location.distanceTo(eventLocation) + " distanta");
+
+                float distanceToEvent = location.distanceTo(eventLocation);
+                if (distanceToEvent < 1000) {
+                    return LocationCheckState.LOCATION_OK;
+                }
+
+                return LocationCheckState.LOCATION_NOT_IN_RANGE;
+            } else {
+                return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
+            }
         }
-        else{
-            return false;
+        catch (IllegalStateException ex) {
+            // Other specific stuff to do
+            return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
         }
+        catch (Exception ex){
+            return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
+        }
+
     }
 
     public void savePoints() {
@@ -363,8 +372,14 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 }
             }
 
-            //getAroundMeEvents("0", latitude, longitude);
+            getAroundMeEvents("0", latitude, longitude);
             getMyEvents("0");
+
+            GPSTracker gps = new GPSTracker(activity.getApplicationContext(), activity);
+            if (!gps.canGetLocation()) {
+                this.noGps = true;
+                this.prepareError("No location services available!");
+            }
 
             NumberOfRefreshMyEvents = 0;
             NumberOfRefreshAroundMe = 0;
@@ -473,13 +488,15 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             pressPlusButtonTextFieldAroundMe = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldAroundMe);
 
             FloatingActionButton createNewActivityFloatingButtonAroundMe = (FloatingActionButton) v.findViewById(R.id.floatingButton2);
-            createNewActivityFloatingButtonAroundMe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(activity, CreateNewActivity.class);
-                    startActivity(intent);
-                }
-            });
+            if(createNewActivityFloatingButtonAroundMe != null) {
+                createNewActivityFloatingButtonAroundMe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(activity, CreateNewActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
 
             // Display the placeholder message
             if (aroundMeEventList.size() == 0) {
@@ -509,20 +526,23 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             mSwipeRefreshLayout2 = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh2);
 
-            mSwipeRefreshLayout2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    getAroundMeEvents("0", latitude, longitude);
+            if(mSwipeRefreshLayout2 != null) {
+                mSwipeRefreshLayout2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        getAroundMeEvents("0", latitude, longitude);
 
-                    // For triggering happening now
-                    getMyEvents("0");
+                        // For triggering happening now
+                        //getMyEvents("0");
+                        checkIsHappeningNow();
 
-                    getFirstPageAroundMe = true;
-                    mSwipeRefreshLayout2.setRefreshing(false);
-                    NumberOfRefreshAroundMe = 0;
-                    nrElements = 4;
-                }
-            });
+                        getFirstPageAroundMe = true;
+                        mSwipeRefreshLayout2.setRefreshing(false);
+                        NumberOfRefreshAroundMe = 0;
+                        nrElements = 4;
+                    }
+                });
+            }
 
             progressBarAroundMe.setAlpha(0f);
         } catch (Exception e) {
@@ -613,6 +633,10 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         }
         fromSwipe = false;
 
+        checkIsHappeningNow();
+    }
+
+    private void checkIsHappeningNow(){
 
         Event happeningEvent = Persistance.getInstance().getHappeningNow(activity);
         boolean HappeningNowStartedAlready = (happeningEvent != null);
@@ -774,7 +798,9 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 // Button not pressed yet -> user press "CHECK-IN"
                 if (buttonState == 0) {
                     // Check if user is < 1 km away from the place
-                    if (checkedLocation(upcomingEvent)) {
+                    LocationCheckState locationState = checkedLocation(upcomingEvent);
+
+                    if (locationState == LocationCheckState.LOCATION_OK) {
 
                         // Yes it is, let's make the check-in for him
                         HashMap<String, String> params = new HashMap<String, String>();
@@ -794,10 +820,14 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
                         requestLocationUpdates();
 
-                    } else {
-                        // No, he is not, don't let him start the event
-                        Toast.makeText(activity, "Go to event location to start sweating on points!", Toast.LENGTH_LONG).show();
-                    }
+                    } else
+                        if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE){
+                            // No, he is not, don't let him start the event
+                            Toast.makeText(activity, "Go to event location to start sweating on points!", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(activity, "Sorry, we can't take your location, please try again later", Toast.LENGTH_LONG).show();
+                        }
                 }
                 // Button is pressed, time is counted -> user press "CHECK-OUT"
                 else if (buttonState == 1) {
@@ -815,23 +845,29 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // User confirms he wants to stop the event
-                            checkinButton.setText("CHECK-IN");
+                            try {
+                                // User confirms he wants to stop the event
+                                checkinButton.setText("CHECK-IN");
 
-                            savePoints();
+                                savePoints();
 
-                            buttonState = 0;
+                                buttonState = 0;
 
-                            ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
-                            params.height = 0;
-                            happeningNowLayout.setLayoutParams(params);
+                                ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
+                                params.height = 0;
+                                happeningNowLayout.setLayoutParams(params);
 
-                            if (googleApiClient.isConnected()) {
-                                googleApiClient.disconnect();
+                                // Clean up
+                                if (googleApiClient.isConnected()) {
+                                    googleApiClient.disconnect();
+                                }
+                                //LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, (LocationListener) activity);
+
+                                confirmationDialog.dismiss();
+                                Persistance.getInstance().setHappeningNow(null, activity);
+                                Persistance.getInstance().setLocation(activity, null);
                             }
-                            confirmationDialog.dismiss();
-                            Persistance.getInstance().setHappeningNow(null, activity);
-                            Persistance.getInstance().setLocation(activity, null);
+                            catch (Exception ex){   ex.printStackTrace();}
                         }
                     });
                     confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
@@ -860,8 +896,11 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if(happeningNowLocation != null) {
                 requestLocationUpdates();
             }
-        } catch (NullPointerException e) { }
+        }
+        catch (NullPointerException e) { }
+        catch (IllegalStateException ex) { }
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -872,6 +911,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         System.out.println("Connection failed");
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -934,6 +974,12 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         final float scale = getContext().getResources().getDisplayMetrics().density;
         int pixels = (int) (56 * scale + 0.5f);
         ll.getLayoutParams().height = pixels;
+        ll.setLayoutParams(ll.getLayoutParams());
+    }
+
+    private void hideError() {
+        RelativeLayout ll = (RelativeLayout) v.findViewById(R.id.noInternetLayout);
+        ll.getLayoutParams().height = 0;
         ll.setLayoutParams(ll.getLayoutParams());
     }
 
@@ -1010,7 +1056,25 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         if (!gps.canGetLocation()) {
             this.noGps = true;
             this.prepareError("No location services available!");
-            return;
+
+            //return;
+        }
+        else{
+            hideError();
+            this.noGps = false;
+
+            // After location services turned off, wake them alive
+            if(latitude == 0) {
+                if (!googleApiClient.isConnected()) {
+                    googleApiClient.connect();
+                }
+
+                Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                }
+            }
         }
 
         //set urlParams

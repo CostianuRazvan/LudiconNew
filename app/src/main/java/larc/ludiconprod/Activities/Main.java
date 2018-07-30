@@ -11,6 +11,7 @@ import android.widget.Toast;
 import larc.ludiconprod.BottomBarHelper.BottomBar;
 import larc.ludiconprod.BottomBarHelper.OnTabReselectListener;
 import larc.ludiconprod.BottomBarHelper.OnTabSelectListener;
+import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.PointsReceivedDialog;
 import larc.ludiconprod.Layer.DataPersistence.ChatPersistence;
 import larc.ludiconprod.R;
@@ -106,8 +107,8 @@ public class Main extends FragmentActivity {
             }
         });
 
-
-        if (super.getIntent().getBooleanExtra("FirstTime", false)) {
+        boolean isUserFirstTime = Persistance.getInstance().getIsUserFirstTime(this);
+        if (isUserFirstTime) {
             PointsReceivedDialog dialog = new PointsReceivedDialog();
             Bundle bundle = new Bundle();
             bundle.putInt("ludicoins", 100);
@@ -116,6 +117,8 @@ public class Main extends FragmentActivity {
             bundle.putInt("level", 1);
             dialog.setArguments(bundle);
             dialog.show(this.getFragmentManager(), "tag");
+
+            Persistance.getInstance().setIsUserFirstTime(this, false);
         }
     }
 

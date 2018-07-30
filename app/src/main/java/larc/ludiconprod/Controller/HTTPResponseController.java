@@ -44,6 +44,7 @@ import larc.ludiconprod.Activities.InviteFriendsActivity;
 import larc.ludiconprod.Activities.LoginActivity;
 import larc.ludiconprod.Activities.Main;
 import larc.ludiconprod.Activities.ProfileDetailsActivity;
+import larc.ludiconprod.Activities.RegisterActivity;
 import larc.ludiconprod.Activities.ResetPasswordFinalActivity;
 import larc.ludiconprod.Dialogs.PointsReceivedDialog;
 import larc.ludiconprod.R;
@@ -159,21 +160,10 @@ public class HTTPResponseController {
 
 
                         if (user.range.equals("0")) {
-
-                            new CountDownTimer(1100, 100) {
-                                @Override
-                                public void onTick(long l) {
-                                    animateProfileImage(false);
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    Intent intent = new Intent(activity, ProfileDetailsActivity.class);
-                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                                    activity.startActivity(intent);
-                                    activity.finish();
-                                }
-                            }.start();
+                                Intent intent = new Intent(activity, ProfileDetailsActivity.class);
+                                // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                activity.startActivity(intent);
+                                activity.finish();
                         } else {
                             new CountDownTimer(1100, 100) {
                                 @Override
@@ -184,8 +174,9 @@ public class HTTPResponseController {
                                 @Override
                                 public void onFinish() {
                                     Intent intent = new Intent(activity, Main.class);
-                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                                    intent.putExtra("FirstTime", activity.getIntent().getBooleanExtra("FirstTime", false));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    //intent.putExtra("FirstTime", activity.getIntent().getBooleanExtra("FirstTime", false));
                                     activity.startActivity(intent);
                                     activity.finish();
                                 }
@@ -200,7 +191,6 @@ public class HTTPResponseController {
                     }
                 } else
                     if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
-
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -208,12 +198,16 @@ public class HTTPResponseController {
                                 intent.putExtra("from", "register");
                                 activity.startActivity(intent);
                             }
-                        }, 3000);
+                        }, 1000);
                     } else
                         if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
+                            Persistance.getInstance().setIsUserFirstTime(activity, true);
+
                             Intent intent = new Intent(activity, Main.class);
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("FirstTime", true);
+                            //intent.putExtra("FirstTime", true);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            activity.finishAffinity();
                             activity.startActivity(intent);
                         }
             }
@@ -864,6 +858,8 @@ public class HTTPResponseController {
                     }
                     Persistance.getInstance().setMyActivities(activity, recacheList);
 
+                    myEventList.clear();
+                    ActivitiesActivity.currentFragment.getMyEvents("0");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -928,6 +924,9 @@ public class HTTPResponseController {
                         if (json != null) displayMessage(json);
                     }
 
+                    if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
+                        ((RegisterActivity)activity).isButtonSubmitEnabled = true;
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -988,9 +987,15 @@ public class HTTPResponseController {
                 CreateNewActivity.createActivityButton.setEnabled(true);
             }
             else{
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(activity, IntroActivity.class);
-                activity.startActivity(intent);
+                if(activity.getLocalClassName().toString().equals("Activities.LoginActivity") ||
+                        activity.getLocalClassName().toString().equals("Activities.RegisterActivity") ){
+                 // do nothing just show message
+                }
+                else {
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(activity, IntroActivity.class);
+                    activity.startActivity(intent);
+                }
             }
     }
 

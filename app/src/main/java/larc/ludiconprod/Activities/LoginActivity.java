@@ -169,7 +169,8 @@ public class LoginActivity extends Activity {
 
                         HashMap<String, String> params = new HashMap<String, String>();
                         params.put("email", email.getText().toString());
-                        params.put("password", PasswordEncryptor.generateSHA255FromString(password.getText().toString()));//PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
+                        params.put("password", PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
+                                        //PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("apiKey", HTTPResponseController.API_KEY);
                        // headers.put("Content-Type","application/json;charset=utf-8");

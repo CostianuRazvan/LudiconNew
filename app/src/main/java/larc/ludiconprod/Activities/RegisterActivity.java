@@ -33,6 +33,8 @@ public class RegisterActivity extends FragmentActivity {
     EditText password;
     EditText passwordRepeat;
 
+    public boolean isButtonSubmitEnabled = true;
+
     //verify password constraints
 
     public boolean passwordValidate(String password, String repeatPassword) {
@@ -211,29 +213,32 @@ public class RegisterActivity extends FragmentActivity {
 
             @Override
             public void onClick(View view) {
-                if (!checkFieldsConstraints()) {
-                    try {
-                        HashMap<String, String> params = new HashMap<String, String>();
-                        params.put("firstName", firstName.getText().toString());
-                        params.put("lastName", lastName.getText().toString());
-                        params.put("email", emailAdress.getText().toString());
-                        params.put("password", PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
-                        params.put("isCustom", "0");
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-                        HTTPResponseController.getInstance().returnResponse(params, headers, RegisterActivity.this, "http://207.154.236.13/api/register/");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if (firstName.getText().length() == 0 || lastName.getText().length() == 0) {
-                        Toast.makeText(RegisterActivity.this, "Please provide first and last name.", Toast.LENGTH_LONG).show();
-                    } else if (emailAdress.getText().length() == 0) {
-                        Toast.makeText(RegisterActivity.this, "Please provide email.", Toast.LENGTH_LONG).show();
-                    } else if (password.getText().length() == 0 || passwordRepeat.getText().length() == 0) {
-                        Toast.makeText(RegisterActivity.this, "Please provide password.", Toast.LENGTH_LONG).show();
-                    } else if (password.getText().length() < 7 || passwordRepeat.getText().length() < 7 || !password.getText().toString().equals(passwordRepeat.getText().toString())) {
-                        Toast.makeText(RegisterActivity.this, "Password must have at least 7 characters and must be the same.", Toast.LENGTH_LONG).show();
+                if(isButtonSubmitEnabled) {
+                    if (!checkFieldsConstraints()) {
+                        try {
+                            HashMap<String, String> params = new HashMap<String, String>();
+                            params.put("firstName", firstName.getText().toString());
+                            params.put("lastName", lastName.getText().toString());
+                            params.put("email", emailAdress.getText().toString());
+                            params.put("password", PasswordEncryptor.generateSHA255FromString(password.getText().toString()));
+                            params.put("isCustom", "0");
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
+                            HTTPResponseController.getInstance().returnResponse(params, headers, RegisterActivity.this, "http://207.154.236.13/api/register/");
+                            isButtonSubmitEnabled = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (firstName.getText().length() == 0 || lastName.getText().length() == 0) {
+                            Toast.makeText(RegisterActivity.this, "Please provide first and last name.", Toast.LENGTH_LONG).show();
+                        } else if (emailAdress.getText().length() == 0) {
+                            Toast.makeText(RegisterActivity.this, "Please provide email.", Toast.LENGTH_LONG).show();
+                        } else if (password.getText().length() == 0 || passwordRepeat.getText().length() == 0) {
+                            Toast.makeText(RegisterActivity.this, "Please provide password.", Toast.LENGTH_LONG).show();
+                        } else if (password.getText().length() < 7 || passwordRepeat.getText().length() < 7 || !password.getText().toString().equals(passwordRepeat.getText().toString())) {
+                            Toast.makeText(RegisterActivity.this, "Password must have at least 7 characters and must be the same.", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }

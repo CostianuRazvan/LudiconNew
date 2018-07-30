@@ -343,4 +343,18 @@ public class Persistance {
         }
         editor.commit();
     }
+
+    public boolean getIsUserFirstTime(Activity activity) {
+       SharedPreferences sharedPreferences = activity.getSharedPreferences("isUserFirstTime", 0);
+       boolean isUserFirstTime = sharedPreferences.getBoolean("isUserFirstTime", false);
+
+       return isUserFirstTime;
+    }
+
+    public void setIsUserFirstTime(Activity activity, boolean isUserFirstTime) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences("isUserFirstTime", 0).edit();
+        editor.putBoolean("isUserFirstTime", isUserFirstTime);
+        editor.commit();
+    }
+
 }
