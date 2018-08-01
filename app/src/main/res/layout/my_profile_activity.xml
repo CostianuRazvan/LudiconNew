@@ -1,63 +1,66 @@
-<!--Specs level bar-->
-<!--More specs-->
+<!--Specs level bar--><!--More specs-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/myProfileTop"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="#FFFFFF">
+
         <TextView
             android:id="@+id/profileTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/darkblue"
-            android:text="My profile"
-            android:textSize="20sp"
-            android:gravity="center|left"
-            android:layout_marginLeft="16dp"
             android:layout_alignParentLeft="true"
-            android:fontFamily="@string/fontbold"/>
+            android:layout_marginLeft="16dp"
+            android:fontFamily="@string/fontbold"
+            android:gravity="center|left"
+            android:text="My profile"
+            android:textColor="@color/darkblue"
+            android:textSize="20sp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/ludicoinsLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:layout_gravity="center"
                 android:background="@drawable/round_ludicoins"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_ludicoins"/>
+                    android:src="@drawable/ic_ludicoins" />
+
                 <TextView
                     android:id="@+id/profileLudicoins"
-                    android:layout_height="match_parent"
                     android:layout_width="wrap_content"
-                    android:text="\?"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:fontFamily="@string/fontmedium"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="8dp"
-                    android:textColor="@color/yellow"/>
+                    android:fontFamily="@string/fontmedium"
+                    android:gravity="center"
+                    android:text="\?"
+                    android:textColor="@color/yellow"
+                    android:textSize="16sp" />
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/settings"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_edit_profile"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"/>
+                android:src="@drawable/ic_edit_profile" />
         </LinearLayout>
     </RelativeLayout>
-
 
 
     <LinearLayout
@@ -65,20 +68,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/myProfileTop">
-        <include
-            layout="@layout/no_connection_bar"/>
+
+        <include layout="@layout/no_connection_bar" />
     </LinearLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/profileContent"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
-        android:scrollbars="none"
-        android:fillViewport="true"
         android:layout_below="@+id/noConnectionTop"
-        android:alpha="1">
+        android:layout_marginBottom="56dp"
+        android:alpha="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +95,6 @@
                 android:layout_marginTop="32dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/profileImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -105,310 +106,391 @@
 
             <TextView
                 android:id="@+id/profileName"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@string/fontmedium"
-                android:textSize="18sp"
+                android:gravity="center"
+                android:text="Florin Bogdan"
                 android:textColor="@color/pink"
-                android:text="Florin Bogdan"/>
+                android:textSize="18sp" />
 
             <ProgressBar
                 android:id="@+id/profileLevelBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="220dp"
                 android:layout_height="8dp"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:progress="250"
-                android:max="1000"
-                android:indeterminate="false"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:foreground="@color/pink"
-                android:progressDrawable="@drawable/blueprogress"
-                android:layout_gravity="center"/>
+                android:indeterminate="false"
+                android:max="1000"
+                android:progress="250"
+                android:progressDrawable="@drawable/blueprogress" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/profileToNextLevel"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@string/fontmedium"
                     android:text="23.567"
-                    android:textSize="14sp"
-                    android:textColor="@color/blue"/>
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
+
                 <ImageView
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:src="@drawable/ic_points_small"/>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_points_small" />
+
                 <TextView
                     android:id="@+id/profileToNextLevelText"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="to next level"
-                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@string/fontmedium"
-                    android:textColor="@color/lightGray"/>
+                    android:text="to next level"
+                    android:textColor="@color/lightGray"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_height="60dp"
                 android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginTop="24dp"
                 android:background="#ffffff"
                 android:orientation="horizontal">
+
                 <LinearLayout
-                    android:layout_height="match_parent"
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="#ffffff"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_user_level"/>
+                        android:src="@drawable/ic_user_level" />
+
                     <LinearLayout
-                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="#ffffff"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/profileLevel"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="12"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="16sp"
-                            android:textColor="@color/green"/>
+                            android:text="12"
+                            android:textColor="@color/green"
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/profileLevelText"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Level"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGray"/>
+                            android:text="Level"
+                            android:textColor="@color/lightGray"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_height="match_parent"
                     android:layout_width="1dp"
-                    android:background="#400c3855"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
-                <LinearLayout
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#400c3855" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="#ffffff"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_user_points"/>
+                        android:src="@drawable/ic_user_points" />
+
                     <LinearLayout
-                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="#ffffff"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/profilePoints"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="12.500"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="16sp"
-                            android:textColor="@color/blue"/>
+                            android:text="12.500"
+                            android:textColor="@color/blue"
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/profilePointsText"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Points"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGray"/>
+                            android:text="Points"
+                            android:textColor="@color/lightGray"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_height="match_parent"
                     android:layout_width="1dp"
-                    android:background="#400c3855"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
-                <LinearLayout
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#400c3855" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="#ffffff"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_user_position"/>
+                        android:src="@drawable/ic_user_position" />
+
                     <LinearLayout
-                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="#ffffff"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/profilePosition"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="46"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="16sp"
-                            android:textColor="@color/pink"/>
+                            android:text="46"
+                            android:textColor="@color/pink"
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/profilePositionText"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Position"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@string/fontmedium"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGray"/>
+                            android:text="Position"
+                            android:textColor="@color/lightGray"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <RelativeLayout
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="24dp">
+
                 <TextView
                     android:id="@+id/profilePracticeSportsLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="PRACTICED SPORTS"
                     android:fontFamily="@string/fontbold"
-                    android:textSize="14sp"
                     android:gravity="left"
-                    android:textColor="@color/black"/>
+                    android:text="PRACTICED SPORTS"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/profilePracticeSportsCountLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="2/12"
                     android:fontFamily="@string/fontmedium"
-                    android:textSize="14sp"
                     android:gravity="right"
-                    android:textColor="@color/lightGray"/>
+                    android:text="2/12"
+                    android:textColor="@color/lightGray"
+                    android:textSize="14sp" />
             </RelativeLayout>
+
             <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:scrollbars="none"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                android:scrollbars="none">
+
                 <LinearLayout
                     android:id="@+id/profileSports"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+
                 </LinearLayout>
             </HorizontalScrollView>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@color/blueAlpha"
                 android:layout_height="1dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:background="@color/blueAlpha">
+
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ProfileHistoryLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/fontbold"
+                    android:gravity="left"
+                    android:text="PROFILE HISTORY"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/RVProfileHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                </android.support.v7.widget.RecyclerView>
+
+                <Button
+                    android:id="@+id/BtnShowFullHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/pink_stroke_rounded_button"
+                    android:fontFamily="@string/fontmedium"
+                    android:text="SHOW FULL HISTORY"
+                    android:textColor="@color/pinkPressed"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/versusLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="STATISTICS"
                 android:fontFamily="@string/fontbold"
-                android:textSize="14sp"
                 android:gravity="left"
-                android:textColor="@color/black"/>
+                android:text="STATISTICS"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
-                        android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/profileTotalEventsLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Total activities:"
-                                android:textColor="@color/lightGray"/>
+                                android:textColor="@color/lightGray" />
+
                             <TextView
                                 android:id="@+id/profileTotalPointsLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Total points:"
-                                android:textColor="@color/lightGray"/>
+                                android:textColor="@color/lightGray" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <TextView
                                 android:id="@+id/profileTotalEvents"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="456"
-                                android:textColor="@color/pink"/>
+                                android:textColor="@color/pink" />
+
                             <TextView
                                 android:id="@+id/profileTotalPoints"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="12.500"
-                                android:textColor="@color/blue"/>
+                                android:textColor="@color/blue" />
                         </LinearLayout>
                     </LinearLayout>
+
                     <Spinner
                         android:id="@+id/allSports"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
-                        android:alpha="0"/>
+                        android:alpha="0" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/lightGray"/>
-                <include
-                    layout="@layout/my_profile_graph"/>
+                    android:background="@color/lightGray" />
+
+                <include layout="@layout/my_profile_graph" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:paddingBottom="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_alignParentBottom="true">
+                android:layout_marginTop="16dp"
+                android:paddingBottom="16dp">
+
                 <Button
                     android:id="@+id/profileLogout"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:background="@drawable/pink_button_selector"
                     android:text="LOGOUT"
                     android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:background="@drawable/pink_button_selector"/>
+                    android:textSize="14sp" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+
     <ProgressBar
         android:id="@+id/profileProgressBar"
         style="@android:style/Widget.Holo.ProgressBar"
@@ -417,19 +499,19 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="56dp"
-        android:indeterminate="true"/>
+        android:indeterminate="true" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:background="@drawable/shadow_top_to_bottom"
-        android:layout_below="@+id/myProfileTop"/>
+        android:layout_below="@+id/myProfileTop"
+        android:background="@drawable/shadow_top_to_bottom" />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:background="@drawable/shadow_bottom_to_top"
-        android:layout_alignParentBottom="true"/>
-
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shadow_bottom_to_top" />
 
 
 </RelativeLayout>

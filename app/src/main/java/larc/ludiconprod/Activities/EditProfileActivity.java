@@ -52,7 +52,8 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 public class EditProfileActivity extends BasicActivity implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject> {
     public static final int PICK_IMAGE_ID = 1423;
 
-    private static final CharSequence TITLES[] = {"SPORT DETAILS", "INFO DETAILS"};
+    private static final CharSequence EN_TITLES[] = {"SPORT DETAILS", "PROFILE DETAILS"};
+    private static final CharSequence RO_TITLES[] = {"DETALII SPORTURI", "DETALII PROFIL"};
     private int tabsNumber = 2;
     private EditViewPagerAdapter adapter;
     private ViewPager pager;
@@ -95,10 +96,14 @@ public class EditProfileActivity extends BasicActivity implements View.OnClickLi
 
             View backButton = findViewById(R.id.backButton);
             TextView titleText = (TextView) findViewById(R.id.titleText);
-            titleText.setText("Edit profile");
 
-            this.adapter = new EditViewPagerAdapter(getSupportFragmentManager(), EditProfileActivity.TITLES, tabsNumber);
-
+            if (getLanguage().equalsIgnoreCase("ro")) {
+                this.adapter = new EditViewPagerAdapter(getSupportFragmentManager(), EditProfileActivity.RO_TITLES, tabsNumber);
+                titleText.setText("Editeaza profilul");
+            } else {
+                this.adapter = new EditViewPagerAdapter(getSupportFragmentManager(), EditProfileActivity.EN_TITLES, tabsNumber);
+                titleText.setText("Edit profile");
+            }
             pager = (ViewPager) findViewById(R.id.editPager);
             pager.setAdapter(adapter);
 

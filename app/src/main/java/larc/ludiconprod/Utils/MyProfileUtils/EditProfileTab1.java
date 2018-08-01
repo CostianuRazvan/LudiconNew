@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +17,14 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 
+import larc.ludiconprod.Activities.BasicFragment;
 import larc.ludiconprod.Activities.EditProfileActivity;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
 import larc.ludiconprod.User;
 import larc.ludiconprod.Utils.util.Sport;
 
-public class EditProfileTab1 extends Fragment implements View.OnClickListener {
+public class EditProfileTab1 extends BasicFragment implements View.OnClickListener {
 
     private int counter;
     private ArrayList<String> sports;
@@ -34,11 +34,33 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
     private TextView progressText;
     EditProfileActivity epa;
     Activity activity;
+    TextView followSports;
+    TextView areaRange;
+    Button save;
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            followSports.setText(R.string.ro_select_sport_follow);
+            areaRange.setText(R.string.ro_select_area_range);
+            save.setText(R.string.ro_save_changes);
+        } else {
+            followSports.setText(R.string.en_select_sport_follow);
+            areaRange.setText(R.string.en_select_area_range);
+            save.setText(R.string.en_save_changes);
+
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        translate();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.edittab1,container,false);
-        while (activity == null){
+        View v = inflater.inflate(R.layout.edittab1, container, false);
+        while (activity == null) {
             activity = getActivity();
         }
 
@@ -47,9 +69,9 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
 
             User u = Persistance.getInstance().getProfileInfo(super.getActivity());
             SeekBar seekBar = (SeekBar) v.findViewById(R.id.editRangeBar);
-            Button save = (Button) v.findViewById(R.id.saveChangesButton2);
+            save = (Button) v.findViewById(R.id.saveChangesButton2);
             progressText = (TextView) v.findViewById(R.id.editRangeTextView);
-            progressText.setText(u.range+ " km");
+            progressText.setText(u.range + " km");
             this.sports = epa.getSports();
             epa.setRange(seekBar);
             this.sports.clear();
@@ -83,8 +105,8 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
 
             Set<Integer> codesKeys = this.codes.keySet();
 
-            Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Quicksand-Medium.ttf");
-            Typeface typeFaceBold = Typeface.createFromAsset(activity.getAssets(),"fonts/Quicksand-Bold.ttf");
+            Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");
+            Typeface typeFaceBold = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Bold.ttf");
 
             for (Integer id : codesKeys) {
                 RadioButton rb = (RadioButton) v.findViewById(id);
@@ -92,7 +114,7 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
                 Integer compoundDrawable = this.compoundDrawables.get(id);
                 rb.setSelected(true);
                 rb.setAlpha(0.4f);
-                rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable,0,0,0);
+                rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, 0, 0);
                 rb.setOnClickListener(this);
             }
 
@@ -101,10 +123,11 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
                     if (s.code.equals(this.codes.get(id))) {
                         Log.d("Sport already", s.code);
                         RadioButton rb = (RadioButton) v.findViewById(id);
+                        rb.setText(s.getSportName(codes.get(id), getLanguage()));
                         Integer compoundDrawable = this.compoundDrawables.get(id);
                         rb.setAlpha(1f);
                         rb.setSelected(false);
-                        rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable,0,R.drawable.ic_check,0);
+                        rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, R.drawable.ic_check, 0);
                         counter++;
                         sports.add(s.code);
                         break;
@@ -125,12 +148,12 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(1);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
-                    if(seekBar.getProgress() >= 1) {
-                        progress = progressValue+1;
+                    if (seekBar.getProgress() >= 1) {
+                        progress = progressValue + 1;
                         progressText.setText(progress + " km");
-                    } else{
+                    } else {
                         progressText.setText("1" + " km");
-                        progress=1;
+                        progress = 1;
 
                     }
                 }
@@ -146,8 +169,10 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
                 }
             });
 
-            ((TextView) v.findViewById(R.id.selectLabel)).setTypeface(typeFace);
-            ((TextView) v.findViewById(R.id.textViewEditRange)).setTypeface(typeFace);
+            followSports = ((TextView) v.findViewById(R.id.selectLabel));
+            followSports.setTypeface(typeFace);
+            areaRange = ((TextView) v.findViewById(R.id.textViewEditRange));
+            areaRange.setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.editRangeTextView)).setTypeface(typeFace);
             save.setTypeface(typeFaceBold);
         } catch (Exception e) {
@@ -162,16 +187,16 @@ public class EditProfileTab1 extends Fragment implements View.OnClickListener {
         RadioButton rb = (RadioButton) view;
         String code = this.codes.get(view.getId());
         Integer compoundDrawable = this.compoundDrawables.get(view.getId());
-        if(!rb.isSelected() && counter > 1 ) {
+        if (!rb.isSelected() && counter > 1) {
             rb.setSelected(true);
             view.setAlpha(0.4f);
-            rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable,0,0,0);
+            rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, 0, 0);
             counter--;
             sports.remove(code);
-        } else if(rb.isSelected()) {
+        } else if (rb.isSelected()) {
             view.setAlpha(1f);
             rb.setSelected(false);
-            rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable,0,R.drawable.ic_check,0);
+            rb.setCompoundDrawablesWithIntrinsicBounds(compoundDrawable, 0, R.drawable.ic_check, 0);
             counter++;
             sports.add(code);
         }

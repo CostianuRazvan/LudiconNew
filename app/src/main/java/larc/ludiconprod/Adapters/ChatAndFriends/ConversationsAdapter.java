@@ -253,6 +253,8 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                 return basicTime + time.split(" ")[0] + " minute";
             else if (time.contains("hour"))
                 return basicTime + time.split(" ")[0] + " ore";
+            else if (time.contains("days"))
+                return basicTime + time.split(" ")[0] + " zile";
             else if (time.contains("yesterday"))
                 return "Ieri";
             else

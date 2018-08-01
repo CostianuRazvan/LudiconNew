@@ -69,7 +69,7 @@ public class ChatAndFriendsActivity extends BasicFragment implements Response.Er
     public static FriendsAdapter friendsAdapter;
     public static ArrayList<Friend> friends = new ArrayList<>();
     private View v;
-    CharSequence Titles[] = {"CONVERSATIONS", "FOLLOWING"};
+    CharSequence EN_TITLES[] = {"CONVERSATIONS", "FOLLOWING"};
     CharSequence RO_TITLES[] = {"CONVERSATII", "URMARIRI"};
     int Numboftabs = 2;
     ArrayList<Chat> chatList = new ArrayList<>();
@@ -137,8 +137,13 @@ public class ChatAndFriendsActivity extends BasicFragment implements Response.Er
         isFirstTimeSetChat = false;
         try {
 
+            CharSequence[] titles;
             super.onCreate(savedInstanceState);
-            adapter = new ChatAndFriendsViewPagerAdapter(activity.getSupportFragmentManager(), Titles, Numboftabs);
+            if (getLanguage().equalsIgnoreCase("ro"))
+                titles = RO_TITLES;
+            else
+                titles = EN_TITLES;
+            adapter = new ChatAndFriendsViewPagerAdapter(activity.getSupportFragmentManager(), titles, Numboftabs);
 
             // Assigning ViewPager View and setting the adapter
             pager = (ViewPager) v.findViewById(R.id.pager);
@@ -385,7 +390,7 @@ public class ChatAndFriendsActivity extends BasicFragment implements Response.Er
 
 
             getFriends("0");
-            friendsAdapter = new FriendsAdapter(friends, activity, activity, getResources(), this);
+            friendsAdapter = new FriendsAdapter(friends, activity, activity, getResources(), this, getLanguage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -412,6 +417,9 @@ public class ChatAndFriendsActivity extends BasicFragment implements Response.Er
             noConversationTV = (TextView) v.findViewById(R.id.noConversationTV);
             joinActivitiesTV = (TextView) v.findViewById(R.id.joinActivitiesTV);
             discoverActivitiesBtn = (Button) v.findViewById(R.id.discoverActivitiesButton);
+
+            translate();
+
             ImageView chatImage = (ImageView) v.findViewById(R.id.chatImage);
             if (chatList.size() == 0) {
                 noConversationTV.setVisibility(View.VISIBLE);
@@ -486,7 +494,6 @@ public class ChatAndFriendsActivity extends BasicFragment implements Response.Er
                     }
                 });
                 addedSwipe = true;
-                translate();
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,11 +8,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +22,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.Calendar;
 
 import larc.ludiconprod.Activities.BasicFragment;
 import larc.ludiconprod.Activities.EditProfileActivity;
@@ -56,7 +51,47 @@ public class EditProfileTab2 extends BasicFragment {
     private TextWatcher textWatcher;
     private boolean languageChanged = false;
 
-    private String localLanguage;
+    EditText firstName;
+    Button changePassword;
+    EditText oldPass;
+    EditText newPass;
+    EditText rePass;
+    EditText lastName;
+    Button save;
+
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            save.setText(R.string.ro_save_changes);
+            male.setText(R.string.ro_male);
+            female.setText(R.string.ro_female);
+            english.setText(R.string.ro_english);
+            romanian.setText(R.string.ro_romanian);
+            firstName.setHint(R.string.ro_first_name);
+            lastName.setHint(R.string.ro_last_name);
+            changePassword.setText(R.string.ro_change_password);
+            oldPass.setHint(R.string.ro_old_pass);
+            rePass.setHint(R.string.ro_re_pass);
+            newPass.setHint(R.string.ro_new_pass);
+        } else {
+            save.setText(R.string.en_save_changes);
+            male.setText(R.string.en_male);
+            female.setText(R.string.en_female);
+            english.setText(R.string.en_english);
+            romanian.setText(R.string.en_romanian);
+            firstName.setHint(R.string.en_first_name);
+            lastName.setHint(R.string.en_last_name);
+            changePassword.setText(R.string.en_change_password);
+            oldPass.setHint(R.string.en_old_pass);
+            rePass.setHint(R.string.en_re_pass);
+            newPass.setHint(R.string.en_new_pass);
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        translate();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +99,7 @@ public class EditProfileTab2 extends BasicFragment {
 
         try {
             final EditProfileActivity epa = (EditProfileActivity) super.getActivity();
-            final Button save = (Button) v.findViewById(R.id.saveChangesButton);
+            save = (Button) v.findViewById(R.id.saveChangesButton);
             User u = Persistance.getInstance().getProfileInfo(super.getActivity());
             this.textWatcher = new TextWatcher() {
                 @Override
@@ -97,9 +132,9 @@ public class EditProfileTab2 extends BasicFragment {
             Typeface typeFace = Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
             Typeface typeFaceBold = Typeface.createFromAsset(assets, "fonts/Quicksand-Bold.ttf");
 
-            EditText firstName = (EditText) v.findViewById(R.id.editFirstName);
+            firstName = (EditText) v.findViewById(R.id.editFirstName);
             firstName.setTypeface(typeFace);
-            EditText lastName = (EditText) v.findViewById(R.id.editLastName);
+            lastName = (EditText) v.findViewById(R.id.editLastName);
             lastName.setTypeface(typeFace);
             male = (RadioButton) v.findViewById(R.id.editMale);
             female = (RadioButton) v.findViewById(R.id.editFemale);
@@ -110,15 +145,15 @@ public class EditProfileTab2 extends BasicFragment {
 
             ageTextView = (EditText) v.findViewById(R.id.editDate);
             ageTextView.setTypeface(typeFace);
-            Button changePassword = (Button) v.findViewById(R.id.editPasswordButton);
+            changePassword = (Button) v.findViewById(R.id.editPasswordButton);
             changePassword.setTypeface(typeFaceBold);
             save.setTypeface(typeFaceBold);
             passwordLayout = (RelativeLayout) v.findViewById(R.id.editPasswordLayout);
-            final EditText oldPass = (EditText) v.findViewById(R.id.oldPassword);
+            oldPass = (EditText) v.findViewById(R.id.oldPassword);
             oldPass.setTypeface(typeFace);
-            final EditText newPass = (EditText) v.findViewById(R.id.newPassword);
+            newPass = (EditText) v.findViewById(R.id.newPassword);
             newPass.setTypeface(typeFace);
-            final EditText rePass = (EditText) v.findViewById(R.id.editPasswordRepeat);
+            rePass = (EditText) v.findViewById(R.id.editPasswordRepeat);
             rePass.setTypeface(typeFace);
             TextView email = (TextView) v.findViewById(R.id.emailLabel);
             email.setText(u.email);

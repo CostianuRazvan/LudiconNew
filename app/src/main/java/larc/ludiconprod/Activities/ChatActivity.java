@@ -77,6 +77,14 @@ public class ChatActivity extends BasicActivity {
 
 
     private void translate() {
+
+        if (getLanguage().equalsIgnoreCase("ro")) {
+            messageInput.setHint(R.string.ro_write_message);
+    }
+    else
+        {
+            messageInput.setHint(R.string.en_write_message);
+        }
     }
 
     public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {

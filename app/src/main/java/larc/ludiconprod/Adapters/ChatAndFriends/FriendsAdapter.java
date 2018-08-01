@@ -51,19 +51,22 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
 
     }
 
+
     private ArrayList<Friend> list = new ArrayList<>();
     private Context context;
     private Activity activity;
     private Resources resources;
     private ChatAndFriendsActivity fragment;
     final ListView listView;
+    private String language;
 
-    public FriendsAdapter(ArrayList<Friend> list, Context context, Activity activity, Resources resources, ChatAndFriendsActivity fragment) {
+    public FriendsAdapter(ArrayList<Friend> list, Context context, Activity activity, Resources resources, ChatAndFriendsActivity fragment, String language) {
         this.list = list;
         this.context = context;
         this.activity = activity;
         this.resources = resources;
         this.fragment = fragment;
+        this.language = language;
 
         this.listView = (ListView) activity.findViewById(R.id.events_listView2); // era v.
     }
@@ -71,6 +74,19 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
     public void setListOfEvents(ArrayList<Friend> newList) {
         this.list = newList;
         this.notifyDataSetChanged();
+    }
+
+    private String translate(String text) {
+        String num = text.split(" ")[0];
+        if (language.equalsIgnoreCase("ro")) {
+            if (text.contains("mutual followers"))
+                return num + "urmariri comune";
+            else if (text.contains("mutual follower"))
+                return num + "urmarire comuna";
+            else
+                return "Nici o urmarire comuna";
+        }
+        return text;
     }
 
     @Override
@@ -129,15 +145,23 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
             }
             holder.friendsName.setText(currentFriend.userName);
             holder.friendsLevel.setText(String.valueOf(currentFriend.level));
+
+            String text = "";
+
+
             if (currentFriend.numberOfMutuals != 0) {
                 if (currentFriend.numberOfMutuals == 1) {
-                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " mutual follower");
+                    text = currentFriend.numberOfMutuals + " mutual follower";
                 } else {
-                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " mutual followers");
+                    text = currentFriend.numberOfMutuals + " mutual followers";
                 }
             } else {
-                holder.friendsMutualFriends.setText("no mutual followings");
+                text = "no mutual followings";
             }
+
+            text = translate(text);
+            holder.friendsMutualFriends.setText(text);
+
             final View currView = view;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

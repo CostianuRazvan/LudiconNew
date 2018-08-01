@@ -52,7 +52,6 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
 
     }
 
-    //TODO RO-EN
 
     private ArrayList<Event> list;
     private Context context;

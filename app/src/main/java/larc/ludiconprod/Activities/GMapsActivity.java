@@ -71,7 +71,6 @@ public class GMapsActivity extends BasicActivity implements PlaceSelectionListen
     public static Marker markerSelected;
     public static Marker myUnauthorizedMarker;
     String addressName = "";
-    String language = getLanguage();
 
     public static int PAGES = 0;
     // You can choose a bigger number for LOOPS, but you know, nobody will fling
@@ -190,7 +189,7 @@ public class GMapsActivity extends BasicActivity implements PlaceSelectionListen
                         setResult(CreateNewActivity.ASK_COORDS_DONE, intent);
                         finish();
                     } else {
-                        if (language.equalsIgnoreCase("ro"))
+                        if (getLanguage().equalsIgnoreCase("ro"))
                             Toast.makeText(currentActivity, getResources().getString(R.string.ro_select_location), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(currentActivity, getResources().getString(R.string.en_select_location), Toast.LENGTH_LONG).show();
@@ -198,7 +197,7 @@ public class GMapsActivity extends BasicActivity implements PlaceSelectionListen
                 }
             });
 
-
+            translate(getLanguage());
         } catch (Exception e) {
             e.printStackTrace();
 

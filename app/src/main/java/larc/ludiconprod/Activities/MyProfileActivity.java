@@ -11,6 +11,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import larc.ludiconprod.Adapters.EditProfile.HistoryFullAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
@@ -64,7 +67,43 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
     static public FragmentActivity activity;
     static boolean isActive = false;
     ConfirmationDialog confirmationDialog;
+    TextView toNextLevel;
+    TextView profileLevelText;
+    TextView profilePointsText;
+    TextView profilePositionText;
+    TextView profilePracticeSportsLabel;
+    TextView versusLabel;
+    TextView profileTotalEventsLabel;
+    TextView profileTotalPointsLabel;
+    Button logout;
+    RecyclerView recyclerView;
+    TextView profileTitle;
 
+    private void translate() {
+        if (getLanguage().equalsIgnoreCase("ro")) {
+
+            toNextLevel.setText(R.string.ro_next_level);
+            profileLevelText.setText(R.string.ro_level);
+            profilePointsText.setText(R.string.ro_points);
+            profilePositionText.setText(R.string.ro_position);
+            profilePracticeSportsLabel.setText(R.string.ro_sports_practiced);
+            versusLabel.setText(R.string.ro_statistics);
+            profileTotalPointsLabel.setText(R.string.ro_total_points);
+            profileTotalEventsLabel.setText(R.string.ro_total_activities);
+            logout.setText(R.string.ro_logout);
+        } else {
+            toNextLevel.setText(R.string.en_next_level);
+            profileLevelText.setText(R.string.en_level);
+            profilePointsText.setText(R.string.en_points);
+            profilePositionText.setText(R.string.en_position);
+            profilePracticeSportsLabel.setText(R.string.en_sports_practiced);
+            versusLabel.setText(R.string.en_statistics);
+            profileTotalPointsLabel.setText(R.string.en_total_points);
+            profileTotalEventsLabel.setText(R.string.en_total_activities);
+            logout.setText(R.string.en_logout);
+
+        }
+    }
 
     @Nullable
     @Override
@@ -78,15 +117,19 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
 
         try {
             super.onCreate(savedInstanceState);
+            recyclerView = (RecyclerView) v.findViewById(R.id.RVProfileHistory);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new HistoryFullAdapter());
 
-            TextView profileTitle = (TextView) v.findViewById(R.id.profileTitle);
+
+            profileTitle = (TextView) v.findViewById(R.id.profileTitle);
             final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
             final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold" +
                     ".ttf");
             profileTitle.setTypeface(typeFace);
             profileTitle.setTextColor(getResources().getColor(R.color.darkblue));
 
-            Button logout = (Button) v.findViewById(R.id.profileLogout);
+            logout = (Button) v.findViewById(R.id.profileLogout);
             this.settings = (ImageView) v.findViewById(R.id.settings);
 
             v.findViewById(R.id.ludicoinsLayout).setOnClickListener(new View.OnClickListener() {
@@ -102,6 +145,14 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
                 this.printInfo(up);
             }
 
+            toNextLevel = (TextView) v.findViewById(R.id.profileToNextLevelText);
+            profileLevelText = (TextView) v.findViewById(R.id.profileLevelText);
+            profilePointsText = (TextView) v.findViewById(R.id.profilePointsText);
+            profilePositionText = (TextView) v.findViewById(R.id.profilePositionText);
+            profileTotalEventsLabel = (TextView) v.findViewById(R.id.profileTotalEventsLabel);
+            profilePracticeSportsLabel = (TextView) v.findViewById(R.id.profilePracticeSportsLabel);
+            profileTotalPointsLabel = (TextView) v.findViewById(R.id.profileTotalPointsLabel);
+            versusLabel = (TextView) v.findViewById(R.id.versusLabel);
 
             ((TextView) v.findViewById(R.id.profileTitle)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileLudicoins)).setTypeface(typeFace);
@@ -169,6 +220,8 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
                 }
 
             });
+
+            translate();
         } catch (Exception e) {
             e.printStackTrace();
         }

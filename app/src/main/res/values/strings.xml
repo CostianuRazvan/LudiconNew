@@ -91,6 +91,27 @@
     <string name="ro_no_conversations">Nu ai nicio conversație încă!</string>
     <string name="ro_join_activities">Descoperă &amp; participă la activități, întâlnelște oameni și începe să conversezi</string>
     <string name="ro_discover_activities">DESCOPERĂ ACTIVITĂȚI</string>
+    <string name="ro_write_message">Scrie un mesaj</string>
+    <string name="ro_next_level">Pana la următorul nivel</string>
+    <string name="ro_level">Nivel</string>
+    <string name="ro_points">Puncte</string>
+    <string name="ro_position">Poziție</string>
+    <string name="ro_sports_practiced">SPORTURI PRACTICATE</string>
+    <string name="ro_statistics">STATISTICI</string>
+    <string name="ro_logout">DECONECTEAZĂ-TE</string>
+    <string name="ro_total_activities">Numar de activitati:</string>
+    <string name="ro_total_points">Numar de puncte:</string>
+    <string name="ro_select_sport_follow">Selectează sportuile pe care ți-ar plăcea să le urmărești</string>
+    <string name="ro_select_area_range">Selectează distanța pentru activitățile din jurul tău</string>
+    <string name="ro_save_changes">SALVEAZĂ MODIFICĂRILE</string>
+    <string name="ro_first_name">Prenume</string>
+    <string name="ro_change_password">Schimba parola</string>
+    <string name="ro_old_pass">Parola veche</string>
+    <string name="ro_re_pass">Repeta parola</string>
+    <string name="ro_new_pass">Noua parola</string>
+    <string name="ro_last_name">Nume</string>
+    <string name="ro_romanian">Romana</string>
+    <string name="ro_english">Engleza</string>
 
     <string name="en_forgot_password">Forgot your password?</string>
     <string name="en_email_address">Email Adress</string>
@@ -176,6 +197,27 @@
     <string name="en_no_conversations">No conversations, yet!</string>
     <string name="en_discover_activities">DISCOVER ACTIVITIES</string>
     <string name="en_join_activities">Discover &amp; join activities, meet people and start chatting</string>
+    <string name="en_write_message">Write a message</string>
+    <string name="en_next_level">to next level</string>
+    <string name="en_level">Level</string>
+    <string name="en_points">Points</string>
+    <string name="en_position">Position</string>
+    <string name="en_sports_practiced">PRACTICED SPORTS</string>
+    <string name="en_statistics">STATISTICS</string>
+    <string name="en_logout">LOGOUT</string>
+    <string name="en_total_points">Total points:</string>
+    <string name="en_total_activities">Total activities: </string>
+    <string name="en_select_area_range">Select the area range for activities around</string>
+    <string name="en_select_sport_follow">Select what sports you would like to follow</string>
+    <string name="en_save_changes">SAVE CHANGES</string>
+    <string name="en_first_name">First Name</string>
+    <string name="en_last_name">Last Name</string>
+    <string name="en_change_password">Change Password</string>
+    <string name="en_old_pass">Old password</string>
+    <string name="en_re_pass">Repeat password</string>
+    <string name="en_new_pass">New password</string>
+    <string name="en_romanian">Romanian</string>
+    <string name="en_english">English</string>
 
 
     <string name="app_name">Ludicon</string>
