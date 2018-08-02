@@ -51,6 +51,7 @@ import larc.ludiconprod.R;
 import larc.ludiconprod.User;
 import larc.ludiconprod.UserProfile;
 import larc.ludiconprod.Utils.MyProfileUtils.Bar;
+import larc.ludiconprod.Utils.MyProfileUtils.History;
 import larc.ludiconprod.Utils.MyProfileUtils.Iterable;
 import larc.ludiconprod.Utils.MyProfileUtils.TopGraph;
 import larc.ludiconprod.Utils.util.Sport;
@@ -78,6 +79,7 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
     Button logout;
     RecyclerView recyclerView;
     TextView profileTitle;
+    TextView lastActivitiesLabel;
 
     private void translate() {
         if (getLanguage().equalsIgnoreCase("ro")) {
@@ -105,6 +107,22 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
         }
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ArrayList<History> historyArrayList = new ArrayList<>();
+
+        // Get Data from API
+
+        History history = new History();
+        historyArrayList.add(history);
+
+        recyclerView.setAdapter(new HistoryFullAdapter(historyArrayList));
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,9 +135,6 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
 
         try {
             super.onCreate(savedInstanceState);
-            recyclerView = (RecyclerView) v.findViewById(R.id.RVProfileHistory);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new HistoryFullAdapter());
 
 
             profileTitle = (TextView) v.findViewById(R.id.profileTitle);
@@ -140,11 +155,17 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
                 }
             });
 
+
             UserProfile up = Persistance.getInstance().getProfileInfo(super.getActivity());
             if (up != null) {
                 this.printInfo(up);
             }
+            recyclerView = (RecyclerView) v.findViewById(R.id.RVProfileHistory);
+            recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
+            Log.d("AUTHKEY", Persistance.getInstance().getUserInfo(getActivity()).authKey);
+
+            lastActivitiesLabel = (TextView) v.findViewById(R.id.ProfileHistoryLabel);
             toNextLevel = (TextView) v.findViewById(R.id.profileToNextLevelText);
             profileLevelText = (TextView) v.findViewById(R.id.profileLevelText);
             profilePointsText = (TextView) v.findViewById(R.id.profilePointsText);
@@ -153,6 +174,7 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             profilePracticeSportsLabel = (TextView) v.findViewById(R.id.profilePracticeSportsLabel);
             profileTotalPointsLabel = (TextView) v.findViewById(R.id.profileTotalPointsLabel);
             versusLabel = (TextView) v.findViewById(R.id.versusLabel);
+
 
             ((TextView) v.findViewById(R.id.profileTitle)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileLudicoins)).setTypeface(typeFace);
@@ -165,6 +187,7 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             ((TextView) v.findViewById(R.id.profilePosition)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profilePositionText)).setTypeface(typeFace);
 
+            lastActivitiesLabel.setTypeface(typeFaceBold);
             ((TextView) v.findViewById(R.id.profilePracticeSportsLabel)).setTypeface(typeFaceBold);
             ((TextView) v.findViewById(R.id.profilePracticeSportsCountLabel)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.versusLabel)).setTypeface(typeFaceBold);

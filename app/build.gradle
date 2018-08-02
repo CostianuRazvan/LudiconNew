@@ -119,6 +119,10 @@ dependencies {
 }
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }
 
 dependencies {

@@ -334,14 +334,18 @@
                     android:id="@+id/profileSports"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"></LinearLayout>
+                    android:orientation="horizontal">
+
+                </LinearLayout>
             </HorizontalScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/blueAlpha"></LinearLayout>
+                android:background="@color/blueAlpha">
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/LLHistory"
@@ -355,17 +359,17 @@
                     android:id="@+id/ProfileHistoryLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:fontFamily="@string/fontmedium"
+                    android:fontFamily="@string/fontbold"
                     android:gravity="left"
-                    android:text="PROFILE HISTORY"
+                    android:text="LAST ACTIVITIES"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/RVProfileHistory"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="100dp"
+                    android:layout_marginTop="10dp">
 
 
                 </android.support.v7.widget.RecyclerView>
