@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ludicon București</string>
+    <string name="errorMessage">E-mail sau parolă incorecte</string>
+    <string name="hello_world">Ludicon este aici!</string>
+    <string name="action_settings">Setări</string>
+    <string name="facebook_app_id">1486061805033157</string>
+
+    <string name="dialogmessage">\tNu există conexiune la internet!\n\tAccesați Setări și activați\n\tWi-Fi sau date mobile</string>
+    <string name="dialogbutton1">Setări</string>
+    <string name="dialogbutton2">Închide</string>
+
+    <string name="Terms"><a href="http://www.google.com">Termeni</a></string>
+    <string name="Policy"><a href="http://www.facebook.com">Politica de confidențialitate</a></string>
+
+    <string-array name="rankings_array">
+        <item>Forbal</item>
+        <item>Volei</item>
+        <item>Baschet</item>
+        <item>Squash</item>
+        <item>Ping Pong</item>
+        <item>Tenis</item>
+        <item>Biciclete</item>
+        <item>Alergat</item>
+        <item>Sală</item>
+        <item>Altul</item>
+    </string-array>
+
+    <string name="or_use_email">Sau folosiți adresa de e-mail</string>
+    <string name="connect_with_facebook">CONECTARE PRIN FACEBOOK</string>
+    <string name="login">AUTENTIFICARE</string>
+    <string name="login1">Autentificare</string>
+    <string name="register">ÎNREGISTRARE</string>f
+    <string name="by_continuing_you_agree_our_nterms_and_privacy_policy">Prin continuarea în aplicație sunteți de acord cu <br/><font color='#d4498b'>Termenele</font> &amp; <font color='#d4498b'>Politica de Confidențialitate</font></string>
+    <string name="first_name">Prenume</string>
+    <string name="last_name">Nume de familie</string>
+    <string name="email_address">Adresă de e-mail</string>
+    <string name="password">Parolă</string>
+    <string name="repeat_password">Repetă parola</string>
+    <string name="create_account">CREEAZĂ CONT</string>
+    <string name="forgot_your_password">Ți-ai uitat parola?</string>
+    <string name="enter_your_email_address_below_n_and_we_ll_send_you_password_reset_n_instruction">Scrie-ți adresa de e-mail mai jos și îți vom tirmite un e-mail cu instrucțiuni pentru schimbarea parolei</string>
+    <string name="reset_password">RESETEAZĂ PAROLA</string>
+    <string name="new_you_out_here_florin_cool">Ești nou aici FLORIN? Super!</string>
+    <string name="we_believe_you_enjoy_ludicon_too_take_a_moment_amp_set_up_your_profile"><![CDATA[Configurează-ți profilul și apoi jocul va începe! Foarte curând, vei putea întâlni sportivi ca și tine alături de care sa participi la evenimente.]]></string>
+    <string name="male">Masculin</string>
+    <string name="female">Feminin</string>
+    <string name="how_old_are_you">Ce vârstă ai?</string>
+    <string name="save_amp_continue"><![CDATA[SALVEAZĂ & CONTINUĂ]]></string>
+    <string name="select_what_sports_you_would_like_to_follow">Selectează sporturile pe care ți-ar plăcea să le urmărești</string>
+    <string name="football">Fotbal</string>
+    <string name="basketball">Baschet</string>
+    <string name="volleyball">Volei</string>
+    <string name="jogging">Alergat</string>
+    <string name="gym">Sală</string>
+    <string name="cycling">Biciclete</string>
+    <string name="tennis">Tenis</string>
+    <string name="ping_pong">Ping Pong</string>
+    <string name="squash">Squash</string>
+    <string name="others">Altul</string>
+    <string name="select_the_area_range_for_activities_around">\t\t\tSelectează distanța pentru activitățile \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tdin jurul tău</string>
+    <string name="_20_km">20 Km</string>
+    <string name="save_preferences">SALVEAZĂ PREFERINȚELE</string>
+    <string name="no_activities_around_you">Nu există activități în jurul tău!</string>
+    <string name="press_the_34_plus_button_34_to_10_create_a_new_activity">Apasă butonul “Plus” pentru\n \t\ta crea o nouă activitate</string>
+    <string name="will_play">O să joace</string>
+    <string name="you_will_gain">O să acumulezi \u0020</string>
+    <string name="per_hour">\u0020 pe oră</string>
+    <string name="date">Data</string>
+    <string name="location">Locația</string>
+    <string name="players">Participanți </string>
+    <string name="join">PARTICIPĂ</string>
+    <string name="no_activities">Nici o activitate!</string>
+    <string name="discover_38_join_activitiesto_10_or_create_a_new_one_10_by_pressing_the_34_plus_button_34"><![CDATA[Descoperă și Participă la activități\n \t\tsau creează o activitate nouă\n \t\t\t\t\tapăsând butonul “Plus”]]></string>
+    <string name="no_internet_connection">Nu sunteți conectat la internet!</string>
+    <string name="activity">ACTIVITATE</string>
+    <string name="other_sport">ALT SPORT</string>
+    <string name="sport_name">Numele sportului</string>
+    <string name="type_amp_number_of_players"><![CDATA[TIPUL & NUMĂRUL PARTICIPANȚILOR]]></string>
+    <string name="this_activity_is_set_as_private_and_will_not_be_visible_in_the_activity_list_invite_your_friends_to_join_this_activity">Această activitate este setată ca privată și nu va fi vizibilă în Lista de Activități. Invită-ți prietenii să participe la această activitate.</string>
+    <string name="date_amp_time"><![CDATA[Data & Ora]]></string>
+    <string name="hour">Ora</string>
+    <string name="location1">LOCAȚIA</string>
+    <string name="tap_here_to_select_location">Apasă aici pentru a selecta locația</string>
+    <string name="enroll_with_a_form">ÎNSCRIERE CU FORMULAR</string>
+    <string name="yes">Da</string>
+    <string name="no">Nu</string>
+    <string name="enrollment_fields">CÂMPURI DE ÎNSCRIERE</string>
+    <string name="address">Adresă</string>
+    <string name="phone_no">Număr de telefon</string>
+    <string name="add_custom">Adaugă câmp</string>
+    <string name="description">DESCRIERE</string>
+    <string name="optional">Opțional</string>
+    <string name="additional_info">Informații suplimentare</string>
+    <string name="invite_friends">INVITĂ PRIETENI</string>
+    <string name="create_activity">CREEAZĂ ACTIVITATE</string>
+    <string name="select_location">SELECTEAZĂ LOCAȚIA</string>
+    <string name="as_event_creator_please_make_sure_you_book_the_desired_interval_at_the_selected_sport_venue">Ca organizator al activității, te rugăm să te asiguri că ai rezervat intervalul preferat pentru locul de desfășurare!</string>
+    <string name="to_create_your_own_location_press_long_tap_on_the_map">Pentru a crea propria locație, apăsați lung pe hartă!</string>
+    <string name="all">ȚOTI</string>
+    <string name="group_chat">CONVERSAȚIE DE GRUP</string>
+    <string name="edit">EDITEAZĂ</string>
+    <string name="delete">ȘTERGE</string>
+    <string name="be_on_top_50_at_the_end_of_the_month_n_and_earn_ludicoins">Fii in Top 50 la sfârșitul lunii si câștigă Ludicoins!</string>
+    <string name="values_are_computed_periodically_so_ranks_are_n_not_real_time">Valorile sunt calculate periodic, astfel încât randurile nu sunt în timp real!</string>
+    <string name="_14_days_left">14 Zile rămase</string>
+    <string name="filter">Filtru</string>
+    <string name="clear_filter">ȘTERGE FILTRELE</string>
+    <string name="general">General</string>
+    <string name="following">Urmărești</string>
+    <string name="apply">APLICĂ</string>
+    <string name="no_conversations_yet">Nu ai nicio conversație încă!</string>
+    <string name="discover_amp_join_activities_make_friends_nand_start_chatting"><![CDATA[Descoperă & participă la activități, întâlnelște oameni și începe să conversezi!]]></string>
+    <string name="discover_activities">DESCOPERĂ ACTIVITĂȚI</string>
+    <string name="no_friends_yet">Nu urmărești pe nimeni încă!</string>
+    <string name="_12_mutual_friends">12 prieteni comuni</string>
+    <string name="chat">CONVERSEAZĂ</string>
+    <string name="write_a_message">Scrie un mesaj...</string>
+    <string name="follow">URMAREȘTE</string>
+    <string name="level">Nivel</string>
+    <string name="points">Puncte</string>
+    <string name="position">Poziție</string>
+    <string name="practiced_sports">SPORTURI PRACTICATE</string>
+    <string name="badges">INSIGNE</string>
+    <string name="you">Tu   </string>
+    <string name="my_profile">Profilul meu</string>
+    <string name="to_next_level">\u0020 până la următorul nivel</string>
+    <string name="statistics">STATISTICI</string>
+    <string name="total_activities">Total activitati:</string>
+    <string name="total_points">Total puncte:</string>
+    <string name="logout">DECONECTEAZĂ-TE</string>
+    <string name="age">Vârsta</string>
+    <string name="change_password">SCHIMBĂ PAROLA</string>
+    <string name="old_password">Parola veche</string>
+    <string name="new_password">Parola nouă</string>
+    <string name="retype_password">Rescrie parola</string>
+    <string name="save_changes">SALVEAZĂ MODIFICĂRILE</string>
+    <string name="no_prizes_yet">Încă nu ai niciun premiu!</string>
+    <string name="come_back_later_join_activities_10_and_gain_ludicoins">Întoarce-te mai târziu!\n Câteva premii super o sa fie valabile\n pentru tine!</string>
+    <string name="discount_code">CODUL DE REDUCERE:</string>
+    <string name="valid_till_20_july_2017">Valid pană pe 20 July 2017</string>
+    <string name="_20_off">20% REDUCERE</string>
+    <string name="smart_football_club">Smart Football Club</string>
+    <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Utilizează acest voucher pentru a primi 1% REDUCERE pentru toate activitățile de fotbal de luni până vineri</string>
+    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Folosește Ludicoins pentru a obține premiile oferite de partenerii noștri!</string>
+    <string name="browse_prizes">RĂSFOIEŞTE PREMIILE</string>
+    <string name="activity1">Activitate</string>
+    <string name="player_profile">Profilul utilizatorului</string>
+
+    <string name="around_me">ÎN JURUL MEU</string>
+    <string name="my_activities">ACTIVITĂȚILE MELE</string>
+    <string name="prizes">PREMII</string>
+    <string name="my_prizes">PREMIILE MELE</string>
+    <string name="this_month">LUNA ASTA</string>
+    <string name="months_3">3 LUNI</string>
+    <string name="all_time">DE LA ÎNCEPUT</string>
+    <string name="conversations">CONVERSAȚII</string>
+    <string name="following1">URMĂRIRI</string>
+    <string name="sport_details">PROFIL SPORTIV</string>
+    <string name="info_details">DETALII PROFIL</string>
+    <string name="ev_public">PUBLIC</string>
+    <string name="ev_private">PRIVAT</string>
+    <string name="edit_profile">Editează profilul</string>
+    <string name="edit_activity">Editează activitatea</string>
+    <string name="confirm">Confirmi?</string>
+    <string name="are_you_sure_you_want_to_logout">Eşti sigur că vrei sa te deconectezi?</string>
+    <string name="register_succes">Te-ai înregistrat cu succes</string>
+    <string name="sent_email_with_confirmation_code">Ți-am trimis un cod de confirmare prin email</string>
+    <string name="please_provide_first_and_last_name">Introduceţi numele si prenumele.</string>
+    <string name="please_provide_email">Introduceţi email-ul.</string>
+    <string name="please_provide_password">Introduceţi parola.</string>
+    <string name="password_must_have_at_least_7_characters_and_must_be_the_same">Parola trebuie sa aibă cel putin 7 caractere si să fie aceeaşi.</string>
+    <string name="there_is_no_authorised_location_available_yet_for_this_sport">Nu există locație autorizată disponibilă pentru acest sports</string>
+    <string name="creating">Creează...</string>
+    <string name="will_go_to">O să meargă la </string>
+    <string name="are_you_sure_you_want_to_delete_this_event">Eşti sigur că vrei să ştergi acest eveniment?</string>
+    <string name="unjoin">RENUNŢĂ</string>
+    <string name="are_you_sure_you_want_to_unjoin_this_event">Eşti sigur că vrei să renunţi la acest eveniment?</string>
+    <string name="activity_details">Detaliile evenimentului</string>
+    <string name="leave">PĂRĂSEȘTE</string>
+    <string name="add_offline_friends">ADĂUGAŢI UN PRIETEN OFFLINE</string>
+    <string name="tomorrow">Mâine</string>
+    <string name="today">Astăzi</string>
+    <string name="enroll_in_event">Înscrie-te în eveniment</string>
+    <string name="we_ve_sent_you_an_email_n_with_instructions">Ți-am trimis un e-mail cu instrucțiuni</string>
+    <string name="please_check_your_email_address_to_confirm_if_you_do_not_find_the_email_in_your_inbox_please_check_your_spam_filter_or_bulk_email_folder">Verifică adresa de e-mail pentru confirmare. Dacă nu găsești e-mailul în căsuța de e-mail, verifică folderul spam sau bulk.</string>
+    <string name="return_to_login">ÎNAPOI LA ÎNREGISTRARE</string>
+    <string name="invite">INVITĂ</string>
+    <string name="invalid_year_provided">Introduceți vârsta!</string>
+    <string name="passwords_do_not_match">Parolele nu se potrivesc!</string>
+    <string name="enter_a_new_password">Introduceți o parolă nouă!</string>
+    <string name="password_must_have_minimum_7_characters">Parola trebuie să aibă cel puțin 7 caractere!</string>
+    <string name="enter_the_old_password">Introduceți vechea parolă!</string>
+    <string name="enter_your_last_name">Introduceți numele de familie!</string>
+    <string name="enter_your_first_name">Introduceți prenumele!</string>
+    <string name="profile_details">Detaliile profilului</string>
+    <string name="first_time_here">Prima dată aici</string>
+    <string name="cool">Super!</string>
+    <string name="its_you">Eşti tu :)</string>
+    <string name="remove">ELIMINĂ</string>
+    <string name="are_you_sure_you_want_to_reedem_this_coupon">Sigur doreşti să cumperi acest premiu?</string>
+    <string name="unfollow">NU MAI URMĂRI</string>
+    <string name="are_you_sure_you_want_to_unfollow">Sigur doreşti să nu mai urmăreşti pe</string>
+    <string name="you_are_now_following">Acum urmăreşti pe</string>
+    <string name="you_are_no_following">Nu mai urmăreşti pe</string>
+
+    <string name="go_to_eventDetails">Accesează detaliile evenimentului</string>
+    <string name="go_to_profileDetails">Accesează detaliile profilului</string>
+    <string name="select_a_location">Selectează o locație!</string>
+    <string name="insert_your_age">Introduceți vârsta!</string>
+    <string name="enter_other_sport_name">Introduceți alt nume de sport!</string>
+    <string name="enter_a_date">Introduceți o dată!</string>
+    <string name="enter_a_time">Introduceți o oră!</string>
+    <string name="too_much_participants_for_this_capacity">Prea mulți participanți pentru această capacitate!</string>
+    <string name="inviting_friends">Invită prieteni...</string>
+    <string name="you_do_not_have_enough_ludicoins_to_redeem_the_coupon">Nu ai suficienți ludicoins pentru a cumpăra premiul.</string>
+    <string name="group_chat_isnt_avaible">Grupul de chat nu este încă disponibil pentru acest eveniment!</string>
+    <string name="go_to_event_location_to_start_sweating_on_points">Mergi la locația evenimentului pentru a putea porni cronometrul!</string>
+    <string name="are_you_sure_you_want_to_stop_sweating_on_points">Eşti sigur că doreşti să opreşti cronometrul?</string>
+    <string name="the_prize_is_yours">Premiul este al tău, felicitări!</string>
+    <string name="you_have_reached_maximum_lenght_for_this_field">Ai atins limita maximă pentru acest câmp!</string>
+    <string name="you_leave_the_event_successfully">Ai părăsit evenimentul cu succes!</string>
+    <string name="you_successfully_removed_the_user_from_event">Ai eliminat cu succes utilizatorul de la eveniment!</string>
+    <string name="you_successfully_removed_the_offline_friend_from_event">Ai eliminat cu succes prietenul offline din eveniment!</string>
+    <string name="you_cancel_the_event_successfully">Evenimentul a fost şters cu succes!</string>
+    <string name="join_was_successful">Participarea la eveniment s-a efectuat cu succes!</string>
+    <string name="check_your_internet_connection">Verificați conexiunea la internet!</string>
+    <string name="this_post_was_shared">Această postare a fost distribuită! </string>
+    <string name="saving">Salvare...</string>
+    <string name="today_at_19_00">Astăzi la 19:00</string>
+    <string name="will_play_something">O să joace something</string>
+    <string name="with_x_others">cu alți x</string>
+    <string name="no_description">Fără descriere</string>
+    <string name="level_24">Nivel 24</string>
+    <string name="congratulations">Felicitări!</string>
+    <string name="you_leveled_up">Ai trecut la nivelul următor!</string>
+    <string name="and_gained">Și ai câștigat:  </string>
+    <string name="get_in_now_only">CUMPĂRĂ ACUM! Doar\t</string>
+
+    <string name="tab_activities">Activități</string>
+    <string name="tab_prizes">Premii</string>
+    <string name="tab_leaderboard">Clasament</string>
+    <string name="tab_chat">Chat&amp;Urmariri</string>
+    <string name="tab_profile">Profilul meu</string>
+
+    <string name="_2_sports">2 sporturi</string>
+    <string name="_3_mutual_friends">3 urmăriri comune</string>
+    <string name="mutual_follower">urmărire comună</string>
+    <string name="mutual_followers">urmăriri comune</string>
+    <string name="no_mutual_followings">nici o urmărire comună</string>
+    <string name="at">la</string>
+    <string name="days_left">zile rămase</string>
+
+    <string name="be_on">Fii in</string>
+    <string name="top_50">Top 50\t</string>
+    <string name="at_the_end_of_the_month_and_earn">la sfârșitul lunii și câștigă\n</string>
+    <string name="ludicoins">Ludicoins</string>
+    <string name="you_play_something">Jucați ceva</string>
+    <string name="press_back_again_to_exit">Apasă din nou pentru a ieși.</string>
+    <string name="is_friend">Prietenul lui\t\t</string>
+
+    <string name="we_cant_take_your_location">Ne pare rău, nu putem să îţi luăm locația, încearcă din nou mai târziu</string>
+    <string name="no_location_services_available">Nu sunt disponibile servicii de localizare!</string>
+    <string name="valid_till">Valabil până la</string>
+    <string name="invited">INVITAT</string>
+    <string name="less_than_a_min_ago">mai puțin de un minut</string>
+    <string name="min">minut</string>
+    <string name="minutes">minute</string>
+    <string name="_hour">oră</string>
+    <string name="hours">ore</string>
+    <string name="day">zi</string>
+    <string name="days">zile</string>
+    <string name="now">acum</string>
+
+</resources>
