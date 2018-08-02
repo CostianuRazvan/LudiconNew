@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 import larc.ludiconprod.Controller.HTTPResponseController;
@@ -274,8 +276,8 @@ public class IntroActivity extends Activity {
         termsAndPrivacyPolicy.setTypeface(typeFace);
         infoTextView.setTypeface(typeFace);
         betaText.setTypeface(typeFace);
-        termsAndPrivacyPolicy.setText(Html.fromHtml("By continuing you agree to our<br/><font color='#d4498b'>Terms</font> &amp; <font color='#d4498b'>Privacy Policy</font>"), TextView.BufferType.SPANNABLE);
-        SpannableString ss = new SpannableString(Html.fromHtml("By continuing you agree to our<br/><font color='#d4498b'>Terms</font> &amp; <font color='#d4498b'>Privacy Policy</font>"));
+        termsAndPrivacyPolicy.setText(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)), TextView.BufferType.SPANNABLE);
+        SpannableString ss = new SpannableString(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)));
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -298,9 +300,21 @@ public class IntroActivity extends Activity {
             public void updateDrawState(TextPaint ds) {
             }
         };
-        ss.setSpan(clickableSpan, 31, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 14, termsAndPrivacyPolicy
-                .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if( Locale.getDefault().getLanguage().startsWith("en")) {
+            ss.setSpan(clickableSpan, 31, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 31, 36, 0);
+            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 14, termsAndPrivacyPolicy
+                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 14,
+                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (Locale.getDefault().getLanguage().startsWith("ro")){
+            ss.setSpan(clickableSpan, 50, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 50, 59, 0);
+            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 29, termsAndPrivacyPolicy
+                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 29,
+                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         termsAndPrivacyPolicy.setText(ss);
         termsAndPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
         termsAndPrivacyPolicy.setHighlightColor(Color.TRANSPARENT);

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Activities.ActivityDetailsActivity;
@@ -172,7 +173,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
 
                 if (!currentFriend.userID.equals(Persistance.getInstance().getUserInfo(activity).id) && Persistance.getInstance().getUserInfo(activity).id.equals(ActivityDetailsActivity.creatorID )) {
 
-                    holder.inviteButton.setText("REMOVE");
+                    holder.inviteButton.setText(R.string.remove);
                     holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
                     holder.inviteButton.setVisibility(View.VISIBLE);
                     holder.inviteButton.setEnabled(true);
@@ -218,7 +219,11 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                         @Override
                         public void onClick(View view) {
                             Friend friend = new Friend();
-                            friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + "'s Friend";
+                            if( Locale.getDefault().getLanguage().startsWith("en")) {
+                                friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
+                            } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }
                             friend.offlineFriend = true;
                             friend.profileImage = "";
                             InviteFriendsActivity.friendsList.add(1, friend);
@@ -246,7 +251,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                         }
                         holder.friendProfileImage.setImageResource(R.drawable.ic_invite);
 
-                        holder.inviteButton.setText("REMOVE");
+                        holder.inviteButton.setText(R.string.remove);
                         holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
                         holder.inviteButton.setVisibility(View.VISIBLE);
                         holder.inviteButton.setEnabled(true);
@@ -302,14 +307,14 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             } else
                                 if (!currentFriend.isInvited) {
                                     holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
-                                    holder.inviteButton.setText("INVITE");
+                                    holder.inviteButton.setText(R.string.invite);
                                     holder.inviteButton.setEnabled(true);
                                     holder.inviteButton.setVisibility(View.VISIBLE);
                                     holder.inviteButton.setTextColor(Color.parseColor("#ffffff"));
 
                                 } else {
                                     holder.inviteButton.setBackgroundResource(R.drawable.transparent_button);
-                                    holder.inviteButton.setText("INVITED");
+                                    holder.inviteButton.setText(R.string.invited);
                                     holder.inviteButton.setEnabled(true);
                                     holder.inviteButton.setVisibility(View.VISIBLE);
                                     holder.inviteButton.setTextColor(Color.parseColor("#660c3855"));
@@ -332,12 +337,12 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                                 public void onClick(View view) {
                                     if (currentFriend.isInvited) {
                                         holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
-                                        holder.inviteButton.setText("INVITE");
+                                        holder.inviteButton.setText(R.string.invite);
                                         holder.inviteButton.setTextColor(Color.parseColor("#ffffff"));
                                         InviteFriendsActivity.friendsList.get(position).isInvited = false;
                                     } else {
                                         holder.inviteButton.setBackgroundResource(R.drawable.transparent_button);
-                                        holder.inviteButton.setText("INVITED");
+                                        holder.inviteButton.setText(R.string.invited);
                                         holder.inviteButton.setTextColor(Color.parseColor("#660c3855"));
                                         InviteFriendsActivity.friendsList.get(position).isInvited = true;
                                     }
@@ -353,7 +358,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                         String id = currentFriend.userID;
                         Activity ac = activity;
                         if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                            Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ac, R.string.its_you, Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -368,7 +373,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                         String id = currentFriend.userID;
                         Activity ac = activity;
                         if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                            Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ac, R.string.its_you, Toast.LENGTH_SHORT).show();
                             return;
                         }
 

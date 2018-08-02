@@ -1,5 +1,6 @@
 package larc.ludiconprod.Controller;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import larc.ludiconprod.Activities.ActivitiesActivity;
 import larc.ludiconprod.Activities.ActivityDetailsActivity;
@@ -248,7 +250,7 @@ public class HTTPResponseController {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if (!deleteAnotherUser) {
-                    Toast.makeText(activity, "You left the event successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.you_leave_the_event_successfully, Toast.LENGTH_SHORT).show();
 
                     HashMap<String, String> params = new HashMap<String, String>();
                     HashMap<String, String> headers = new HashMap<String, String>();
@@ -268,7 +270,7 @@ public class HTTPResponseController {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(intent);
                 } else {
-                    Toast.makeText(activity, "You successfully removed the user from event!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.you_successfully_removed_the_user_from_event, Toast.LENGTH_SHORT).show();
                     HashMap<String, String> params = new HashMap<String, String>();
                     HashMap<String, String> headers = new HashMap<String, String>();
                     HashMap<String, String> urlParams = new HashMap<String, String>();
@@ -290,7 +292,7 @@ public class HTTPResponseController {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                Toast.makeText(activity, "You successfully removed the user from event!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.you_successfully_removed_the_user_from_event, Toast.LENGTH_SHORT).show();
                 for (int i = InviteFriendsActivity.participantList.size() - 1; i >= 0; i--) {
                     if (InviteFriendsActivity.participantList.get(i).userID.equals(userId)) {
                         InviteFriendsActivity.participantList.remove(i);
@@ -307,7 +309,7 @@ public class HTTPResponseController {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                Toast.makeText(activity, "You successfully removed the offline friend from event!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.you_successfully_removed_the_offline_friend_from_event, Toast.LENGTH_SHORT).show();
                 InviteFriendsActivity.participantList.remove(position);
                 InviteFriendsActivity.inviteFriendsAdapter.notifyDataSetChanged();
 
@@ -320,7 +322,7 @@ public class HTTPResponseController {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                Toast.makeText(activity, "You cancel the event successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.you_cancel_the_event_successfully, Toast.LENGTH_SHORT).show();
 
                 HashMap<String, String> params = new HashMap<String, String>();
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -587,7 +589,11 @@ public class HTTPResponseController {
                         InviteFriendsActivity.participantList.add(friend);
                         for (int j = 0; j < friend.numberOfOffliners; j++) {
                             Friend offlineFriend = new Friend();
-                            offlineFriend.userName = friend.userName + "'s Friend";
+                            if( Locale.getDefault().getLanguage().startsWith("en")) {
+                                offlineFriend.userName = friend.userName + activity.getResources().getString(R.string.is_friend);
+                            } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                                offlineFriend.userName = activity.getResources().getString(R.string.is_friend) + friend.userName;
+                            }
                             offlineFriend.offlineFriend = true;
                             offlineFriend.profileImage = "";
                             offlineFriend.isOfflineParticipant = true;
@@ -640,7 +646,11 @@ public class HTTPResponseController {
 
                     for (int i = 0; i < jsonObject.getInt("offlineFriendsCount"); i++) {
                         Friend friend = new Friend();
-                        friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + "'s Friend";
+                        if( Locale.getDefault().getLanguage().startsWith("en")) {
+                            friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
+                        } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                        }
                         InviteFriendsActivity.numberOfOfflineFriends++;
                         InviteFriendsActivity.friendsList.add(1, friend);
                         friend.offlineFriend = true;
@@ -768,11 +778,13 @@ public class HTTPResponseController {
 
     private Response.Listener<JSONObject> createJoinEventSuccesListener(final String eventId) {
         return new Response.Listener<JSONObject>() {
+            @TargetApi(Build.VERSION_CODES.M)
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
                     if (activity.getLocalClassName().toString().equals("Activities.ActivityDetailsActivity")) {
-                        Toast.makeText(activity, "Join was successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.join_was_successful, Toast.LENGTH_SHORT).show();
 
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
@@ -799,7 +811,7 @@ public class HTTPResponseController {
                         myEventList.clear();
                         ActivitiesActivity.currentFragment.getMyEvents("0");
                     } else {
-                        Toast.makeText(activity, "Join was successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.join_was_successful, Toast.LENGTH_SHORT).show();
 
                         for (int i = 0; i < aroundMeEventList.size(); i++) {
                             if (aroundMeEventList.get(i).id.equals(eventId)) {
@@ -916,7 +928,7 @@ public class HTTPResponseController {
                 try {
                     String json = error.getMessage();
                     if (error instanceof TimeoutError) {
-                        Toast.makeText(activity, "Check your internet connection!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, R.string.check_your_internet_connection, Toast.LENGTH_LONG).show();
                     } else {
                         json = trimMessage(json, "error");
                         System.out.println(json);

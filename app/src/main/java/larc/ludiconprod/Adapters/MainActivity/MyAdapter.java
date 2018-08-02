@@ -285,7 +285,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     String id = currentEvent.creatorId;
                     if (Persistance.getInstance().getUserInfo(activity).id.equals(id)) {
-                        Toast.makeText(activity, "It's you :)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.its_you, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -303,14 +303,14 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String sportName = "";
 
             if (currentEvent.sportCode.equalsIgnoreCase("JOG") || currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC")) {
-                weWillPlayString = "Will go to ";
+                weWillPlayString = activity.getResources().getString(R.string.will_go_to) + " ";
                 sportName = sport.sportName;
             } else {
                 if (currentEvent.sportCode.equalsIgnoreCase("OTH")) {
-                    weWillPlayString = "Will play ";
+                    weWillPlayString = activity.getResources().getString(R.string.will_play) + " ";
                     sportName = currentEvent.otherSportName;
                 } else {
-                    weWillPlayString = "Will play ";
+                    weWillPlayString = activity.getResources().getString(R.string.will_play) + " ";
                     sportName = sport.sportName;
                 }
             }
@@ -320,12 +320,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ViewHolder)holder).sportLabel.setText(weWillPlayString);
                 ((ViewHolder)holder).sportName.setText(sportName);
 
-                ((ViewHolder)holder).ludicoinsNumber.setText("  +" + String.valueOf(currentEvent.ludicoins));
+                ((ViewHolder)holder).ludicoinsNumber.setText("+" + String.valueOf(currentEvent.ludicoins));
                 ((ViewHolder)holder).pointsNumber.setText("  +" + String.valueOf(currentEvent.points));
 
 
                 ((ViewHolder)holder).locationEvent.setText(currentEvent.placeName);
-                ((ViewHolder)holder).playersNumber.setText(currentEvent.numberOfParticipants + "/" + currentEvent.capacity);
+                ((ViewHolder)holder).playersNumber.setText(" " + currentEvent.numberOfParticipants + "/" + currentEvent.capacity);
             int counter = 0;
             if (currentEvent.numberOfParticipants - 1 >= 1) {
                 ((ViewHolder)holder).friends0.setVisibility(View.VISIBLE);
@@ -407,9 +407,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             int year = Integer.parseInt(stringDate[0]);
             String date = "";
             if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
-                date = "Today, " + stringDateAndTime[1].substring(0, 5);
+                date = activity.getResources().getString(R.string.today) + ", " + stringDateAndTime[1].substring(0, 5);
             } else if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
-                date = "Tomorrow, " + stringDateAndTime[1].substring(0, 5);
+                date = activity.getResources().getString(R.string.tomorrow) + ", " + stringDateAndTime[1].substring(0, 5);
             } else if (year <= todayYear) {
                 date = getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
             } else {

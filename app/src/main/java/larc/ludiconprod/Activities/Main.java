@@ -58,6 +58,13 @@ public class Main extends FragmentActivity {
             bottomBar.setDefaultTab(R.id.tab_friends);
         }
 
+
+        bottomBar.getTabAtPosition(0).setTitle(getResources().getString(R.string.tab_activities));
+        bottomBar.getTabAtPosition(1).setTitle(getResources().getString(R.string.tab_prizes));
+        bottomBar.getTabAtPosition(2).setTitle(getResources().getString(R.string.tab_leaderboard));
+        bottomBar.getTabAtPosition(3).setTitle(getResources().getString(R.string.tab_chat));
+        bottomBar.getTabAtPosition(4).setTitle(getResources().getString(R.string.tab_profile));
+
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -129,7 +136,7 @@ public class Main extends FragmentActivity {
             if (exit) {
                 finish(); // finish activity
             } else {
-                Toast.makeText(this, "Press back again to exit.",
+                Toast.makeText(this, getResources().getString(R.string.press_back_again_to_exit),
                         Toast.LENGTH_SHORT).show();
                 exit = true;
                 new Handler().postDelayed(new Runnable() {

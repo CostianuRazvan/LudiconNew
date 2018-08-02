@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="#660c3855"
-                        android:text="Will play " />
+                        android:text="@string/will_play" />
 
                     <TextView
                         android:id="@+id/sportName"
@@ -121,9 +121,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="14sp"
+                android:text="@string/you_will_gain"
                 android:textColor="#0c3855"
-                android:text="You will gain" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/ludicoinsNumber"
@@ -133,7 +133,7 @@
                 android:textSize="14sp"
                 android:layout_gravity="center"
                 android:textColor="#fcb851"
-                android:text="  +25" />
+                android:text="+25" />
 
             <ImageView
                 android:id="@+id/ludicoinImage"
@@ -169,7 +169,7 @@
                 android:textColor="#0c3855"
                 android:alpha="0.4"
                 android:layout_gravity="center"
-                android:text="  per hour" />
+                android:text="@string/per_hour" />
         </LinearLayout>
 
         <LinearLayout
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/lightGray"
-                    android:text="Date" />
+                    android:text="@string/date" />
 
                 <TextView
                     android:id="@+id/eventDate"
@@ -217,7 +217,7 @@
                     android:textSize="14sp"
                     android:textColor="#0c3855"
                     android:alpha="0.4"
-                    android:text="Location" />
+                    android:text="@string/location" />
 
                 <TextView
                     android:id="@+id/locationEvent"
@@ -243,7 +243,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/lightGray"
-                android:text="Players  " />
+                android:text="@string/players" />
 
             <TextView
                 android:id="@+id/playersNumber"
@@ -324,7 +324,7 @@
                     android:layout_gravity="center"
                     android:textColor="#ffffff"
                     android:layout_alignParentRight="true"
-                    android:text="JOIN" />
+                    android:text="@string/join" />
             </RelativeLayout>
 
 

@@ -149,7 +149,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
                     Intent intent = new Intent(currView.getContext(), ActivityDetailsActivity.class);
                     //intent.putExtra("eventUid", currentEvent.id);
                     activity.startActivity(intent);
-                    Toast.makeText(context, "Go to EventDetails", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.go_to_eventDetails, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -168,7 +168,7 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
                     // intent.putExtra("uid", currentEvent.creator);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     // activity.startActivity(intent);
-                    Toast.makeText(context, "Go to ProfileDetails", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.go_to_profileDetails, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -180,9 +180,9 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
 
             if (currentEvent.sportCode.equalsIgnoreCase("JOG") ||
                     currentEvent.sportCode.equalsIgnoreCase("GYM") || currentEvent.sportCode.equalsIgnoreCase("CYC"))
-                weWillPlayString = "Will go to " + sport.sportName;
+                weWillPlayString = activity.getResources().getString(R.string.will_go_to) + " " + sport.sportName;
             else
-                weWillPlayString = "Will play " + sport.sportName;
+                weWillPlayString = activity.getResources().getString(R.string.will_play) + " " + sport.sportName;
 
             holder.sportName.setText(weWillPlayString);
 
@@ -274,9 +274,9 @@ public class EditActivitiesAdapter extends BaseAdapter implements ListAdapter {
             String[] stringDate = displayDate.split("-");
             String date = "";
             if (Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
-                date = "Today, " + stringDateAndTime[1].substring(0, 5);
+                date = activity.getResources().getString(R.string.today) + ", " + stringDateAndTime[1].substring(0, 5);
             } else if (Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
-                date = "Tomorrow, " + stringDateAndTime[1].substring(0, 5);
+                date =  activity.getResources().getString(R.string.tomorrow) + ", " + stringDateAndTime[1].substring(0, 5);
             } else {
                 date = MyAdapter.getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
             }

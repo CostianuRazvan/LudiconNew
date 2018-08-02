@@ -51,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Happening Now!"
+                        android:text="@string/happening_now"
                         android:textColor="#d4498b"
                         android:textSize="18sp" />
 
@@ -71,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/HNTV"
-                        android:text="You are playing "
+                        android:text="@string/you_are_playing"
                         android:textColor="#acb8c1"
                         android:textSize="14sp" />
 
@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/HNTV"
                         android:layout_toRightOf="@+id/HNPlay"
-                        android:text="Football"
+                        android:text="@string/football"
                         android:textColor="@color/green"
                         android:textSize="14sp" />
 
@@ -106,7 +106,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="You will gain"
+                            android:text="@string/you_will_gain"
                             android:textColor="#0c3855"
                             android:textSize="14sp" />
 
@@ -146,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
-                            android:text="per hour"
+                            android:text="@string/per_hour"
                             android:textColor="#acb8c1"
                             android:textSize="14sp" />
 
@@ -170,7 +170,7 @@
                                 android:id="@+id/locationTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Location"
+                                android:text="@string/location"
                                 android:textColor="#acb8c1"
                                 android:textSize="14sp" />
 
@@ -194,7 +194,7 @@
                                 android:id="@+id/playersTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Players"
+                                android:text="@string/players"
                                 android:textColor="#acb8c1"
                                 android:textSize="14sp" />
 
@@ -260,7 +260,7 @@
                 android:background="@drawable/pink_button_selector"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:text="CHECK-IN"
+                android:text="@string/check_in"
                 android:textColor="#ffffff"
 
                 android:textSize="14dp" />

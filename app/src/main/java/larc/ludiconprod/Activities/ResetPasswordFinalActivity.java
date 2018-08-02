@@ -33,14 +33,14 @@ public class ResetPasswordFinalActivity extends Activity {
         TextView sendText = (TextView) findViewById(R.id.textViewSent);
         TextView emailText = (TextView) findViewById(R.id.textViewEmail);
         if(from.equals("reset")) {
-            titleText.setText("Reset Password");
+            titleText.setText(R.string.reset_password);
         }else if(from.equals("register")){
-            titleText.setText("Register success");
+            titleText.setText(R.string.register_succes);
         }
         sendText.setTypeface(typeFace);
         emailText.setTypeface(typeFace);
         if(from.equals("register")){
-            sendText.setText("We've sent you an email with confirmation code");
+            sendText.setText(R.string.sent_email_with_confirmation_code);
             sendText.setGravity(Gravity.CENTER);
             sendText.setPadding(30,0,30,0);
 

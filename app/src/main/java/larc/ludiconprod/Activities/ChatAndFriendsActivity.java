@@ -73,7 +73,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     public static FriendsAdapter friendsAdapter;
     public static ArrayList<Friend> friends = new ArrayList<>();
     private View v;
-    CharSequence Titles[] = {"CONVERSATIONS", "FOLLOWING"};
+    CharSequence Titles[];
     int Numboftabs = 2;
     ArrayList<Chat> chatList = new ArrayList<>();
     static public ChatAndFriendsActivity currentFragment;
@@ -124,6 +124,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         try {
 
             super.onCreate(savedInstanceState);
+            Titles = new CharSequence[]{getResources().getString(R.string.conversations), getResources().getString(R.string.following1)};
             adapter = new ChatAndFriendsViewPagerAdapter(activity.getSupportFragmentManager(), Titles, Numboftabs);
 
             // Assigning ViewPager View and setting the adapter

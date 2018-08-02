@@ -65,7 +65,7 @@ public class ResetPasswordActivity extends Activity {
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
         TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText("Reset Password");
+        titleText.setText(R.string.reset_password);
         titleText.setTypeface(typeFace);
 
         Calligrapher calligrapher = new Calligrapher(this);
@@ -106,7 +106,7 @@ public class ResetPasswordActivity extends Activity {
                 if (!checkFieldsConstraints()) {
                     resetPassword();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "Please provide email.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResetPasswordActivity.this, R.string.please_provide_email, Toast.LENGTH_LONG).show();
                 }
             }
         });

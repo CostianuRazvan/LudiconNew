@@ -150,9 +150,9 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 public void onClick(View view) {
                     confirmationDialog = new ConfirmationDialog(getActivity());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
+                    confirmationDialog.title.setText(R.string.confirm);
                     confirmationDialog.title.setTypeface(typeFaceBold);
-                    confirmationDialog.message.setText("Are you sure you want to logout?");
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_logout);
                     confirmationDialog.message.setTypeface(typeFace);
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                             @Override

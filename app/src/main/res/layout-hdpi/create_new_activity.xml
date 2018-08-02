@@ -45,7 +45,7 @@
                 android:id="@+id/activityText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ACTIVITY"
+                android:text="@string/activity"
                 android:textSize="14sp"
                 android:fontFamily="@string/fontbold"
                 android:textColor="#0c3855"/>
@@ -78,7 +78,7 @@
                         android:id="@+id/chooseSportNameText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="OTHER SPORT"
+                        android:text="@string/other_sport"
                         android:textSize="14sp"
                         android:layout_marginTop="24dp"
 
@@ -101,7 +101,7 @@
                         android:drawableLeft="@drawable/ic_sport_others"
                         android:textColor="#0c3855"
                         android:fontFamily="@string/fontmedium"
-                        android:hint="Sport name"
+                        android:hint="@string/sport_name"
                         android:text="" />
 
                 </RelativeLayout>
@@ -115,7 +115,7 @@
                     android:fontFamily="@string/fontmedium"
                     android:layout_below="@+id/chooseSportNameLayout"
                     android:layout_marginTop="24dp"
-                    android:text="TYPE &amp; NUMBER OF PLAYERS" />
+                    android:text="@string/type_amp_number_of_players" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -191,7 +191,7 @@
                     android:fontFamily="@string/fontmedium"
                     android:layout_below="@+id/typeAndNumberLayout"
                     android:layout_marginTop="0dp"
-                    android:text="This activity is set as Private and will not be visible in the Activity List.Invite your friends to Join this activity" />
+                    android:text="@string/this_activity_is_set_as_private_and_will_not_be_visible_in_the_activity_list_invite_your_friends_to_join_this_activity" />
 
                 <TextView
                     android:id="@+id/dateAndTime"
@@ -202,7 +202,7 @@
                     android:fontFamily="@string/fontmedium"
                     android:layout_below="@+id/privateText"
                     android:layout_marginTop="24dp"
-                    android:text="DATE &amp; TIME" />
+                    android:text="@string/date_amp_time" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
                             android:layout_marginLeft="8dp"
                             android:textSize="16dp"
                             android:layout_toRightOf="@+id/calendarImageView"
-                            android:hint="Date"
+                            android:hint="@string/date"
                             android:textColorHint="@color/lightGray"
                             android:text=""
                             android:fontFamily="@string/fontmedium"
@@ -270,7 +270,7 @@
                             android:layout_marginLeft="8dp"
                             android:textSize="16dp"
                             android:layout_toRightOf="@+id/hourImageView"
-                            android:hint="Hour"
+                            android:hint="@string/hour"
                             android:textColorHint="@color/lightGray"
                             android:text=""
                             android:fontFamily="@string/fontmedium"
@@ -293,7 +293,7 @@
                     android:fontFamily="@string/fontmedium"
                     android:layout_below="@+id/layoutDateAndTime"
                     android:layout_marginTop="24dp"
-                    android:text="LOCATION" />
+                    android:text="@string/location1" />
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
@@ -330,7 +330,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Tap here to Select Location"
+                        android:text="@string/tap_here_to_select_location"
                         android:textSize="14sp"
                         android:gravity="center_horizontal|center_vertical"
                         android:textColor="#0c3855"
@@ -364,7 +364,7 @@
                     android:textSize="14sp"
                     android:textColor="#0c3855"
                     android:fontFamily="@string/fontbold"
-                    android:text="DESCRIPTION" />
+                    android:text="@string/description" />
                     <TextView
                         android:id="@+id/optional"
                         android:layout_width="match_parent"
@@ -373,7 +373,7 @@
                         android:textColor="@color/lightGray"
                         android:fontFamily="@string/fontbold"
                         android:gravity="right"
-                        android:text="Optional" />
+                        android:text="@string/optional" />
 
                 </LinearLayout>
                 
@@ -384,7 +384,7 @@
                     android:background="@drawable/rounded_edittext"
                     android:layout_below="@+id/descriptionLayout"
                     android:layout_marginTop="16dp"
-                    android:hint="Additional Info"
+                    android:hint="@string/additional_info"
                     android:maxLength="100"
                     android:drawableLeft="@drawable/ic_info"
                     android:textColorHint="@color/lightGray"
@@ -402,7 +402,7 @@
                     android:textColor="#0c3855"
                     android:fontFamily="@string/fontbold"
                     android:layout_marginTop="24dp"
-                    android:text="INVITE FRIENDS" />
+                    android:text="@string/invite_friends" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -461,7 +461,7 @@
                     android:layout_height="48dp"
                     android:id="@+id/createActivityButton"
                     android:background="@drawable/pink_button_selector"
-                    android:text="CREATE ACTIVITY"
+                    android:text="@string/create_activity"
                     android:textSize="14sp"
                     android:fontFamily="@string/fontbold"
                     android:textColor="#ffffff"

@@ -36,7 +36,7 @@
         android:background="@drawable/pink_button_selector"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
-        android:text="YES"
+        android:text="@string/yes"
         android:textColor="@color/white"/>
 
     <Button
@@ -48,7 +48,7 @@
         android:background="@drawable/white_button_selector"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
-        android:text="NO"
+        android:text="@string/no"
         android:textColor="#d4498b"
         android:layout_marginBottom="10dp"/>
 

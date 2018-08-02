@@ -77,7 +77,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Will play"
+                            android:text="@string/will_play"
                             android:id="@+id/sportPlayed"
                             android:textColor="@color/lightGray"
                             android:textSize="14sp"
@@ -86,7 +86,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Football"
+                            android:text="@string/football"
                             android:layout_toRightOf="@+id/sportPlayed"
                             android:id="@+id/sportName"
                             android:layout_marginLeft="4dp"
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="#0c3855"
-                        android:text="You will gain" />
+                        android:text="@string/you_will_gain" />
 
                     <TextView
                         android:id="@+id/ludicoinsNumber"
@@ -163,7 +163,7 @@
                         android:textSize="14sp"
                         android:textColor="@color/lightGray"
                         android:layout_gravity="center"
-                        android:text="  per hour" />
+                        android:text="@string/per_hour" />
 
 
 
@@ -186,7 +186,7 @@
                     android:fontFamily="@string/fontmedium"
                     android:textColor="#0c3855"
                     android:id="@+id/players"
-                    android:text="PLAYERS"
+                    android:text="@string/players"
                     android:layout_below="@+id/line2"
                     android:layout_marginTop="24dp"
                     />
@@ -387,7 +387,7 @@
                         android:id="@+id/allParticipants"
                         android:visibility="invisible"
                         android:textColor="#d4498b"
-                        android:text="ALL"
+                        android:text="@string/all"
                         android:textSize="14dp"
                         android:layout_marginTop="16dp"
                         android:textAlignment="center"
@@ -407,7 +407,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        android:text="GROUP CHAT"
+                        android:text="@string/group_chat"
                         android:textSize="14dp"
                         android:id="@+id/groupChatButton"
                         android:fontFamily="@string/fontbold"
@@ -418,7 +418,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        android:text="Invite Friends"
+                        android:text="@string/invite_friends"
                         android:textSize="14dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
@@ -492,7 +492,7 @@
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="48dp"
-                        android:text="EDIT"
+                        android:text="@string/edit"
                         android:textColor="#ffffff"
                         android:textSize="14dp"
                         android:id="@+id/editEventButton"
@@ -511,7 +511,7 @@
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="48dp"
-                        android:text="DELETE"
+                        android:text="@string/delete"
                         android:textColor="#d4498b"
                         android:textSize="14dp"
                         android:id="@+id/deleteOrCancelEventButton"
@@ -524,7 +524,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="JOIN"
+                    android:text="@string/join"
                     android:textColor="#ffffff"
                     android:textSize="14dp"
                     android:layout_below="@+id/description"

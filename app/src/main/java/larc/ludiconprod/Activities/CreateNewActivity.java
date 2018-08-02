@@ -66,11 +66,11 @@ import static larc.ludiconprod.Activities.InviteFriendsActivity.numberOfOfflineF
 
 public class CreateNewActivity extends Activity implements AdapterView.OnItemSelectedListener, OnMapReadyCallback, Response.ErrorListener {
 
-    String[] sportNames = {"Football", "Basketball", "Volleyball", "Jogging", "Gym", "Cycling", "Tennis", "Ping Pong", "Squash", "Others"};
+    String[] sportNames;
     String[] sportCodes = {"FOT", "BAS", "VOL", "JOG", "GYM", "CYC", "TEN", "PIN", "SQU", "OTH"};
     int sportImages[] = {R.drawable.ic_sport_football, R.drawable.ic_sport_basketball, R.drawable.ic_sport_voleyball, R.drawable.ic_sport_jogging, R.drawable.ic_sport_gym,
             R.drawable.ic_sport_cycling, R.drawable.ic_sport_tennis, R.drawable.ic_sport_pingpong, R.drawable.ic_sport_squash, R.drawable.ic_sport_others};
-    String[] privacyNames = {"Public", "Private"};
+    String[] privacyNames;
     int privacyImages[] = {R.drawable.ic_bnav_user_selected, R.drawable.ic_lock};
     TextView privateText;
     RelativeLayout otherSportLayout;
@@ -118,24 +118,24 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
         boolean isConstraintChecked = false;
         if (sportSpinner.getSelectedItemPosition() == 9) {
             if (otherSportName.getText().length() == 0) {
-                Toast.makeText(getApplicationContext(), "Please enter other sport name!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.enter_other_sport_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
         if (calendarTextView.getText().length() == 0) {
-            Toast.makeText(getApplicationContext(), "Please enter a date!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_a_date, Toast.LENGTH_SHORT).show();
             return true;
         } else
             if (hourTextView.getText().length() == 0) {
-                Toast.makeText(getApplicationContext(), "Please enter a time!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.enter_a_time, Toast.LENGTH_SHORT).show();
                 return true;
             } else
                 if (lat == Double.MAX_VALUE && !getIntent().getBooleanExtra("isEdit", false)) {
-                    Toast.makeText(getApplicationContext(), "Please select a location!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.select_a_location, Toast.LENGTH_SHORT).show();
                     return true;
                 } else
                     if (Integer.valueOf(playersNumber.getText().toString()) < numberOfTotalParticipants + 1) {
-                        Toast.makeText(getApplicationContext(), "Too much participants for this capacity!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.too_much_participants_for_this_capacity, Toast.LENGTH_SHORT).show();
                         return true;
 
                     }
@@ -195,7 +195,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
             public void onClick(View view) {
                 if (!checkConstraints()) {
                     if (!getIntent().getBooleanExtra("isEdit", false)) {
-                        Toast.makeText(CreateNewActivity.this, "Creating...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CreateNewActivity.this, R.string.creating, Toast.LENGTH_LONG).show();
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("authKey", Persistance.getInstance().getUserInfo(CreateNewActivity.this).authKey);
@@ -231,7 +231,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                         HTTPResponseController.getInstance().createEvent(params, headers, CreateNewActivity.this, null, CreateNewActivity.this,false);
 
                     } else {
-                        Toast.makeText(CreateNewActivity.this, "Saving...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CreateNewActivity.this, R.string.saving, Toast.LENGTH_LONG).show();
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("authKey", Persistance.getInstance().getUserInfo(CreateNewActivity.this).authKey);
@@ -311,9 +311,9 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
         InviteFriendsActivity.isFirstTimeInviteFriends = false;
 
         if (!getIntent().getBooleanExtra("isEdit", false)) {
-            titleText.setText("Create Activity");
+            titleText.setText(R.string.create_activity);
         } else {
-            titleText.setText("Edit Activity");
+            titleText.setText(R.string.edit_activity);
         }
 
 
@@ -331,7 +331,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (otherSportName.getText().length() >= 32) {
-                    Toast.makeText(getApplicationContext(), "You have reached maximum lenght for this field!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.you_have_reached_maximum_lenght_for_this_field, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -350,7 +350,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (descriptionEditText.getText().length() >= 100) {
-                    Toast.makeText(getApplicationContext(), "You have reached maximum lenght for this field!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.you_have_reached_maximum_lenght_for_this_field, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -360,6 +360,9 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
             }
         });
 
+        sportNames = new String[]{getResources().getString(R.string.football),getResources().getString(R.string.basketball), getResources().getString(R.string.volleyball),
+                getResources().getString(R.string.jogging), getResources().getString(R.string.gym), getResources().getString(R.string.cycling), getResources().getString(R.string.tennis),
+                getResources().getString(R.string.ping_pong), getResources().getString(R.string.squash), getResources().getString(R.string.others)};
         CustomSpinner customAdapterSports = new CustomSpinner(getApplicationContext(), sportImages, sportNames);
         sportSpinner.setAdapter(customAdapterSports);
         sportSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -402,6 +405,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                 return false;
             }
         });
+        privacyNames = new String[]{getResources().getString(R.string.ev_public), getResources().getString(R.string.ev_private)};
         CustomSpinner customAdapterPrivacy = new CustomSpinner(getApplicationContext(), privacyImages, privacyNames);
         privacySpinner.setAdapter(customAdapterPrivacy);
         privacySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -549,7 +553,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                 eventDetails.listOfParticipants.add(friend);
             }
 
-            createActivityButton.setText("SAVE CHANGES");
+            createActivityButton.setText(R.string.save_changes);
 
             //set custom data for edit
 

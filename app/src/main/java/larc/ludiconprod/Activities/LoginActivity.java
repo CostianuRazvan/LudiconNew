@@ -93,7 +93,7 @@ public class LoginActivity extends Activity {
         backButton = (RelativeLayout) findViewById(R.id.backButton);
         forgotPasswordText=(TextView) findViewById(R.id.forgotPasswordText);
         TextView titleText=(TextView) findViewById(R.id.titleText);
-        titleText.setText("Login");
+        titleText.setText(R.string.login);
         titleText.setTypeface(typeFace);
         forgotPasswordText.setTypeface(typeFaceBold);
 
@@ -198,7 +198,7 @@ public class LoginActivity extends Activity {
         if (mToast != null) {
             mToast.cancel();
         }
-        mToast = Toast.makeText(this, R.string.errorMessage, Toast.LENGTH_LONG);
+        mToast = Toast.makeText(this, getResources().getString(R.string.errorMessage), Toast.LENGTH_LONG);
         mToast.show();
     }
 

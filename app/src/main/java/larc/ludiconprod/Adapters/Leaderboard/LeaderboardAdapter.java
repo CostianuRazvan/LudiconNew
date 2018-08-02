@@ -82,7 +82,7 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
 
 
             int left = day.getActualMaximum(Calendar.DAY_OF_MONTH) - day.get(Calendar.DAY_OF_MONTH);
-            daysLeft.setText(left + " days left");
+            daysLeft.setText(left + " " + fragment.getResources().getString(R.string.days_left));
 
             AssetManager assets = inflater.getContext().getAssets();// Is this the right asset?
             Typeface typeFace = Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
@@ -92,15 +92,15 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
             ((TextView) view.findViewById(R.id.topText)).setTypeface(typeFace);
 
             SpannableStringBuilder spanTxt = new SpannableStringBuilder("");
-            spanTxt.append("Be on ");
+            spanTxt.append(fragment.getResources().getString(R.string.be_on) + " ");
             spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 6,0);
-            spanTxt.append("Top 50 ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 12,0);
+            spanTxt.append(fragment.getResources().getString(R.string.top_50) + " ");
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 13,0);
 
-            spanTxt.append("at the end of the month\nand earn");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 12, 45,0);
-            spanTxt.append(" Ludicoins");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 45, 55,0);
+            spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 13, 46,0);
+            spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 46, 55,0);
             ((TextView) view.findViewById(R.id.topText)).setText(spanTxt, TextView.BufferType.SPANNABLE);
 
 
@@ -197,7 +197,7 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
                 String id = currentPosition.userId;
                 Activity ac = fragment.getActivity();
                 if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                    Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ac, R.string.its_you, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(fragment.getActivity(), UserProfileActivity.class);

@@ -103,7 +103,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
     static public FragmentActivity activity;
 
-    CharSequence Titles[] = {"AROUND ME", "MY ACTIVITIES"};
+    CharSequence Titles[];
     int Numboftabs = 2;
 
     static public boolean getFirstPageAroundMe = true;
@@ -321,6 +321,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             updateActiveToken(activity);
 
             // Creating ViewPager Adapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs
+            Titles = new CharSequence[]{getResources().getString(R.string.around_me),getResources().getString(R.string.my_activities)};
             adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), Titles, Numboftabs);
 
             // Assigning ViewPager View and setting the adapter
@@ -378,7 +379,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             GPSTracker gps = new GPSTracker(activity.getApplicationContext(), activity);
             if (!gps.canGetLocation()) {
                 this.noGps = true;
-                this.prepareError("No location services available!");
+                this.prepareError(getResources().getString(R.string.no_location_services_available));
             }
 
             NumberOfRefreshMyEvents = 0;
@@ -419,7 +420,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                     @Override
                     public void onSuccess(Sharer.Result result) {
-                        Toast.makeText(activity, "This post was shared! ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.this_post_was_shared + " ", Toast.LENGTH_SHORT).show();
                         getActivity().onBackPressed();
                     }
 
@@ -454,7 +455,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             isGetingPage = false;
 
             if (this.noGps) {
-                this.prepareError("No location services available!");
+                this.prepareError(getResources().getString(R.string.no_location_services_available));
             }
 
             // stop swiping
@@ -553,7 +554,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void updateListOfMyEvents() {
         if (this.noGps) {
-            this.prepareError("No location services available!");
+            this.prepareError(getResources().getString(R.string.no_location_services_available));
         }
 
         // stop swiping on my events
@@ -648,7 +649,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             if(HappeningNowStartedAlready){
                 checkinButton = (Button) v.findViewById(R.id.checkinHN);
-                checkinButton.setText("CHECK-OUT");
+                checkinButton.setText(R.string.logout);
 
                 buttonState = 1;
 
@@ -811,7 +812,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
                         buttonState = 1;
 
-                        checkinButton.setText("CHECK-OUT");
+                        checkinButton.setText(R.string.logout);
                         HappeningNowLocation happeningNowLocation = new HappeningNowLocation();
                         happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
 
@@ -823,10 +824,10 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                     } else
                         if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE){
                             // No, he is not, don't let him start the event
-                            Toast.makeText(activity, "Go to event location to start sweating on points!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, getResources().getString(R.string.go_to_event_location_to_start_sweating_on_points), Toast.LENGTH_LONG).show();
                         }
                         else {
-                            Toast.makeText(activity, "Sorry, we can't take your location, please try again later", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, getResources().getString(R.string.we_cant_take_your_location), Toast.LENGTH_LONG).show();
                         }
                 }
                 // Button is pressed, time is counted -> user press "CHECK-OUT"
@@ -838,16 +839,16 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                     final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold.ttf");
                     final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
+                    confirmationDialog.title.setText(R.string.confirm);
                     confirmationDialog.title.setTypeface(typeFaceBold);
-                    confirmationDialog.message.setText("Are you sure you want to stop sweating on points?");
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_stop_sweating_on_points);
                     confirmationDialog.message.setTypeface(typeFace);
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             try {
                                 // User confirms he wants to stop the event
-                                checkinButton.setText("CHECK-IN");
+                                checkinButton.setText(R.string.check_in);
 
                                 savePoints();
 
@@ -999,7 +1000,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             Log.d("Response", error.toString());
             if (error instanceof NetworkError) {
-                this.prepareError("No internet connection!");
+                this.prepareError(getResources().getString(R.string.no_internet_connection));
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -1055,7 +1056,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         GPSTracker gps = new GPSTracker(activity.getApplicationContext(), activity);
         if (!gps.canGetLocation()) {
             this.noGps = true;
-            this.prepareError("No location services available!");
+            this.prepareError(getResources().getString(R.string.no_location_services_available));
 
             //return;
         }

@@ -1,8 +1,12 @@
 package larc.ludiconprod.Utils.util;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
+import java.util.Locale;
 import java.util.TreeMap;
+
+import larc.ludiconprod.R;
 
 /**
  * Created by ancuta on 7/12/2017.
@@ -13,16 +17,29 @@ public class Sport {
     public static final String GENERAL = "GEN";
 
     static {
-        SPORT_MAP.put("BAS", "basketball");
-        SPORT_MAP.put("CYC", "cycling");
-        SPORT_MAP.put("FOT", "football");
-        SPORT_MAP.put("GYM", "gym");
-        SPORT_MAP.put("JOG", "jogging");
-        SPORT_MAP.put("OTH", "other");
-        SPORT_MAP.put("PIN", "ping-pong");
-        SPORT_MAP.put("SQU", "squash");
-        SPORT_MAP.put("TEN", "tennis");
-        SPORT_MAP.put("VOL", "volleyball");
+        if( Locale.getDefault().getLanguage().startsWith("en")) {
+            SPORT_MAP.put("BAS", "basketball");
+            SPORT_MAP.put("CYC", "cycling");
+            SPORT_MAP.put("FOT", "football");
+            SPORT_MAP.put("GYM", "gym");
+            SPORT_MAP.put("JOG", "jogging");
+            SPORT_MAP.put("OTH", "other");
+            SPORT_MAP.put("PIN", "ping-pong");
+            SPORT_MAP.put("SQU", "squash");
+            SPORT_MAP.put("TEN", "tennis");
+            SPORT_MAP.put("VOL", "volleyball");
+        }else  if (Locale.getDefault().getLanguage().startsWith("ro")){
+            SPORT_MAP.put("BAS", "baschet");
+            SPORT_MAP.put("CYC", "biciclete");
+            SPORT_MAP.put("FOT", "fotbal");
+            SPORT_MAP.put("GYM", "sală");
+            SPORT_MAP.put("JOG", "alergat");
+            SPORT_MAP.put("OTH", "altul");
+            SPORT_MAP.put("PIN", "ping-pong");
+            SPORT_MAP.put("SQU", "squash");
+            SPORT_MAP.put("TEN", "tenis");
+            SPORT_MAP.put("VOL", "volei");
+        }
     }
     public final String sportName;
     public final String code;

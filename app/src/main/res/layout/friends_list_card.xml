@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="12 mutual friends"
+                android:text="@string/_12_mutual_friends"
                 android:textColor="#acb8c1"
                 android:id="@+id/friendsMutualFriends" />
             </LinearLayout>

@@ -36,7 +36,7 @@
             android:layout_marginTop="32dp"
             android:textSize="18sp"
             android:textColor="#f44292"
-            android:text="New you out here Florin?Cool!" />
+            android:text="@string/new_you_out_here_florin_cool" />
 
         <TextView
             android:id="@+id/textView5"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textSize="16sp"
-            android:text="We believe you enjoy Ludicon too!Take a moment &amp; set up your profile." />
+            android:text="@string/we_believe_you_enjoy_ludicon_too_take_a_moment_amp_set_up_your_profile" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                     android:layout_weight="1"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="Male"
+                    android:text="@string/male"
                     android:textSize="16sp"
                     android:textColor="#1A0c3855"
                     />
@@ -119,7 +119,7 @@
                     android:layout_weight="1"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="Female"
+                    android:text="@string/female"
                     android:textColor="#1A0c3855" />
             </RadioGroup>
         </RelativeLayout>
@@ -135,7 +135,7 @@
             android:inputType="number"
             android:textSize="16sp"
             android:background="@drawable/rounded_edittext"
-            android:hint="How old are you?"/>
+            android:hint="@string/how_old_are_you"/>
     </LinearLayout>
 
 
@@ -144,7 +144,7 @@
         android:id="@+id/saveAndContinueButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="SAVE &amp; CONTINUE"
+        android:text="@string/save_amp_continue"
         android:layout_marginBottom="16dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="16dp"

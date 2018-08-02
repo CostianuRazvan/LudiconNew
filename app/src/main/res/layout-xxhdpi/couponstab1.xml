@@ -49,7 +49,7 @@
         android:textColor="#d4498b"
         android:visibility="invisible"
         android:fontFamily="@string/fontmedium"
-        android:text="No prizes, yet!" />
+        android:text="@string/no_prizes_yet" />
 
     <TextView
         android:id="@+id/noCouponsText"
@@ -63,7 +63,7 @@
         android:visibility="invisible"
         android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:text="Come back later. Join activities&#10;and gain Ludicoins!" />
+        android:text="@string/come_back_later_join_activities_10_and_gain_ludicoins" />
 
     <Button
         android:id="@+id/noCouponsButton"
@@ -80,7 +80,7 @@
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:background="@drawable/pink_button_selector"
-        android:text="Discover activities"/>
+        android:text="@string/discover_activities"/>
 
     <ProgressBar
         android:id="@+id/progressCoupons"

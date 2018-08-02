@@ -45,6 +45,7 @@ import larc.ludiconprod.Utils.MyProfileUtils.EditViewPagerAdapter;
 import larc.ludiconprod.Utils.ui.SlidingTabLayout;
 import larc.ludiconprod.Utils.util.Sport;
 
+import static larc.ludiconprod.Activities.ActivitiesActivity.activity;
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 
 /**
@@ -54,7 +55,7 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener, Response.ErrorListener, Response.Listener<JSONObject> {
     public static final int PICK_IMAGE_ID = 1423;
 
-    private static final CharSequence TITLES[] = {"SPORT DETAILS", "INFO DETAILS"};
+    private static CharSequence[] TITLES;
     private int tabsNumber = 2;
     private EditViewPagerAdapter adapter;
     private ViewPager pager;
@@ -95,8 +96,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
             View backButton = findViewById(R.id.backButton);
             TextView titleText = (TextView) findViewById(R.id.titleText);
-            titleText.setText("Edit profile");
+            titleText.setText(R.string.edit_profile);
 
+            TITLES = new CharSequence[]{getResources().getString(R.string.sport_details), getResources().getString(R.string.info_details)};
             this.adapter = new EditViewPagerAdapter(getSupportFragmentManager(), EditProfileActivity.TITLES, tabsNumber);
 
             pager = (ViewPager) findViewById(R.id.editPager);
@@ -225,13 +227,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
 
         if (user.firstName.isEmpty()) {
-            Toast.makeText(this, "Enter your first name!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.enter_your_first_name, Toast.LENGTH_SHORT).show();
             return;
         }
 
         user.lastName = this.lastName.getText().toString();
         if (user.lastName.isEmpty()) {
-            Toast.makeText(this, "Enter your last name!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.enter_your_last_name, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -243,13 +245,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             int age = Integer.parseInt(this.date.getText().toString());
             yearBorn = Calendar.getInstance().get(Calendar.YEAR) - age;
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid year provided!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,  R.string.invalid_year_provided, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (this.newPassword.getText().length() > 0 || this.oldPassword.getText().length() > 0 || this.repeatPassword.getText().length() > 0) {
             if (!this.newPassword.getText().toString().equals(this.repeatPassword.getText().toString())) {
-                Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.passwords_do_not_match, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -257,15 +259,15 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             String oldPass = this.oldPassword.getText().toString();
 
             if (pass.isEmpty()) {
-                Toast.makeText(this, "Enter a new password!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.enter_a_new_password, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (pass.length() < 7) {
-                Toast.makeText(this, "Password must have minimum 7 characters!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.password_must_have_minimum_7_characters, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (oldPass.isEmpty()) {
-                Toast.makeText(this, "Enter the old password!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.enter_the_old_password, Toast.LENGTH_SHORT).show();
                 return;
             }
 
