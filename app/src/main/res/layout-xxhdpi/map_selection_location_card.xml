@@ -125,7 +125,7 @@
                             android:textColor="#0c3855"
                             android:alpha="0.4"
                             android:layout_gravity="center"
-                            android:text="  per hour" />
+                            android:text="@string/per_hour" />
 
 
 

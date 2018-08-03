@@ -113,7 +113,7 @@ public class MyCouponsAdapter extends BaseAdapter implements ListAdapter {
             holder.description.setText(currentCoupon.description);
 
             Date date = new Date(currentCoupon.expiryDate * 1000);
-            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
             holder.validDate.setText("Valid till " + fmt.format(date));
         }
 

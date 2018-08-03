@@ -84,7 +84,7 @@
                     android:fontFamily="@string/fontbold"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="FOLLOW"
+                    android:text="@string/follow"
                     android:textColor="#ffffff"
                     android:textSize="14sp"/>
             </LinearLayout>
@@ -122,7 +122,7 @@
                             android:id="@+id/profileLevelText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Level"
+                            android:text="@string/level"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -162,7 +162,7 @@
                             android:id="@+id/profilePointsText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Points"
+                            android:text="@string/points"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -202,7 +202,7 @@
                             android:id="@+id/profilePositionText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Position"
+                            android:text="@string/position"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -217,7 +217,7 @@
                     android:id="@+id/profilePracticeSportsLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="PRACTICED SPORTS"
+                    android:text="@string/practiced_sports"
                     android:fontFamily="@string/fontbold"
                     android:textSize="14sp"
                     android:gravity="left"
@@ -260,7 +260,7 @@
                     android:id="@+id/profileBadgesText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="BADGES"
+                    android:text="@string/badges"
                     android:fontFamily="@string/fontbold"
                     android:textSize="14sp"
                     android:gravity="left"/>

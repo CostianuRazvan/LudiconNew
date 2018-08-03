@@ -9,7 +9,7 @@
         android:id="@+id/noConnectionText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="No internet connection!"
+        android:text="@string/no_internet_connection"
         android:gravity="center"
         android:textSize="14sp"
         android:textColor="#ffffff"

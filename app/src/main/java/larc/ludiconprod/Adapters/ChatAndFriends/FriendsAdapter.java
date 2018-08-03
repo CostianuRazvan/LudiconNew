@@ -131,12 +131,12 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
             holder.friendsLevel.setText(String.valueOf(currentFriend.level));
             if (currentFriend.numberOfMutuals != 0) {
                 if (currentFriend.numberOfMutuals == 1) {
-                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " mutual follower");
+                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " " + activity.getResources().getString(R.string.mutual_follower));
                 } else {
-                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " mutual followers");
+                    holder.friendsMutualFriends.setText(currentFriend.numberOfMutuals + " " + activity.getResources().getString(R.string.mutual_followers));
                 }
             } else {
-                holder.friendsMutualFriends.setText("no mutual followings");
+                holder.friendsMutualFriends.setText(R.string.no_mutual_followings);
             }
             final View currView = view;
             view.setOnClickListener(new View.OnClickListener() {

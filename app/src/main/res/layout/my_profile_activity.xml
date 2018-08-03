@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/darkblue"
-            android:text="My profile"
+            android:text="@string/my_profile"
             android:textSize="20sp"
             android:gravity="center|left"
             android:layout_marginLeft="16dp"
@@ -149,7 +149,7 @@
                     android:id="@+id/profileToNextLevelText"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="to next level"
+                    android:text="@string/to_next_level"
                     android:textSize="14sp"
                     android:fontFamily="@string/fontmedium"
                     android:textColor="@color/lightGray"/>
@@ -189,7 +189,7 @@
                             android:id="@+id/profileLevelText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Level"
+                            android:text="@string/level"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -229,7 +229,7 @@
                             android:id="@+id/profilePointsText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Points"
+                            android:text="@string/points"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -269,7 +269,7 @@
                             android:id="@+id/profilePositionText"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:text="Position"
+                            android:text="@string/position"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
                             android:textColor="@color/lightGray"/>
@@ -284,7 +284,7 @@
                     android:id="@+id/profilePracticeSportsLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="PRACTICED SPORTS"
+                    android:text="@string/practiced_sports"
                     android:fontFamily="@string/fontbold"
                     android:textSize="14sp"
                     android:gravity="left"
@@ -322,7 +322,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="STATISTICS"
+                android:text="@string/statistics"
                 android:fontFamily="@string/fontbold"
                 android:textSize="14sp"
                 android:gravity="left"
@@ -348,13 +348,13 @@
                                 android:id="@+id/profileTotalEventsLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total activities:"
+                                android:text="@string/total_activities"
                                 android:textColor="@color/lightGray"/>
                             <TextView
                                 android:id="@+id/profileTotalPointsLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total points:"
+                                android:text="@string/total_points"
                                 android:textColor="@color/lightGray"/>
                         </LinearLayout>
                         <LinearLayout
@@ -402,7 +402,7 @@
                     android:id="@+id/profileLogout"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="LOGOUT"
+                    android:text="@string/logout"
                     android:textColor="#ffffff"
                     android:textSize="14sp"
                     android:background="@drawable/pink_button_selector"/>

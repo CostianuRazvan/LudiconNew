@@ -49,7 +49,7 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 
 public class CouponsActivity extends Fragment implements Response.ErrorListener, Response.Listener<JSONObject> {
 
-    private static final CharSequence TITLES[] = {"COUPONS", "MY COUPONS"};
+    private static CharSequence[] TITLES;
 
     private Context mContext;
     private int tabsNumber = 2;
@@ -330,7 +330,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
                 String json = trimMessage(error.getMessage(), "error");
                 if (json != null) {
                     if (json.compareTo("User does not have enough points to redeem coupon.") == 0) {
-                        Toast.makeText(super.getContext(), "You do not have enough ludicoins to redeem the coupon.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(super.getContext(), R.string.you_do_not_have_enough_ludicoins_to_redeem_the_coupon, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(super.getContext(), json, Toast.LENGTH_LONG).show();
                     }
@@ -340,7 +340,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         }
     }
         if (error instanceof NetworkError) {
-            this.prepareError("No internet connection!");
+            this.prepareError(getResources().getString(R.string.no_internet_connection));
         } else {
             RelativeLayout ll = (RelativeLayout) v.findViewById(R.id.noInternetLayout);
             ll.getLayoutParams().height = 0;
@@ -422,6 +422,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         try {
             super.onCreate(savedInstanceState);
 
+            TITLES = new CharSequence[]{getResources().getString(R.string.prizes), getResources().getString(R.string.my_prizes)};
             this.adapter = new CouponsPagerAdapter(this.getFragmentManager(), CouponsActivity.TITLES, this.tabsNumber, this);
 
             pager = (ViewPager) v.findViewById(R.id.couponsPager);
@@ -539,7 +540,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
 
         try {
             if(response.get("status") != null && ((String)response.get("status")).compareTo("Success") == 0){
-                Toast.makeText(activity, "The coupon is yours, congrats!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.the_prize_is_yours, Toast.LENGTH_SHORT).show();
 
                 // Reset the value for ludicoins
                 TextView ludicoins = (TextView) v.findViewById(R.id.cuponsLudicoins);

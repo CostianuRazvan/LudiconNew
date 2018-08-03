@@ -14,7 +14,7 @@
         android:id="@+id/topText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Be on Top 50 at the end of the month\n and earn Ludicoins"
+        android:text="@string/be_on_top_50_at_the_end_of_the_month_n_and_earn_ludicoins"
         android:gravity="center"
         android:textColor="@color/darkblue"/>
     <TextView
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:text="Values are computed periodically, so ranks are \n not real-time!"
+        android:text="@string/values_are_computed_periodically_so_ranks_are_n_not_real_time"
         android:gravity="center"
         android:textColor="@color/darkblue"/>
 
@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="3dp"
-        android:text="14 days left"
+        android:text="@string/_14_days_left"
         android:textColor="@color/lightGray" />
 </LinearLayout>

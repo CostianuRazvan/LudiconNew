@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/fontmedium"
-                    android:text="20% OFF"
+                    android:text="@string/_20_off"
                     android:textColor="#d4498b"
                     android:textSize="18sp" />
 
@@ -72,7 +72,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@string/fontmedium"
-            android:text="Use this voucher to recive 1% OFF for all football activities from Monday yo Friday"
+            android:text="@string/use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday"
             android:textColor="@color/darkblue"
             android:textSize="14sp" />
 
@@ -85,7 +85,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@string/fontmedium"
-            android:text="Valid till 20 July 2017"
+            android:text="@string/valid_till_20_july_2017"
             android:textColor="#400c3855"
             android:textSize="14sp" />
 
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/fontbold"
-            android:text="GET IN NOW! only "
+            android:text="@string/get_in_now_only"
             android:textColor="#ffffff"
             android:textSize="14sp" />
 

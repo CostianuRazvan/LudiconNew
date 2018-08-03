@@ -67,7 +67,7 @@
         android:textColor="#d4498b"
         android:visibility="invisible"
         android:fontFamily="@string/fontmedium"
-        android:text="No activities around you!" />
+        android:text="@string/no_activities_around_you" />
 
     <TextView
         android:id="@+id/pressPlusButtonTextFieldAroundMe"
@@ -80,7 +80,7 @@
         android:textColor="#660c3855"
         android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:text="Press the &#34;Plus Button&#34; to&#10;   Create a New Activity " />
+        android:text="@string/press_the_34_plus_button_34_to_10_create_a_new_activity" />
 
 
     <ProgressBar

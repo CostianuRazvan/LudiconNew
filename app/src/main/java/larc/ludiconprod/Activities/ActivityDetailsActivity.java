@@ -155,7 +155,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         findViewById(R.id.internetRefresh).setAlpha(0);
         backButton = (RelativeLayout) findViewById(R.id.backButton);
         TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText("Activity Details");
+        titleText.setText(R.string.activity_details);
         creatorImageProfile = (CircleImageView) findViewById(R.id.creatorImageProfile);
         creatorName = (TextView) findViewById(R.id.creatorName);
         sportPlayed = (TextView) findViewById(R.id.sportPlayed);
@@ -258,12 +258,12 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
 
         if (sport.code.equalsIgnoreCase("JOG") ||
                 sport.code.equalsIgnoreCase("GYM") || sport.code.equalsIgnoreCase("CYC"))
-            weWillPlayString = "Will go to";
+            weWillPlayString =getResources().getString(R.string.will_go_to);
         else
             if (sport.code.equalsIgnoreCase("OTH")) {
-                weWillPlayString = "Will play";
+                weWillPlayString = getResources().getString(R.string.will_play);
             } else
-                weWillPlayString = "Will play";
+                weWillPlayString = getResources().getString(R.string.will_play);
 
         sportPlayed.setText(weWillPlayString);
         if (sport.code.equalsIgnoreCase("OTH")) {
@@ -273,8 +273,8 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         }
 
 
-        ludicoinsNumber.setText("+ " + String.valueOf(eventDetails.ludicoins));
-        pointsNumber.setText("+ " + String.valueOf(eventDetails.points));
+        ludicoinsNumber.setText("+" + String.valueOf(eventDetails.ludicoins));
+        pointsNumber.setText("  +" + String.valueOf(eventDetails.points));
         playerNumber.setText(String.valueOf(eventDetails.numberOfParticipants + "/" + String.valueOf(eventDetails.capacity)));
 
         LinearLayout locationCard = (LinearLayout) findViewById(R.id.root);
@@ -469,7 +469,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     intent.putExtra("groupChat", 1);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(ActivityDetailsActivity.this, "Group chat isn't avaible yet for this event!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityDetailsActivity.this, getResources().getString(R.string.group_chat_isnt_avaible), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -511,14 +511,14 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
 
         Calendar cal = Calendar.getInstance();
         cal.set(Integer.valueOf(stringDate[0]), Integer.valueOf(stringDate[1]) - 1, Integer.valueOf(stringDate[2]));
-        DateFormatSymbols dfs = new DateFormatSymbols(Locale.ENGLISH);
+        DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
         String dayName = dfs.getWeekdays()[cal.get(Calendar.DAY_OF_WEEK)];
 
         if (Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
-            date = "Today " + "at " + stringDateAndTime[1].substring(0, 5);
+            date = activity.getResources().getString(R.string.today) + " " + activity.getResources().getString(R.string.at) + " "  + stringDateAndTime[1].substring(0, 5);
         } else
             if (Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
-                date = "Tomorrow " + "at " + stringDateAndTime[1].substring(0, 5);
+                date = activity.getResources().getString(R.string.tomorrow) + " " + activity.getResources().getString(R.string.at) + " " + stringDateAndTime[1].substring(0, 5);
             } else {
                 date = dayName + ", " + getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDate[0] + " at " + stringDateAndTime[1].substring(0, 5);
             }
@@ -539,7 +539,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         description.setText(eventDetails.description);
         if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.listOfParticipants.size() == 0) {
 
-            deleteOrCancelEventButton.setText("DELETE");
+            deleteOrCancelEventButton.setText(R.string.delete);
             final String eventid = b.getString("eventId");
             deleteOrCancelEventButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -547,9 +547,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
 
                     final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
+                    confirmationDialog.title.setText(R.string.confirm);
                     confirmationDialog.title.setTypeface(typeFaceBold);
-                    confirmationDialog.message.setText("Are you sure you want to delete this event?");
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_delete_this_event);
                     confirmationDialog.message.setTypeface(typeFace);
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -576,7 +576,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
 
         } else
             if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.listOfParticipants.size() >= 1) {
-                deleteOrCancelEventButton.setText("LEAVE");
+                deleteOrCancelEventButton.setText(R.string.leave);
                 //call join api method
 
                 final String eventid = b.getString("eventId");
@@ -597,7 +597,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     deleteOrCancelEventButton.setVisibility(View.INVISIBLE);
                     editEventButton.setVisibility(View.INVISIBLE);
                     joinOrUnjoinButton.setVisibility(View.VISIBLE);
-                    joinOrUnjoinButton.setText("UNJOIN");
+                    joinOrUnjoinButton.setText(R.string.unjoin);
                     joinOrUnjoinButton.setBackgroundResource(R.drawable.pink_stroke_rounded_button);
                     joinOrUnjoinButton.setTextColor(Color.parseColor("#d4498b"));
                     //call join api method
@@ -608,9 +608,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                         public void onClick(View view) {
                             final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
                             confirmationDialog.show();
-                            confirmationDialog.title.setText("Confirm?");
+                            confirmationDialog.title.setText(R.string.confirm);
                             confirmationDialog.title.setTypeface(typeFaceBold);
-                            confirmationDialog.message.setText("Are you sure you want to unjoin this event?");
+                            confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_unjoin_this_event);
                             confirmationDialog.message.setTypeface(typeFace);
                             confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -639,7 +639,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                         deleteOrCancelEventButton.setVisibility(View.INVISIBLE);
                         editEventButton.setVisibility(View.INVISIBLE);
                         joinOrUnjoinButton.setVisibility(View.VISIBLE);
-                        joinOrUnjoinButton.setText("JOIN");
+                        joinOrUnjoinButton.setText(R.string.join);
                         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) chatAndInviteLayout.getLayoutParams();
                         params.height = 0;
                         params.topMargin = 0;
@@ -733,7 +733,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                 String id = eventDetails.creatorId;
                 Activity ac = ActivityDetailsActivity.this;
                 if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                    Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ac, getResources().getString(R.string.its_you), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -775,7 +775,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     String id = data.get(v).userID;
                     Activity ac = ActivityDetailsActivity.this;
                     if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                        Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ac, getResources().getString(R.string.its_you), Toast.LENGTH_SHORT).show();
                         return;
                     }
 

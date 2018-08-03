@@ -34,7 +34,7 @@
         android:id="@+id/saveInvitedFriends"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="SAVE CHANGES"
+        android:text="@string/save_changes"
         android:textSize="14dp"
         android:fontFamily="@string/fontbold"
         android:layout_marginBottom="16dp"

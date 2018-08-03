@@ -41,20 +41,20 @@
                 android:id="@+id/activityLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Activity"
+                android:text="@string/activity1"
                 android:layout_weight="1"/>
             <TextView
                 android:id="@+id/dateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text="@string/date"
                 android:layout_weight="1"
                 android:gravity="center"/>
             <TextView
                 android:id="@+id/ludicoinsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ludicoins"
+                android:text="@string/ludicoins"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"/>
         </LinearLayout>

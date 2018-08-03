@@ -191,7 +191,7 @@ public class GMapsActivity extends FragmentActivity implements PlaceSelectionLis
                         finish();
                     }
                     else{
-                        Toast.makeText(currentActivity,"Please select a location!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(currentActivity,R.string.select_a_location,Toast.LENGTH_LONG).show();
                     }
                 }
             });

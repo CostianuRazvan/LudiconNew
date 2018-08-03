@@ -338,7 +338,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View v) {
                         String id = list.get(pos).creatorId;
                         if (Persistance.getInstance().getUserInfo(activity).id.equals(id)) {
-                            Toast.makeText(activity, "It's you :)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, R.string.its_you, Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -355,14 +355,14 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String sportName = "";
 
                 if (list.get(pos).sportCode.equalsIgnoreCase("JOG") || list.get(pos).sportCode.equalsIgnoreCase("GYM") || list.get(position).sportCode.equalsIgnoreCase("CYC")) {
-                    weWillPlayString = "Will go to ";
+                    weWillPlayString = activity.getResources().getString(R.string.will_go_to) + " ";
                     sportName = sport.sportName;
                 } else {
                     if (list.get(pos).sportCode.equalsIgnoreCase("OTH")) {
-                        weWillPlayString = "Will play ";
+                        weWillPlayString = activity.getResources().getString(R.string.will_play) + " ";
                         sportName = list.get(pos).otherSportName;
                     } else {
-                        weWillPlayString = "Will play ";
+                        weWillPlayString = activity.getResources().getString(R.string.will_play) + " ";
                         sportName = sport.sportName;
                     }
                 }
@@ -373,12 +373,12 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ((ViewHolder)holder).sportName.setText(sportName);
 
 
-                ((ViewHolder)holder).ludicoinsNumber.setText("  +" + String.valueOf(list.get(pos).ludicoins));
+                ((ViewHolder)holder).ludicoinsNumber.setText("+" + String.valueOf(list.get(pos).ludicoins));
                 ((ViewHolder)holder).pointsNumber.setText("  +" + String.valueOf(list.get(pos).points));
 
 
                 ((ViewHolder)holder).locationEvent.setText(list.get(pos).placeName);
-                ((ViewHolder)holder).playersNumber.setText(list.get(pos).numberOfParticipants + "/" + list.get(pos).capacity);
+                ((ViewHolder)holder).playersNumber.setText(" " + list.get(pos).numberOfParticipants + "/" + list.get(pos).capacity);
                 if (list.get(pos).numberOfParticipants - 1 >= 1) {
                     ((ViewHolder)holder).friends0.setVisibility(View.VISIBLE);
                 }
@@ -460,9 +460,9 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 int year = Integer.parseInt(stringDate[0]);
                 String date = "";
                 if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) == todayDay) {
-                    date = "Today, " + stringDateAndTime[1].substring(0, 5);
+                    date = activity.getResources().getString(R.string.today) + ", " + stringDateAndTime[1].substring(0, 5);
                 } else if (year <= todayYear && Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
-                    date = "Tomorrow, " + stringDateAndTime[1].substring(0, 5);
+                    date = activity.getResources().getString(R.string.tomorrow) + ", " + stringDateAndTime[1].substring(0, 5);
                 } else if (year <= todayYear) {
                     date = getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDateAndTime[1].substring(0, 5);
                 } else {

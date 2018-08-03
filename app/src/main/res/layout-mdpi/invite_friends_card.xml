@@ -76,7 +76,7 @@
                 android:textColor="#ffffff"
                 android:layout_marginRight="16dp"
                 android:layout_alignParentRight="true"
-                android:text="INVITE" />
+                android:text="@string/invite" />
         </RelativeLayout>
 
 

@@ -32,7 +32,7 @@ public class LeaderboardActivity extends Fragment implements RadioGroup.OnChecke
     private TreeMap<Integer, String> codes = new TreeMap<>();
     private TreeMap<Integer, Integer> compoundDrawables = new TreeMap<>();
     private int tabsNumber = 3;
-    private static final String[] TITLES = {"THIS MONTH", "3 MONTHS", "ALL TIME"};
+    private static String[] TITLES;
 
     View v;
     Context mContext;
@@ -60,6 +60,7 @@ public class LeaderboardActivity extends Fragment implements RadioGroup.OnChecke
         try {
             super.onCreate(savedInstanceState);
 
+            TITLES = new String[]{getResources().getString(R.string.this_month), getResources().getString(R.string.months_3), getResources().getString(R.string.all_time)};
             this.adapter = new LeaderboardPagerAdapter(this.getFragmentManager(), this, LeaderboardActivity.TITLES, this.tabsNumber);
 
             pager = (ViewPager) v.findViewById(R.id.couponsPager);

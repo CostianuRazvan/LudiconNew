@@ -339,7 +339,7 @@ public class MessageAdapter extends BaseAdapter implements ListAdapter {
                           String id = currentMessage.authorId;
                             Activity ac = activity;
                             if (Persistance.getInstance().getUserInfo(ac).id.equals(id)) {
-                                Toast.makeText(ac, "It's you :)", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ac, R.string.its_you, Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             Intent intent = new Intent(ac, UserProfileActivity.class);

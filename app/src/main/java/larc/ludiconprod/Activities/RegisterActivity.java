@@ -99,7 +99,7 @@ public class RegisterActivity extends FragmentActivity {
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
         TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText("Register");
+        titleText.setText(R.string.register);
         titleText.setTypeface(typeFace);
         backButton = (RelativeLayout) findViewById(R.id.backButton);
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
@@ -231,13 +231,13 @@ public class RegisterActivity extends FragmentActivity {
                         }
                     } else {
                         if (firstName.getText().length() == 0 || lastName.getText().length() == 0) {
-                            Toast.makeText(RegisterActivity.this, "Please provide first and last name.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, R.string.please_provide_first_and_last_name, Toast.LENGTH_LONG).show();
                         } else if (emailAdress.getText().length() == 0) {
-                            Toast.makeText(RegisterActivity.this, "Please provide email.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, R.string.please_provide_email, Toast.LENGTH_LONG).show();
                         } else if (password.getText().length() == 0 || passwordRepeat.getText().length() == 0) {
-                            Toast.makeText(RegisterActivity.this, "Please provide password.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, R.string.please_provide_password, Toast.LENGTH_LONG).show();
                         } else if (password.getText().length() < 7 || passwordRepeat.getText().length() < 7 || !password.getText().toString().equals(passwordRepeat.getText().toString())) {
-                            Toast.makeText(RegisterActivity.this, "Password must have at least 7 characters and must be the same.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, R.string.password_must_have_at_least_7_characters_and_must_be_the_same, Toast.LENGTH_LONG).show();
                         }
                     }
                 }

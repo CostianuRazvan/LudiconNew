@@ -86,7 +86,7 @@ public class ProfileDetailsActivity extends Activity {
         male = (RadioButton) findViewById(R.id.male);
         female = (RadioButton) findViewById(R.id.female);
         TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText("Profile Details");
+        titleText.setText(R.string.profile_details);
         sexSwitch = (RadioGroup) findViewById(R.id.sexSwitch);
         chooseAPhoto = (ImageView) findViewById(R.id.chooseAPhoto);
         chooseAPhoto.setImageResource(R.drawable.ic_image_add);
@@ -108,7 +108,7 @@ public class ProfileDetailsActivity extends Activity {
         saveAndContinueButton = (Button) findViewById(R.id.saveAndContinueButton);
         saveAndContinueButton.setTypeface(typeFaceBold);
         introText = (TextView) findViewById(R.id.introText);
-        introText.setText("First time here, " + Persistance.getInstance().getUserInfo(this).firstName + "? Cool!");
+        introText.setText(R.string.first_time_here + ", " + Persistance.getInstance().getUserInfo(this).firstName + "? " + R.string.cool);
         introText.setTypeface(typeFace);
         age = (EditText) findViewById(R.id.age);
         age.setTypeface(typeFace);
@@ -199,7 +199,7 @@ public class ProfileDetailsActivity extends Activity {
                     Animation shake = AnimationUtils.loadAnimation(ProfileDetailsActivity.this, R.anim.shake);
                     age.startAnimation(shake);
                     age.setBackgroundResource(R.drawable.rounded_edittext_red);
-                    Toast.makeText(ProfileDetailsActivity.this, "Please insert your age!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProfileDetailsActivity.this, R.string.insert_your_age, Toast.LENGTH_LONG).show();
                 }
             }
         });

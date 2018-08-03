@@ -52,7 +52,7 @@
                 android:layout_height="48dp"
                 android:id="@+id/selectLocationButton"
                 android:background="@drawable/pink_button_selector"
-                android:text="SELECT LOCATION"
+                android:text="@string/select_location"
                 android:textSize="14sp"
                 android:layout_alignParentBottom="true"
                 android:fontFamily="@string/fontbold"
@@ -101,7 +101,7 @@
                         android:layout_marginTop="5dp"
                         android:textAlignment="center"
                         android:textColor="@color/darkblue"
-                        android:text="To create your own location, press long tap on the map!"/>
+                        android:text="@string/to_create_your_own_location_press_long_tap_on_the_map"/>
 
 
                     <TextView
@@ -116,7 +116,7 @@
                     android:textSize="12sp"
                         android:textAlignment="center"
                     android:textColor="@color/darkblue"
-                    android:text="As event creator, please make sure you book the desired interval at the selected sport venue!"/>
+                    android:text="@string/as_event_creator_please_make_sure_you_book_the_desired_interval_at_the_selected_sport_venue"/>
 
 
 

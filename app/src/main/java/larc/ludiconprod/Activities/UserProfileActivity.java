@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
@@ -61,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
 
             View backButton = findViewById(R.id.backButton);
             TextView titleText = (TextView) findViewById(R.id.titleText);
-            titleText.setText("Player profile");
+            titleText.setText(R.string.player_profile);
 
             final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
             titleText.setTypeface(typeFace);
@@ -244,7 +245,7 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
 
             Button friendButton = (Button) super.findViewById(R.id.profileFriend);
             if (friend) {
-                friendButton.setText("UNFOLLOW");
+                friendButton.setText(R.string.unfollow);
                 friendButton.setOnClickListener(new View.OnClickListener() {
                     final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
                     final Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
@@ -253,9 +254,9 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
                     public void onClick(View view) {
                         final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this);
                         confirmationDialog.show();
-                        confirmationDialog.title.setText("Confirm?");
+                        confirmationDialog.title.setText(R.string.confirm);
                         confirmationDialog.title.setTypeface(typeFaceBold);
-                        confirmationDialog.message.setText("Are you sure you want to unfollow " + firstName + "?");
+                        confirmationDialog.message.setText(getResources().getString(R.string.are_you_sure_you_want_to_unfollow) + " " + firstName + "?");
                         confirmationDialog.message.setTypeface(typeFace);
                         confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -393,10 +394,10 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
     public void onFriendResponse(JSONObject response, boolean action) {
         String name = this.user.firstName + " " + this.user.lastName;
         if (action) {
-            Toast.makeText(this, "You are now following " + name + "!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.you_are_now_following) + " " + name + "!", Toast.LENGTH_SHORT).show();
             this.friendAdded();
         } else {
-            Toast.makeText(this, "You are no following " + name + "!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.you_are_no_following) + " " + name + "!", Toast.LENGTH_SHORT).show();
             this.friendRemoved();
         }
     }
@@ -437,16 +438,16 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
         final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         final Typeface typeFaceBold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
         Button friendButton = (Button) super.findViewById(R.id.profileFriend);
-        friendButton.setText("UNFOLLOW");
+        friendButton.setText(R.string.unfollow);
         friendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 final ConfirmationDialog confirmationDialog = new ConfirmationDialog(UserProfileActivity.this);
                 confirmationDialog.show();
-                confirmationDialog.title.setText("Confirm?");
+                confirmationDialog.title.setText(R.string.confirm);
                 confirmationDialog.title.setTypeface(typeFaceBold);
-                confirmationDialog.message.setText("Are you sure you want to unfollow " + firstName + "?");
+                confirmationDialog.message.setText((getResources().getString(R.string.are_you_sure_you_want_to_unfollow)) + " " + firstName + "?");
                 confirmationDialog.message.setTypeface(typeFace);
                 confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -467,7 +468,7 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
 
     public void friendRemoved() {
         Button friendButton = (Button) super.findViewById(R.id.profileFriend);
-        friendButton.setText("FOLLOW");
+        friendButton.setText(R.string.follow);
         friendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

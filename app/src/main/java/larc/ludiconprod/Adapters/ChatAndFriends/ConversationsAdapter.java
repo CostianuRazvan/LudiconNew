@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Activities.ChatActivity;
@@ -240,20 +241,38 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
 
     public void setTime(int timeElapsed, ViewHolder holder, Chat currentChat) {
         if (timeElapsed == 0) {
-            holder.timeElapsed.setText("less than a min ago");
+            holder.timeElapsed.setText(R.string.less_than_a_min_ago);
         } else
             if (timeElapsed < 60) {
-                holder.timeElapsed.setText(Integer.valueOf(timeElapsed) + " min ago");
+                if( Locale.getDefault().getLanguage().startsWith("en")) {
+                    holder.timeElapsed.setText(Integer.valueOf(timeElapsed) + " min ago");
+                }else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                    if (Integer.valueOf(timeElapsed) == 1) {
+                        holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.min));
+                    } else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.minutes));
+                }
             } else
                 if (timeElapsed < 1440) {
-                    holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 60) + " hour ago");
+                    if( Locale.getDefault().getLanguage().startsWith("en")) {
+                        holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 60) + " hour ago");
+                    }else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                        if (Integer.valueOf(timeElapsed / 60) == 1){
+                            holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hour));
+                        }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hours));
+                    }
                 } else
                     if (timeElapsed < 10080) {
-                        holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 1440) + " days ago");
+                        if( Locale.getDefault().getLanguage().startsWith("en")) {
+                            holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 1440) + " days ago");
+                        }else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                            if (Integer.valueOf(timeElapsed / 1440) ==1){
+                                holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.day));
+                            }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.days));
+                        }
                     } else {
                         String displayDate = "";
                         try {
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
                             java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
                             displayDate = formatter.format(date);
                         } catch (Exception e) {

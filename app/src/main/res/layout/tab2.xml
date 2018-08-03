@@ -67,7 +67,7 @@
         android:textColor="#d4498b"
         android:visibility="invisible"
         android:fontFamily="@string/fontmedium"
-        android:text="No activities!" />
+        android:text="@string/no_activities" />
 
     <TextView
         android:id="@+id/pressPlusButtonTextFieldMyActivity"
@@ -80,7 +80,7 @@
         android:textColor="#660c3855"
         android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:text="Discover &#38; Join Activitiesto&#10;      or Create a new one&#10;by pressing the &#34;Plus Button&#34;" />
+        android:text="@string/discover_38_join_activitiesto_10_or_create_a_new_one_10_by_pressing_the_34_plus_button_34" />
     <ProgressBar
         android:id="@+id/progressBarMyEvents"
         style="@android:style/Widget.Holo.ProgressBar"

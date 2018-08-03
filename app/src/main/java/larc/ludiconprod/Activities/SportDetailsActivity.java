@@ -63,7 +63,7 @@ public class SportDetailsActivity extends Activity {
         setContentView(R.layout.sport_details_activity);
         football=(RadioButton)findViewById(R.id.football);
         TextView titleText=(TextView) findViewById(R.id.titleText);
-        titleText.setText("Sport Details");
+        titleText.setText(R.string.sport_details);
         backButton=(RelativeLayout) findViewById(R.id.backButton);
         seekBar=(SeekBar) findViewById(R.id.seekBar);
         seekBar.setMax(19);

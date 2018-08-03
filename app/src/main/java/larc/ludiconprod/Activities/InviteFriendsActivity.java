@@ -57,7 +57,7 @@ public class InviteFriendsActivity extends Activity {
         TextView titleText = (TextView) findViewById(R.id.titleText);
         friendsListView = (ListView) findViewById(R.id.inviteFriendsListView);
         saveInvitedFriends = (Button) findViewById(R.id.saveInvitedFriends);
-        titleText.setText("Invite Friends");
+        titleText.setText(R.string.invite_friends);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +98,7 @@ public class InviteFriendsActivity extends Activity {
             saveInvitedFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(InviteFriendsActivity.this, "Inviting friends...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InviteFriendsActivity.this, R.string.inviting_friends, Toast.LENGTH_SHORT).show();
                     HashMap<String, String> params = new HashMap<String, String>();
                     HashMap<String, String> headers = new HashMap<String, String>();
                     headers.put("authKey", Persistance.getInstance().getUserInfo(InviteFriendsActivity.this).authKey);
@@ -135,14 +135,14 @@ public class InviteFriendsActivity extends Activity {
 
         if (!isFirstTimeInviteFriends && !getIntent().getBooleanExtra("isEdit", false) && !getIntent().getBooleanExtra("isParticipant", false)) {
             Friend friend = new Friend();
-            friend.userName = "ADD OFFLINE FRIEND";
+            friend.userName = getResources().getString(R.string.add_offline_friends);
             friendsList.add(friend);
             getFriends("0");
             inviteFriendsAdapter = new InviteFriendsAdapter(friendsList, this, this, getResources(), this);
         } else
             if (!isFirstTimeInviteFriends && getIntent().getBooleanExtra("isEdit", false) && !getIntent().getBooleanExtra("isParticipant", false)) {
                 Friend friend = new Friend();
-                friend.userName = "ADD OFFLINE FRIEND";
+                friend.userName = getResources().getString(R.string.add_offline_friends);
                 friendsList.add(friend);
                 getInvitedFriends("0");
                 inviteFriendsAdapter = new InviteFriendsAdapter(friendsList, this, this, getResources(), this);
@@ -150,7 +150,7 @@ public class InviteFriendsActivity extends Activity {
                 if (!isFirstTimeInviteFriends && getIntent().getBooleanExtra("isParticipant", false)) {
                     inviteFriendsAdapter = new InviteFriendsAdapter(participantList, this, this, getResources(), this);
                     ActivityDetailsActivity.ifFirstTimeGetParticipants = true;
-                    titleText.setText("Participants");
+                    titleText.setText(R.string.players);
 
                 } else {
                     friendsListView.setAdapter(inviteFriendsAdapter);

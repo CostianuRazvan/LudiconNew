@@ -121,9 +121,9 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
 
                     final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
                     confirmationDialog.show();
-                    confirmationDialog.title.setText("Confirm?");
+                    confirmationDialog.title.setText(R.string.confirm);
                     confirmationDialog.title.setTypeface(typeFaceBold);
-                    confirmationDialog.message.setText("Are you sure you want to reedem this coupon?");
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_reedem_this_coupon);
                     confirmationDialog.message.setTypeface(typeFace);
 
                     confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
@@ -166,8 +166,8 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
             holder.description.setText(currentCoupon.description);
 
             Date date = new Date(currentCoupon.expiryDate * 1000);
-            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
-            holder.validDate.setText("Valid till " + fmt.format(date));
+            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+            holder.validDate.setText(activity.getResources().getString(R.string.valid_till) + " " + fmt.format(date));
         }
 
         return view;

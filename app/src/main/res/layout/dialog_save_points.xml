@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="160dp"
         android:gravity="center"
-        android:text="Level 24"
+        android:text="@string/level_24"
         android:textColor="#ffffff"
         android:textSize="30dp" />
 
@@ -35,7 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:gravity="center_horizontal"
-        android:text="Congratulations!"
+        android:text="@string/congratulations"
         android:textColor="#ffffff"
         android:textSize="16dp" />
 
@@ -51,7 +51,7 @@
             android:id="@+id/levelUPText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You Leveled Up!"
+            android:text="@string/you_leveled_up"
             android:textColor="#ffffff"
             android:textSize="20dp" />
 
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="And gained:  "
+            android:text="@string/and_gained"
             android:textColor="#ffffff"
             android:textSize="14dp"
 
