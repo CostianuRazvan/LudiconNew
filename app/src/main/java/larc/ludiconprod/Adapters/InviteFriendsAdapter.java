@@ -215,6 +215,23 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                     holder.inviteButton.setVisibility(View.INVISIBLE);
                     holder.inviteButton.setEnabled(true);
 
+                    holder.friendName.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Friend friend = new Friend();
+                            if( Locale.getDefault().getLanguage().startsWith("en")) {
+                                friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
+                            } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }
+                            friend.offlineFriend = true;
+                            friend.profileImage = "";
+                            InviteFriendsActivity.friendsList.add(1, friend);
+                            InviteFriendsActivity.numberOfOfflineFriends++;
+                            InviteFriendsActivity.inviteFriendsAdapter.notifyDataSetChanged();
+                        }
+                    });
+
                     holder.friendProfileImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
