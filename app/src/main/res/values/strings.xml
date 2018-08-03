@@ -325,5 +325,13 @@
     <string name="invited">INVITED</string>
     <string name="less_than_a_min_ago">less than a min ago</string>
 
+    <string name="min">minute</string>
+    <string name="minutes">minutes</string>
+    <string name="_hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="now">now</string>
+
 
 </resources>

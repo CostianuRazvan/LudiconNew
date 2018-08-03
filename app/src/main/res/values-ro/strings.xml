@@ -13,6 +13,32 @@
     <string name="Terms"><a href="http://www.google.com">Termeni</a></string>
     <string name="Policy"><a href="http://www.facebook.com">Politica de confidențialitate</a></string>
 
+    <string name="fontregular">Quicksand-Regular.ttf</string>
+    <string name="fontmedium">Quicksand-Medium.ttf</string>
+    <string name="fontbold">Quicksand-Bold.ttf</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="pick_image_intent_text"></string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="dummy_content">LUDICON</string>
+    <string name="hello_user">Salut, %1$s!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_ask_preferences">AskPreferences</string>
+    <string name="dummy_button">Dummy Button</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_ask_range">AskRange</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="title_activity_create_new">CreateNewActivity</string>
+
+    <string-array name="chooseSex_array">
+        <item>M</item>
+        <item>F</item>
+
+    </string-array>
+
     <string-array name="rankings_array">
         <item>Forbal</item>
         <item>Volei</item>
@@ -242,6 +268,37 @@
     <string name="tab_leaderboard">Clasament</string>
     <string name="tab_chat">Chat&amp;Urmăriri</string>
     <string name="tab_profile">Profilul meu</string>
+
+    <string-array name="sports_array">
+        <item>Football</item>
+        <item>Volleyball</item>
+        <item>Basketball</item>
+        <item>Squash</item>
+        <item>Ping Pong</item>
+        <item>Tennis</item>
+        <item>Cycling</item>
+        <item>Jogging</item>
+        <item>Gym</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_chat_template">ChatTemplateActivity</string>
+    <string name="title_activity_chat_list">ChatListActivity</string>
+
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_event_details">EventDetails</string>
+    <string name="title_activity_rankings">RankingsActivity</string>
+
+    <string name="title_activity_edit_event">EditEventActivity</string>
+
+    <string name="happening_now">Se întâmplă acum!</string>
+    <string name="you_are_playing">Ești la </string>
+
+    <string name="check_in">START</string>
+
+
+
 
     <string name="_2_sports">2 sporturi</string>
     <string name="_3_mutual_friends">3 urmăriri comune</string>
