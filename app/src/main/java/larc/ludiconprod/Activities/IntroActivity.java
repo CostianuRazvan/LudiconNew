@@ -72,7 +72,6 @@ public class IntroActivity extends Activity {
     Button registerButton;
     TextView infoTextView;
     TextView termsAndPrivacyPolicy;
-    TextView betaText;
     static public ImageView profileImage;
     private ProfileTracker profileTracker;
     private CallbackManager callbackManager;
@@ -137,14 +136,12 @@ public class IntroActivity extends Activity {
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setTypeface(typeFace);
         termsAndPrivacyPolicy = (TextView) findViewById(R.id.termsAndPrivacyPolicy);
-        betaText = (TextView) findViewById(R.id.betaText);
 
         registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setTypeface(typeFace);
         infoTextView = (TextView) findViewById(R.id.textView);
         profileImage = (ImageView) findViewById(R.id.profileImage);
         logo.animate().translationY(-300f).setDuration(1000);
-        betaText.animate().translationY(-300f).setDuration(1000);
 
         callbackManager = CallbackManager.Factory.create();
         if (Persistance.getInstance().getUserInfo(this).id == null) {
@@ -275,7 +272,6 @@ public class IntroActivity extends Activity {
         typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
         termsAndPrivacyPolicy.setTypeface(typeFace);
         infoTextView.setTypeface(typeFace);
-        betaText.setTypeface(typeFace);
         termsAndPrivacyPolicy.setText(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)), TextView.BufferType.SPANNABLE);
         SpannableString ss = new SpannableString(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)));
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -442,8 +438,6 @@ public class IntroActivity extends Activity {
                         Log.v("poza",imageString);
                         logo.animate().translationY(300f);
                         logo.animate().translationY(-300f).setDuration(1000);
-                        betaText.animate().translationY(300f);
-                        betaText.animate().translationY(-300f).setDuration(1000);
 
                         HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
                     }
@@ -467,8 +461,6 @@ public class IntroActivity extends Activity {
 
                         logo.animate().translationY(300f);
                         logo.animate().translationY(-300f).setDuration(1000);
-                        betaText.animate().translationY(300f);
-                        betaText.animate().translationY(-300f).setDuration(1000);
 
                         HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
                         System.out.println("bitmaponprepare");

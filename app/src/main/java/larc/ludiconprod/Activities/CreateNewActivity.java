@@ -1,15 +1,20 @@
 package larc.ludiconprod.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +23,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.support.v4.content.ContextCompat;
 
 import com.android.volley.NetworkError;
 import com.android.volley.Response;
@@ -206,7 +216,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
            paramsImg.addRule(RelativeLayout.CENTER_VERTICAL);
            paramsImg.setMargins(50,0,50,0);
            LinearLayout.LayoutParams lparamsImg = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-           lparamsImg.gravity=Gravity.CENTER;
+           lparamsImg.gravity= Gravity.CENTER;
            img.setLayoutParams(paramsImg);
            img.setLayoutParams(lparamsImg);
            img.setImageResource(R.drawable.ic_info);
