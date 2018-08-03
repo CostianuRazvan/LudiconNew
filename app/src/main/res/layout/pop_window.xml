@@ -5,15 +5,28 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="Enroll in event"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:layout_marginLeft="90dp"
+        />
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="35dp"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -24,37 +37,30 @@
 
             <RelativeLayout
                 android:id="@+id/rel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
-                    android:text="Enroll in event"
-                    android:textColor="@color/black"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="90dp"/>
-
-
+                >
             </RelativeLayout>
 
-
-            <Button
-                android:id="@+id/join"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="JOIN"
-                android:layout_below="@+id/rel"
-                android:textSize="14dp"
-                android:textColor="@color/white"
-                android:background="@drawable/pink_button_selector"/>
+                android:layout_alignParentBottom="true"
+                android:id="@+id/joinL"
+                android:layout_marginBottom="5dp">
+
+                <Button
+                     android:id="@+id/join"
+                     android:layout_width="100dp"
+                     android:layout_height="30dp"
+                     android:layout_centerHorizontal="true"
+                     android:text="JOIN"
+                     android:textSize="14dp"
+                     android:textColor="@color/white"
+                     android:background="@drawable/pink_button_selector"/>
+            </LinearLayout>
 
         </RelativeLayout>
     </ScrollView>

@@ -376,7 +376,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/rounded_edittext"
-                    android:checkedButton="@+id/yes"
+                    android:checkedButton="@+id/no"
                     android:orientation="horizontal"
                     android:layout_below="@+id/enrollWithAForm"
                     android:layout_marginTop="16dp">
@@ -443,7 +443,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:background="@drawable/pin_1_normal"
+                            android:background="@drawable/ic_info"
                             android:gravity="center" />
 
                         <TextView

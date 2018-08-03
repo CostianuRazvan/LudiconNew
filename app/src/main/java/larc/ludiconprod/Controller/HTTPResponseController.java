@@ -60,7 +60,7 @@ import larc.ludiconprod.Utils.util.Sport;
 import static larc.ludiconprod.Activities.ActivitiesActivity.aroundMeEventList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 import static larc.ludiconprod.Activities.ActivitiesActivity.fradapter;
-import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageAroundMe;
+import static larc.ludiconprod.Activities.ActivitiesActivity.pageNumberAroundMe;
 import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageMyActivity;
 import static larc.ludiconprod.Activities.ActivitiesActivity.myAdapter;
 import static larc.ludiconprod.Activities.ActivitiesActivity.myEventList;
@@ -359,7 +359,7 @@ public class HTTPResponseController {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onResponse(JSONObject jsonObject) {
-                if (getFirstPageAroundMe) {
+                if (pageNumberAroundMe == 0) {
                     aroundMeEventList.clear();
                     sponsorsList.clear();
                 }
@@ -404,7 +404,7 @@ public class HTTPResponseController {
 
                         aroundMeEventList.add(event);
                     }
-                    if (getFirstPageAroundMe) {
+                    if (pageNumberAroundMe == 0) {
                         for (int i = 0; i < jsonObject.getJSONArray("sponsors").length(); i++) {
                             Sponsors sponsors = new Sponsors();
                             sponsors.id = jsonObject.getJSONArray("sponsors").getJSONObject(i).getInt("id");
@@ -419,11 +419,10 @@ public class HTTPResponseController {
                         ActivitiesActivity.NumberOfRefreshAroundMe++;
                     }
 
-                    if (getFirstPageAroundMe) {
+                    if (pageNumberAroundMe == 0) {
                         Persistance.getInstance().setSponsors(activity, sponsorsList);
                         //Persistance.getInstance().setAroundMeActivities(activity, aroundMeEventList);
                     }
-                    getFirstPageAroundMe = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1012,7 +1011,9 @@ public class HTTPResponseController {
             }
             else{
                 if(activity.getLocalClassName().toString().equals("Activities.LoginActivity") ||
-                        activity.getLocalClassName().toString().equals("Activities.RegisterActivity") ){
+                        activity.getLocalClassName().toString().equals("Activities.RegisterActivity") ||
+                                activity.getLocalClassName().toString().equals("Activities.Pop") ||
+                                activity.getLocalClassName().toString().equals("Activities.ActivitiesActivity") ){
                  // do nothing just show message
                 }
                 else {
@@ -1054,7 +1055,7 @@ public class HTTPResponseController {
         eventid = eventId;
 
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/joinEvent", params, headers, this.createJoinEventSuccesListener(eventId), this.createRequestErrorListener());
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/joinEvent", params, headers, this.createJoinEventSuccesListener(eventId), this.createRequestErrorListener());
         requestQueue.add(jsObjRequest);
 
     }

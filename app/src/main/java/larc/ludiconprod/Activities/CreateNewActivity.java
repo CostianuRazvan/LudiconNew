@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -70,6 +71,7 @@ import me.anwarshahriar.calligrapher.Calligrapher;
 
 import static android.R.color.transparent;
 import static android.view.View.VISIBLE;
+import static larc.ludiconprod.Activities.ActivitiesActivity.activity;
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 import static larc.ludiconprod.Activities.ActivitiesActivity.latitude;
 import static larc.ludiconprod.Activities.ActivitiesActivity.longitude;
@@ -148,6 +150,8 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
     RelativeLayout relPhone;
     public int numberOfLines = 0;
 
+    private boolean wasFormBasedAndIsEdited = false;
+
     public static String getMonth(int month) {
         String date = new DateFormatSymbols().getMonths()[month - 1];
         return date.substring(0, 1).toUpperCase().concat(date.substring(1, 3));
@@ -189,12 +193,16 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
            RelativeLayout.LayoutParams layoutParams;
            layoutParams = (RelativeLayout.LayoutParams) addCustom.getLayoutParams();
 
+           DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+           float fPixelsHeight = metrics.density * 48;
+           int pixelsHeight = (int) (fPixelsHeight + 0.5f);
+
            final LinearLayout linLayout = new LinearLayout(this);
-           linLayout.setId(numberOfLines + 1);
+           linLayout.setId(numberOfLines + 1 + 100);
            linLayout.setOrientation(LinearLayout.HORIZONTAL);
 
            final TextView et = new TextView(this);
-           RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,145);
+           RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pixelsHeight);//145);
            params.setMargins(0, 30, 0, 0);
            linLayout.setLayoutParams(params);
 
@@ -220,15 +228,37 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
 
            linLayout.setBackgroundDrawable(ContextCompat.getDrawable(CreateNewActivity.this, R.drawable.rounded_edittext));
 
-           LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(750, ViewGroup.LayoutParams.WRAP_CONTENT);
+           DisplayMetrics displayMetrics = new DisplayMetrics();
+           getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+           int displayWidth = displayMetrics.widthPixels;
+
+           LinearLayout.LayoutParams lparams;
+           int paddingValue = 0;
+
+           if(metrics.density < 2) {
+               paddingValue = (int)(12 * metrics.density + 0.5f);
+               lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.63f), ViewGroup.LayoutParams.WRAP_CONTENT);
+           }
+           else if(metrics.density >= 2 && metrics.density <= 3){
+               paddingValue = (int)(24 * metrics.density + 0.5f);
+               lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.68f), ViewGroup.LayoutParams.WRAP_CONTENT);
+           }
+           else {
+               paddingValue = (int)(48 * metrics.density + 0.5f);
+               lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.73f), ViewGroup.LayoutParams.WRAP_CONTENT);
+           }
+
            lparams.gravity = Gravity.CENTER;
+
+           et.setPadding(paddingValue,0,0,0);
+
            RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
            paramsText.addRule(RelativeLayout.CENTER_HORIZONTAL);
            paramsText.addRule(RelativeLayout.CENTER_VERTICAL);
-           paramsText.setMargins(100, 0, 0, 0);
            et.setLayoutParams(paramsText);
            et.setLayoutParams(lparams);
-           et.setId(numberOfLines + 1);
+           //et.setId(numberOfLines + 1);
            et.setBackgroundColor(transparent);
            et.setTextColor(getResources().getColor(R.color.darkblue));
            et.setText(addCustomText.getText().toString());
@@ -266,13 +296,17 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
         RelativeLayout.LayoutParams layoutParams;
         layoutParams = (RelativeLayout.LayoutParams) addCustom.getLayoutParams();
 
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        float fPixelsHeight = metrics.density * 48;
+        int pixelsHeight = (int) (fPixelsHeight + 0.5f);
+
         final LinearLayout linLayout = new LinearLayout(this);
-        linLayout.setId(numberOfLines + 1);
+        linLayout.setId(numberOfLines + 1 + 100);
         linLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         final TextView et = new TextView(this);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,145);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pixelsHeight); //145);
         params.setMargins(0, 30, 0, 0);
         linLayout.setLayoutParams(params);
 
@@ -298,15 +332,39 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
 
         linLayout.setBackgroundDrawable(ContextCompat.getDrawable(CreateNewActivity.this, R.drawable.rounded_edittext));
 
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(750, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(750, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int displayWidth = displayMetrics.widthPixels;
+
+        LinearLayout.LayoutParams lparams;
+        int paddingValue = 0;
+
+        if(metrics.density < 2) {
+            paddingValue = (int)(12 * metrics.density + 0.5f);
+            lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.63f), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        else if(metrics.density >= 2 && metrics.density <= 3){
+            paddingValue = (int)(24 * metrics.density + 0.5f);
+            lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.68f), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        else {
+            paddingValue = (int)(48 * metrics.density + 0.5f);
+            lparams = new LinearLayout.LayoutParams( (int) (displayWidth * 0.73f), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
         lparams.gravity=Gravity.CENTER;
+
+        et.setPadding(paddingValue,0,0,0);
+
         RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         paramsText.addRule(RelativeLayout.CENTER_HORIZONTAL);
         paramsText.addRule(RelativeLayout.CENTER_VERTICAL);
-        paramsText.setMargins(100,0,0,0);
+
         et.setLayoutParams(paramsText);
         et.setLayoutParams(lparams);
-        et.setId(numberOfLines + 1);
+        //et.setId(numberOfLines + 1);
         et.setBackgroundColor(transparent);
         et.setTextColor(getResources().getColor(R.color.darkblue));
         et.setTextSize(16);
@@ -411,10 +469,12 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
             if (getIntent().getStringExtra("form").equals("0")) {
                 yes.setChecked(true);
                 yes.setTextColor(Color.parseColor("#ffffff"));
+                yesOrNoSwitch.check(yes.getId());
             } else
             if (getIntent().getStringExtra("form").equals("1")) {
                 no.setChecked(true);
                 no.setTextColor(Color.parseColor("#ffffff"));
+                yesOrNoSwitch.check(no.getId());
             }
         }
 
@@ -435,13 +495,18 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                         yes.setTextColor(Color.parseColor("#ffffff"));
                         no.setTextColor(Color.parseColor("#1A0c3855"));
                         enroll = 1;
+
                         enrollmentFields.setVisibility(VISIBLE);
-                        enrollmentFields1.setVisibility(VISIBLE);
-                        enrollmentFields2.setVisibility(VISIBLE);
                         newFields.setVisibility(VISIBLE);
+
+                        if(!wasFormBasedAndIsEdited) {
+                            enrollmentFields1.setVisibility(VISIBLE);
+                            enrollmentFields2.setVisibility(VISIBLE);
+                            formParameters.add(enrollmentFieldsAddress.getText().toString());
+                            formParameters.add(enrollmentFieldsPhone.getText().toString());
+                        }
+
                         isFormBased = true;
-                        formParameters.add(enrollmentFieldsAddress.getText().toString());
-                        formParameters.add(enrollmentFieldsPhone.getText().toString());
                     } else {
                         no.setBackgroundResource(R.drawable.green_button_selector);
                         yes.setBackgroundResource(transparent);
@@ -451,20 +516,33 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                         enrollmentFields.setVisibility(View.GONE);
                         enrollmentFields1.setVisibility(View.GONE);
                         enrollmentFields2.setVisibility(View.GONE);
-                        newFields.setVisibility(View.GONE);
+
                         isFormBased = false;
                         formParameters.removeAll(formParameters);
+
+                        for(int j = 100; j <= 102 + numberOfLines ; j ++){
+                            LinearLayout lin =  (LinearLayout) findViewById(j);
+                            if(lin != null)
+                                lin.setVisibility(View.GONE);
+                        }
+                        newFields.setVisibility(View.GONE);
+
                     }
                 }
         });
 
         if (!getIntent().getBooleanExtra("isEdit", false)) {
-            if (enrollmentFields1.getVisibility() == View.VISIBLE) {
-                formParameters.add(enrollmentFieldsAddress.getText().toString());
-            }
-            if (enrollmentFields2.getVisibility() == View.VISIBLE) {
-                formParameters.add(enrollmentFieldsPhone.getText().toString());
-            }
+            no.setBackgroundResource(R.drawable.green_button_selector);
+            yes.setBackgroundResource(transparent);
+            yes.setTextColor(Color.parseColor("#1A0c3855"));
+            no.setTextColor(Color.parseColor("#ffffff"));
+            enroll = 0;
+            enrollmentFields.setVisibility(View.GONE);
+            enrollmentFields1.setVisibility(View.GONE);
+            enrollmentFields2.setVisibility(View.GONE);
+            newFields.setVisibility(View.GONE);
+            isFormBased = false;
+            formParameters.removeAll(formParameters);
         }
 
         minusButton1.setOnClickListener(new View.OnClickListener() {
@@ -532,11 +610,18 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                             params.put("isFormBased", isFormBased ? "1" : "0");
                             int counter = 0;
                             if (formParameters.size() > 0) {
+                                // check if the Add Custom is filled
+                                String temporaryCustomField = addCustomText.getText().toString();
+                                if(temporaryCustomField.compareToIgnoreCase("Add Custom") != 0 && !temporaryCustomField.isEmpty()){
+                                    formParameters.add(temporaryCustomField);
+                                }
+
                                 for (int i = 0; i < formParameters.size(); i++) {
                                     params.put("formParameters[" + counter + "]", formParameters.get(i));
                                     counter++;
                                 }
                             }
+
                         }
                         HTTPResponseController.getInstance().createEvent(params, headers, CreateNewActivity.this, null, CreateNewActivity.this,false);
 
@@ -593,6 +678,12 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                         params.put("isFormBased", isFormBased ? "1" : "0");
                         int counter = 0;
                         if (formParameters.size() > 0 && isFormBased) {
+                            // check if the Add Custom is filled
+                            String temporaryCustomField = addCustomText.getText().toString();
+                            if(temporaryCustomField.compareToIgnoreCase("Add Custom") != 0 && !temporaryCustomField.isEmpty()){
+                                formParameters.add(temporaryCustomField);
+                            }
+
                             for (int i = 0; i < formParameters.size(); i++) {
                                 params.put("formParameters[" + counter + "]", formParameters.get(i));
                                 counter++;
@@ -932,6 +1023,9 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                 enrollmentFields1.setVisibility(View.GONE);
                 enrollmentFields2.setVisibility(View.GONE);
                 addCustom.setVisibility(VISIBLE);
+                wasFormBasedAndIsEdited = true;
+                yesOrNoSwitch.check(yes.getId());
+
                 for (int i =0; i<eventDetails.formParameters.size();i++) {
                     if (eventDetails.formParameters.get(i).equals("Address")){
                         enrollmentFields1.setVisibility(VISIBLE);
@@ -953,6 +1047,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
                 enrollmentFields1.setVisibility(View.GONE);
                 enrollmentFields2.setVisibility(View.GONE);
                 newFields.setVisibility(View.GONE);
+                yesOrNoSwitch.check(no.getId());
             }
 
 

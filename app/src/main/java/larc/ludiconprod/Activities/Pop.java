@@ -2,6 +2,7 @@ package larc.ludiconprod.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -65,25 +66,22 @@ public class Pop extends Activity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        int width = dm.widthPixels;
-        int height = 370;
+        double widthPop = dm.widthPixels * 0.7;
+        double heightPop = dm.heightPixels * 0.25; //370;
 
             popWindow = (RelativeLayout) findViewById(R.id.popWindow);
             textView11 = (TextView) findViewById(R.id.textView11);
             rel = (RelativeLayout) findViewById(R.id.rel);
             join = (Button) findViewById((R.id.join));
 
-            final RelativeLayout relLayout = new RelativeLayout(this);
-            RelativeLayout.LayoutParams paramsR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            relLayout.setLayoutParams(paramsR);
-            paramsR.addRule(RelativeLayout.BELOW, R.id.textView11);
-
-
             final ArrayList<String> myList = (ArrayList<String>) getIntent().getSerializableExtra("formParameters");
             final String eventId = (String) getIntent().getSerializableExtra("eventId");
             final String authKey = (String) getIntent().getSerializableExtra("authKey");
             final String userId = (String) getIntent().getSerializableExtra("userId");
 
+
+            final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+            textView11.setTypeface(typeFace);
 
             for (int i = 0; i<myList.size(); i++) {
 
@@ -92,16 +90,14 @@ public class Pop extends Activity {
                 linLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linLayout.setBackgroundDrawable(ContextCompat.getDrawable(Pop.this, R.drawable.rounded_edittext));
 
-
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)(140*.99));
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)( dm.heightPixels * 0.07));//(140*.99));
                 linLayout.setLayoutParams(params);
                 params.setMargins(20, 0, 20, 20);
-
-
 
                 if(i != 0) {
                     params.addRule(RelativeLayout.BELOW, linLayout.getId()-1);
                 }
+
                 ImageView img = new ImageView(this);
                 RelativeLayout.LayoutParams paramsImg = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 paramsImg.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -110,12 +106,12 @@ public class Pop extends Activity {
                 lparamsImg.gravity = Gravity.CENTER;
                 img.setLayoutParams(paramsImg);
                 img.setLayoutParams(lparamsImg);
+
                 if (myList.get(i).equals("Address")) {
                     img.setImageResource(R.drawable.pin_1_normal);
                 } else img.setImageResource(R.drawable.ic_info);
                 img.setPadding(20, 0, 0, 0);
                 linLayout.addView(img);
-
 
                 EditText text = new EditText(this);
                 text.setHint(myList.get(i));
@@ -127,20 +123,17 @@ public class Pop extends Activity {
                 linLayout.addView(text);
                 linearLayoutList.add(linLayout);
 
+                heightPop = heightPop + 0.08 * dm.heightPixels;
+                //relLayout.addView(linLayout);
+                rel.addView(linLayout);
 
-                    height = height + 160;
-                relLayout.addView(linLayout);
             }
 
-            if (height >= 1000){
-                height = 1000;
+            if (heightPop >= 0.8 * dm.heightPixels){
+                heightPop = 0.8 *dm.heightPixels;
             }
 
-            getWindow().setLayout((int)(width*.7),(int) (height*.99));
-
-
-
-           rel.addView(relLayout);
+            getWindow().setLayout((int)(widthPop),(int) (heightPop));
 
             join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,11 +160,13 @@ public class Pop extends Activity {
                         }
 
                 } else {
+                    /*
                     for (int i =0; i<editTextList.size();i++) {
                         if (editTextList.get(i).getText().length() == 0) {
                             Toast.makeText(Pop.this, "", Toast.LENGTH_LONG).show();
                         }
                     }
+                    */
                 }
             }
         });

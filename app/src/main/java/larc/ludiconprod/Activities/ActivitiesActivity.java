@@ -106,7 +106,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     CharSequence Titles[] = {"AROUND ME", "MY ACTIVITIES"};
     int Numboftabs = 2;
 
-    static public boolean getFirstPageAroundMe = true;
+    static public int pageNumberAroundMe = 0;
     static public boolean getFirstPageMyActivity = true;
 
     static public AroundMeAdapter fradapter;
@@ -285,6 +285,8 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             mContext = inflater.getContext();
             isOnActivityPage = true;
             aroundMeEventList.clear();
+
+            pageNumberAroundMe = 0;
 
             v = inflater.inflate(R.layout.activities_acitivity, container, false);
             nrElements = 4;
@@ -536,7 +538,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                         //getMyEvents("0");
                         checkIsHappeningNow();
 
-                        getFirstPageAroundMe = true;
+                        pageNumberAroundMe = 0;
                         mSwipeRefreshLayout2.setRefreshing(false);
                         NumberOfRefreshAroundMe = 0;
                         nrElements = 4;
@@ -945,7 +947,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     private void onInternetRefresh() {
         getFirstPageMyActivity = true;
         NumberOfRefreshMyEvents = 0;
-        getFirstPageAroundMe = true;
+        pageNumberAroundMe = 0;
         NumberOfRefreshAroundMe = 0;
 
         getMyEvents("0");
@@ -1051,6 +1053,8 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         HashMap<String, String> headers = new HashMap<String, String>();
         HashMap<String, String> urlParams = new HashMap<String, String>();
         headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+
+        pageNumberAroundMe =  Integer.parseInt(pageNumber);
 
         GPSTracker gps = new GPSTracker(activity.getApplicationContext(), activity);
         if (!gps.canGetLocation()) {
