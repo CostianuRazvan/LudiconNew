@@ -1007,6 +1007,8 @@ public class HTTPResponseController {
         return json;
     }
 
+    //TODO -> Get past events getPastEvents();
+
     public void getAroundMeEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);

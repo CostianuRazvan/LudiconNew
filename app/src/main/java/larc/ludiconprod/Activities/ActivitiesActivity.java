@@ -505,7 +505,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             }
         }
         urlParams.put("userSports", userSport);
-        //get Around Me Event
+        //TODO -> getPastEvents activity with FragmentActivity for Tab3
         HTTPResponseController.getInstance().getAroundMeEvent(params, headers, activity, urlParams, this);
     }
 

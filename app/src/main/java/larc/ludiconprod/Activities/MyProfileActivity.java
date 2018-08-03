@@ -42,16 +42,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import larc.ludiconprod.Adapters.EditProfile.HistoryFullAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
+import larc.ludiconprod.Service.History;
+import larc.ludiconprod.Service.RetroFitAdapter;
 import larc.ludiconprod.User;
 import larc.ludiconprod.UserProfile;
 import larc.ludiconprod.Utils.MyProfileUtils.Bar;
-import larc.ludiconprod.Utils.MyProfileUtils.History;
 import larc.ludiconprod.Utils.MyProfileUtils.Iterable;
 import larc.ludiconprod.Utils.MyProfileUtils.TopGraph;
 import larc.ludiconprod.Utils.util.Sport;
@@ -77,9 +79,16 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
     TextView profileTotalEventsLabel;
     TextView profileTotalPointsLabel;
     Button logout;
+    Button showFullHistory;
     RecyclerView recyclerView;
     TextView profileTitle;
     TextView lastActivitiesLabel;
+
+
+    void startNewActivity() {
+        Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+        startActivity(intent);
+    }
 
     private void translate() {
         if (getLanguage().equalsIgnoreCase("ro")) {
@@ -115,13 +124,29 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
 
         // Get Data from API
 
-        History history = new History();
-        historyArrayList.add(history);
+        TreeMap<String, Integer> cd = new TreeMap<>();
+        cd.put("FOT", R.drawable.ic_sport_football);
+        cd.put("BAS", R.drawable.ic_sport_basketball);
+        cd.put("VOL", R.drawable.ic_sport_voleyball);
+        cd.put("JOG", R.drawable.ic_sport_jogging);
+        cd.put("GYM", R.drawable.ic_sport_gym);
+        cd.put("CYC", R.drawable.ic_sport_cycling);
+        cd.put("TEN", R.drawable.ic_sport_tennis);
+        cd.put("PIN", R.drawable.ic_sport_pingpong);
+        cd.put("SQU", R.drawable.ic_sport_squash);
+        cd.put("OTH", R.drawable.ic_sport_others);
 
-        recyclerView.setAdapter(new HistoryFullAdapter(historyArrayList));
+        String userId = Persistance.getInstance().getUserInfo(getActivity()).id;
+        String authKey = Persistance.getInstance().getUserInfo(getActivity()).authKey;
+
+        recyclerView.setAdapter(new HistoryFullAdapter(historyArrayList, cd));
+
+        final RetroFitAdapter retroFitAdapter = new RetroFitAdapter(authKey, recyclerView);
+        retroFitAdapter.getEvents(userId, 0);
 
 
     }
+
 
     @Nullable
     @Override
@@ -164,6 +189,8 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
             Log.d("AUTHKEY", Persistance.getInstance().getUserInfo(getActivity()).authKey);
+            Log.d("USERID", Persistance.getInstance().getUserInfo(getActivity()).id);
+
 
             lastActivitiesLabel = (TextView) v.findViewById(R.id.ProfileHistoryLabel);
             toNextLevel = (TextView) v.findViewById(R.id.profileToNextLevelText);
@@ -174,6 +201,7 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             profilePracticeSportsLabel = (TextView) v.findViewById(R.id.profilePracticeSportsLabel);
             profileTotalPointsLabel = (TextView) v.findViewById(R.id.profileTotalPointsLabel);
             versusLabel = (TextView) v.findViewById(R.id.versusLabel);
+            showFullHistory = (Button) v.findViewById(R.id.BtnShowFullHistory);
 
 
             ((TextView) v.findViewById(R.id.profileTitle)).setTypeface(typeFace);
@@ -205,6 +233,14 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             }
 
             ((Button) v.findViewById(R.id.profileLogout)).setTypeface(typeFaceBold);
+
+
+            showFullHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startNewActivity();
+                }
+            });
 
             logout.setOnClickListener(new View.OnClickListener() {
                 final Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");

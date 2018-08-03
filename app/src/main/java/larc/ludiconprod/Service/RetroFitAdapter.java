@@ -1,13 +1,11 @@
 package larc.ludiconprod.Service;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import larc.ludiconprod.Activities.UserProfileActivity;
-import larc.ludiconprod.Controller.Persistance;
+import larc.ludiconprod.Adapters.EditProfile.HistoryFullAdapter;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,11 +19,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroFitAdapter {
 
     private Retrofit retrofit;
-    static UserProfileActivity userProfileActivity;
+    String authKey;
+    RecyclerView recyclerView;
 
+    public RetroFitAdapter(String authKey, RecyclerView recyclerView) {
+        this.authKey = authKey;
+        this.recyclerView = recyclerView;
+    }
 
-    public static OkHttpClient getClient() {
+    private OkHttpClient getClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         httpClient.addInterceptor(new Interceptor() {
             @Override
@@ -34,7 +41,7 @@ public class RetroFitAdapter {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("authKey", Persistance.getInstance().getUserInfo(userProfileActivity).authKey)
+                        .header("authKey", authKey)
                         .method(original.method(), original.body())
                         .build();
 
@@ -43,29 +50,34 @@ public class RetroFitAdapter {
             }
         });
 
+        httpClient.interceptors().add(logging);
+
         return httpClient.build();
+
 
     }
 
     private void initializeRetroFit() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.ludicon.ro")
+                .baseUrl("http://207.154.236.13/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient())
                 .build();
     }
 
-    public void getEvents(int userId, int pageNumber) {
+    public void getEvents(String userId, int pageNumber) {
         initializeRetroFit();
         LudiconAPI service = retrofit.create(LudiconAPI.class);
 
-        Call<History> request = null; // service.pastEvents(userId, pageNumber, "GMT +3");
-        request.enqueue(new Callback<History>() {
+        Call<HistoryResponse> request = service.pastEvents(authKey, userId, pageNumber + "", "GMT +3");
+        request.enqueue(new Callback<HistoryResponse>() {
             @Override
-            public void onResponse(Call<History> call, Response<History> response) {
+            public void onResponse(Call<HistoryResponse> call, Response<HistoryResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
+                        Log.d("PASTEVENTS", response.body().getHistoryArrayList().get(0).getEventDate() + "");
 
+                        ((HistoryFullAdapter) recyclerView.getAdapter()).addAllItems(response.body().getHistoryArrayList());
                     }
                 } else {
                     Log.d("FAIL", response.code() + " " + response.message());
@@ -73,7 +85,7 @@ public class RetroFitAdapter {
             }
 
             @Override
-            public void onFailure(Call<History> call, Throwable t) {
+            public void onFailure(Call<HistoryResponse> call, Throwable t) {
                 Log.e("FAIL", t.getMessage() + " ", t);
             }
         });
