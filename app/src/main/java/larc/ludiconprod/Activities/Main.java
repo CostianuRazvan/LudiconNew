@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 import larc.ludiconprod.BottomBarHelper.BottomBar;
 import larc.ludiconprod.BottomBarHelper.OnTabReselectListener;
 import larc.ludiconprod.BottomBarHelper.OnTabSelectListener;
@@ -18,7 +20,7 @@ import larc.ludiconprod.R;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 
-public class Main extends FragmentActivity {
+public class Main extends FragmentActivity implements Serializable {
     public static BottomBar bottomBar;
     public static boolean exit = false;
 
