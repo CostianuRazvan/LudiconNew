@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import larc.ludiconprod.Adapters.MainActivity.AroundMeAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
@@ -78,7 +79,6 @@ public class Pop extends Activity {
             final String eventId = (String) getIntent().getSerializableExtra("eventId");
             final String authKey = (String) getIntent().getSerializableExtra("authKey");
             final String userId = (String) getIntent().getSerializableExtra("userId");
-
 
             final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
             textView11.setTypeface(typeFace);
@@ -140,8 +140,8 @@ public class Pop extends Activity {
             public void onClick(View v) {
                 if (!checkFieldsConstraints()) {
                         try {
-                        HashMap<String, String> params = new HashMap<String, String>();
-                        HashMap<String, String> headers = new HashMap<String, String>();
+                        LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
+                        LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
                         headers.put("authKey", authKey);
                         params.put("eventId", eventId);
                         params.put("userId", userId);
@@ -158,15 +158,6 @@ public class Pop extends Activity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-                } else {
-                    /*
-                    for (int i =0; i<editTextList.size();i++) {
-                        if (editTextList.get(i).getText().length() == 0) {
-                            Toast.makeText(Pop.this, "", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    */
                 }
             }
         });
