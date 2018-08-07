@@ -166,7 +166,11 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
                     myList.add(currentFriend.profileImage);
                     intent.putExtra("otherParticipantImage", myList);
                     intent.putExtra("chatId", "isNot");
+                    intent.putExtra("groupChat", 0);
                     intent.putExtra("UserId", currentFriend.userID);
+                    ArrayList<String> userIdList = new ArrayList<String>();
+                    userIdList.add(currentFriend.userID);
+                    intent.putExtra("otherParticipantId", userIdList);
                     activity.startActivity(intent);
                     isOnChatPage = false;
                 }

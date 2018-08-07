@@ -38,11 +38,13 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Struct;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.TimeZone;
 
@@ -53,6 +55,7 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Chat;
 import larc.ludiconprod.Utils.ChatAndFriends.ChatAndFriendsViewPagerAdapter;
+import larc.ludiconprod.Utils.ChatComparator.ChatComparator;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.ui.SlidingTabLayout;
 
@@ -76,6 +79,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     CharSequence Titles[];
     int Numboftabs = 2;
     ArrayList<Chat> chatList = new ArrayList<>();
+    ArrayList<Chat> chatListClone = new ArrayList<>();
     static public ChatAndFriendsActivity currentFragment;
     FragmentActivity activity;
     public static ListView chatListView;
@@ -88,7 +92,6 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     public String keyOfLastChat;
     public Double valueOfLastChat;
     public int numberOfChatsPage;
-    ProgressBar progressBarChats;
     public static ProgressBar progressBarFriends;
     int numberOfTotalChatsArrived;
     Boolean isLastPage = false;
@@ -99,8 +102,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     Boolean isAlreadyProcess = false;
     public static int NumberOfRefreshFriends = 0;
     private int dp56;
-    ProgressBar chatLoading;
     public boolean shouldRequestPage = false;
+
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ChatAndFriendsActivity() {
         currentFragment = this;
@@ -111,9 +115,12 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = inflater.getContext();
         v = inflater.inflate(R.layout.chat_and_friends_activity, container, false);
+
+        // ?? Laur
         while (activity == null) {
             activity = getActivity();
         }
+
         currentChatAndFriends = this;
         threadsList.clear();
         friends.clear();
@@ -121,6 +128,7 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         isOnChatPage = true;
         NumberOfRefreshFriends = 0;
         isFirstTimeSetChat = false;
+
         try {
 
             super.onCreate(savedInstanceState);
@@ -145,12 +153,17 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
 
             // Setting the ViewPager For the SlidingTabsLayout
             tabs.setViewPager(pager);
-            chatAdapter = new ConversationsAdapter(chatList, activity.getApplicationContext(), activity, getResources(), currentFragment);
 
+            View vChat = inflater.inflate(R.layout.chat_tab, container, false);
+            TextView noConversationTV = (TextView) vChat.findViewById(R.id.noConversationTV);
+            TextView joinActivitiesTV = (TextView) vChat.findViewById(R.id.joinActivitiesTV);
+            Button discoverActivitiesButton = (Button) vChat.findViewById(R.id.discoverActivitiesButton);
+            ImageView chatImage = (ImageView) vChat.findViewById(R.id.chatImage);
 
-            final float scale = mContext.getResources().getDisplayMetrics().density;
-            this.dp56 = (int) (56 * scale + 0.5f);
-
+            noConversationTV.setVisibility(View.INVISIBLE);
+            joinActivitiesTV.setVisibility(View.INVISIBLE);
+            discoverActivitiesButton.setVisibility(View.INVISIBLE);
+            chatImage.setVisibility(View.INVISIBLE);
 
             DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
             connectedRef.addValueEventListener(new ValueEventListener() {
@@ -167,213 +180,15 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                 }
             });
 
-            final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id).child("chats");
-            firebaseRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    /*if(!isOnChatPage && !isOnChat1to1) {
+            chatAdapter = new ConversationsAdapter(chatList, activity.getApplicationContext(), activity, getResources(), currentFragment);
+            getConversations();
 
-                        String names = "";
-                        for (DataSnapshot users : dataSnapshot.child("users").getChildren()) {
-                            if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                names += users.child("name").getValue().toString() + ",";
-                            }
+            mSwipeRefreshLayout = (SwipeRefreshLayout) vChat.findViewById(R.id.swipe_refreshChat);
+            mSwipeRefreshLayout.setRefreshing(true);
 
-                        }
-                    }*/
-                    if (dataSnapshot.hasChild("last_message_date") && isFirstTimeSetChat && isOnChatPage) {
-                        final Chat chat = new Chat();
-                        chat.chatId = dataSnapshot.getKey();
-                        if (dataSnapshot.hasChild("event_id")) {
-                            chat.eventId = dataSnapshot.child("event_id").getValue().toString();
-                        }
-                        String names;
-                        if (chat.eventId != null) {
-                            names = "Group:";
-                        } else {
-                            names = "";
-                        }
-                        int counterOfNames=0;
-                        for (DataSnapshot users : dataSnapshot.child("users").getChildren()) {
-
-                            if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                if(counterOfNames == 0) {
-                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                        names += users.child("name").getValue().toString() + ",";
-                                        counterOfNames++;
-                                    } else {
-                                        names += "Unknown" + ",";
-                                        counterOfNames++;
-                                    }
-                                }else if(counterOfNames == 1){
-                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                        if(dataSnapshot.child("users").getChildrenCount() > 3) {
-                                            names += users.child("name").getValue().toString() + "....";
-                                        }else{
-                                            names += users.child("name").getValue().toString() + ",";
-                                        }
-                                        counterOfNames++;
-                                    } else {
-                                        if(dataSnapshot.child("users").getChildrenCount() > 3) {
-                                            names += "Unknown" + "....";
-                                        }else{
-                                            names += "Unknown" + ",";
-                                        }
-                                        counterOfNames++;
-                                    }
-                                }
-                                if (users.hasChild("image")) {
-                                    chat.image.add(users.child("image").getValue().toString());
-                                } else {
-                                    chat.image.add("");
-                                }
-                                chat.otherParticipantId.add(users.getKey().toString());
-                            }
-                        }
-                        chat.participantName = names;
-
-                        chat.lastMessageTime = Double.valueOf(dataSnapshot.child("last_message_date").getValue().toString());
-                        DatabaseReference lastMessageRef = dataSnapshot.child("messages").getRef();
-                        Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
-                        lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    chat.lastMessage = child.child("message").getValue().toString();
-                                    chat.lastMessageId = child.getKey().toString();
-                                }
-                                chatList.add(0, chat);
-                                setAdapter();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    try {
-                        if (dataSnapshot.hasChild("last_message_date") && isOnChatPage && !isAlreadyProcess) {
-                            isAlreadyProcess = true;
-                            for (int i = 0; i < chatList.size(); i++) {
-                                if (dataSnapshot.getKey().equalsIgnoreCase(chatList.get(i).chatId)) {
-                                    chatList.remove(i);
-                                    if (chatList.size() > 0 && threadsList.size() > i) {
-                                        threadsList.get(i).cancel();
-                                        threadsList.remove(i);
-                                        break;
-                                    }
-                                }
-                            }
-
-                            final Chat chat = new Chat();
-                            chat.chatId = dataSnapshot.getKey();
-                            if (dataSnapshot.hasChild("event_id")) {
-                                chat.eventId = dataSnapshot.child("event_id").getValue().toString();
-                            }
-                            String names;
-                            if (chat.eventId != null) {
-                                names = "Group:";
-                            } else {
-                                names = "";
-                            }
-                            int counterOfNames=0;
-                            for (DataSnapshot users : dataSnapshot.child("users").getChildren()) {
-
-                                if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                    if(counterOfNames == 0) {
-                                        if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                            names += users.child("name").getValue().toString() + ",";
-                                            counterOfNames++;
-                                        } else {
-                                            names += "Unknown" + ",";
-                                            counterOfNames++;
-                                        }
-                                    }else if(counterOfNames == 1){
-                                        if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                            if(dataSnapshot.child("users").getChildrenCount() > 3) {
-                                                names += users.child("name").getValue().toString() + "....";
-                                            }else{
-                                                names += users.child("name").getValue().toString() + ",";
-                                            }
-                                            counterOfNames++;
-                                        } else {
-                                            if(dataSnapshot.child("users").getChildrenCount() > 3) {
-                                                names += "Unknown" + "....";
-                                            }else{
-                                                names += "Unknown" + ",";
-                                            }
-                                            counterOfNames++;
-                                        }
-                                    }
-                                    if (users.hasChild("image")) {
-                                        chat.image.add(users.child("image").getValue().toString());
-                                    } else {
-                                        chat.image.add("");
-                                    }
-                                    chat.otherParticipantId.add(users.getKey().toString());
-                                }
-                            }
-                            chat.participantName = names;
-
-                            chat.lastMessageTime = Double.valueOf(dataSnapshot.child("last_message_date").getValue().toString());
-                            DatabaseReference lastMessageRef = dataSnapshot.child("messages").getRef();
-                            Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
-                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                        chat.lastMessage = child.child("message").getValue().toString();
-                                        chat.lastMessageId = child.getKey().toString();
-                                    }
-                                    if (chatList.size() > 0 && !chatList.get(0).chatId.equals(chat.chatId)) {
-                                        chatList.add(0, chat);
-                                        setAdapter();
-                                        isAlreadyProcess = false;
-                                    } else
-                                        if (chatList.size() == 0) {
-                                            chatList.add(0, chat);
-                                            setAdapter();
-                                            isAlreadyProcess = false;
-                                        }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            getFirstPage();
-
-
-            getFriends("0");
             friendsAdapter = new FriendsAdapter(friends, activity, activity, getResources(), this);
+            getFriends("0");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -381,17 +196,203 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         return v;
     }
 
-    public void setAdapter() {
+    public void getConversations() {
+        final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference currUser = firebaseRef.child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+        final DatabaseReference generalChats =  firebaseRef.child("chats");
+
+        // Check if user has any chats
+        currUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.child("chats").exists()) {
+                    chatAdapter.setChatList(chatList);
+                    setChatAdapter();
+                    Persistance.getInstance().setConversation(activity, chatList);
+
+                    addedSwipe = false;
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        final long currentDate = System.currentTimeMillis() / 1000L;
+
+        // Get all the chat id's
+        currUser.child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                final ArrayList<String> chatIds = new ArrayList<String>();
+
+                for (DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()) {
+
+                    String chatKey = uniqueKeySnapshot.getKey();
+                    chatIds.add(chatKey);
+
+                    generalChats.child(chatKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(final DataSnapshot dataSnapshotChat) {
+                            if (dataSnapshotChat.hasChild("last_message_date")) {
+                                double lastMessageDate = Double.valueOf(dataSnapshotChat.child("last_message_date").getValue().toString());
+                                String eventId = dataSnapshotChat.child("event_id").getValue() == null ? null : dataSnapshotChat.child("event_id").getValue().toString();
+
+                                long difference = currentDate - (long)lastMessageDate;
+
+                                // One week, no chat => archive
+                                long maxAcceptedDiff =  60 * 60 * 24 * 7;
+
+                                // Show the events one week after they happened
+                                if(eventId == null || (eventId != null && difference < maxAcceptedDiff)) {
+                                    final Chat chat = new Chat();
+                                    chat.chatId = dataSnapshotChat.getKey();
+                                    chat.lastMessageTime = Double.valueOf(dataSnapshotChat.child("last_message_date").getValue().toString());
+                                    if (dataSnapshotChat.child("event_id").getValue() != null) {
+                                        chat.eventId = dataSnapshotChat.child("event_id").getValue().toString();
+                                    }
+
+                                    // Get Chat name
+                                    String names = "";
+                                    if (chat.eventId != null) {
+                                        names = "Group:";
+
+                                        if (dataSnapshotChat.child("event_info").getValue() != null) {
+                                            if (dataSnapshotChat.child("event_info").child("date").getValue() != null) {
+                                                try {
+                                                    chat.eventDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataSnapshotChat.child("event_info").child("date").getValue().toString());
+                                                } catch (ParseException e) {
+                                                }
+                                            }
+
+                                            if (dataSnapshotChat.child("event_info").child("place_name").getValue() != null) {
+                                                chat.eventLocation = dataSnapshotChat.child("event_info").child("place_name").getValue().toString();
+                                            }
+
+                                            if (dataSnapshotChat.child("event_info").child("sport_code").getValue() != null) {
+                                                chat.eventSport = dataSnapshotChat.child("event_info").child("sport_code").getValue().toString();
+                                            }
+
+                                            if (chat.eventDate != null) {
+                                                DateFormat df = new SimpleDateFormat("d MMM yyyy");
+
+                                                names = df.format(chat.eventDate) + " - " + chat.eventSport + " ";
+                                            }
+                                        }
+                                    }
+
+                                    int counterOfNames = 0;
+
+                                    if (chat.eventDate == null) {
+                                        for (DataSnapshot users : dataSnapshotChat.child("users").getChildren()) {
+
+                                            if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
+                                                if (counterOfNames == 0) {
+                                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
+                                                        names += users.child("name").getValue().toString() + ",";
+                                                        counterOfNames++;
+                                                    } else {
+                                                        counterOfNames++;
+                                                    }
+                                                } else if (counterOfNames == 1) {
+                                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
+                                                        if (dataSnapshot.child("users").getChildrenCount() > 3) {
+                                                            names += users.child("name").getValue().toString() + "..";
+                                                        } else {
+                                                            names += users.child("name").getValue().toString() + ",";
+                                                        }
+                                                        counterOfNames++;
+                                                    } else {
+                                                        counterOfNames++;
+                                                    }
+                                                }
+                                                if (users.hasChild("image")) {
+                                                    chat.image.add(users.child("image").getValue().toString());
+                                                } else {
+                                                    chat.image.add("");
+                                                }
+                                                chat.otherParticipantId.add(users.getKey().toString());
+                                            }
+                                        }
+                                    }
+
+                                    chat.participantName = names;
+                                    chat.lastMessage = "test";
+
+                                    DatabaseReference lastMessageRef = dataSnapshotChat.child("messages").getRef();
+                                    Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
+                                    lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshotM) {
+                                            for (DataSnapshot childMsg : dataSnapshotM.getChildren()) {
+                                                chat.lastMessage = childMsg.child("message").getValue().toString();
+                                                chat.lastMessageId = childMsg.getKey().toString();
+
+                                                chatList.add(chat);
+                                                chatIds.remove(dataSnapshotChat.getKey());
+
+                                                if (chatIds.size() == 0) {
+                                                    System.out.println("hoooray");
+
+                                                    Collections.sort(chatList, new ChatComparator());
+
+                                                    chatAdapter.setChatList(chatList);
+                                                    setChatAdapter();
+                                                    Persistance.getInstance().setConversation(activity, chatList);
+
+                                                    addedSwipe = false;
+                                                    mSwipeRefreshLayout.setRefreshing(false);
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    if (!dataSnapshotChat.hasChild("messages")) {
+                                        chatIds.remove(dataSnapshotChat.getKey());
+                                    }
+                                }
+                                else{
+                                    chatIds.remove(dataSnapshotChat.getKey());
+                                }
+                            }
+                            else {
+                                chatIds.remove(dataSnapshotChat.getKey());
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void setChatAdapter() {
         try {
             chatAdapter.notifyDataSetChanged();
-            chatLoading = (ProgressBar) v.findViewById(R.id.chatLoading);
-            progressBarChats = (ProgressBar) v.findViewById(R.id.progressBarChats);
-            progressBarChats.setAlpha(0f);
 
-            chatLoading.setAlpha(0f);
-            final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refreshChat);
+            mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refreshChat);
             chatListView = (ListView) v.findViewById(R.id.chat_listView);
-
 
             if (!isFirstTimeSetChat) {
                 chatListView.setAdapter(chatAdapter);
@@ -401,7 +402,9 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
             TextView joinActivitiesTV = (TextView) v.findViewById(R.id.joinActivitiesTV);
             Button discoverActivitiesButton = (Button) v.findViewById(R.id.discoverActivitiesButton);
             ImageView chatImage = (ImageView) v.findViewById(R.id.chatImage);
-            if (chatList.size() == 0) {
+
+            ArrayList<Chat> currentList = chatAdapter.getChatList();
+            if (currentList.size() == 0) {
                 noConversationTV.setVisibility(View.VISIBLE);
                 joinActivitiesTV.setVisibility(View.VISIBLE);
                 discoverActivitiesButton.setVisibility(View.VISIBLE);
@@ -420,61 +423,29 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                 chatImage.setVisibility(View.INVISIBLE);
                 chatListView.setVisibility(View.VISIBLE);
             }
-            shouldRequestPage=true;
-            if(isLastPage){
-                ArrayList<String> unseenChats=new ArrayList<>();
-                for(int i=0;i<chatList.size();i++){
-                   if(!chatList.get(i).lastMessageId.equals(chatList.get(i).lastMessageSeen)) {
-                       unseenChats.add(chatList.get(i).chatId);
-                   }
-                }
-                Persistance.getInstance().setUnseenChats(activity,unseenChats);
-            }
-            if (chatListView != null && shouldRequestPage) {
-                chatListView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(final View v, MotionEvent event) {
-                        if (v != null && chatListView.getChildCount() > 0) {
-                            if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+
+            addedSwipe = false;
 
 
-                                if (chatListView.getLastVisiblePosition() == chatListView.getAdapter().getCount() - 1 &&
-                                        chatListView.getChildAt(chatListView.getChildCount() - 1).getBottom() <= chatListView.getHeight()) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (!addedSwipe) {
+                        chatListClone = (ArrayList) chatList.clone();
+                        chatList.clear();
 
-                                    // mSwipeRefreshLayout1.setRefreshing(true);
-                                    if (!isLastPage) {
-                                        progressBarChats.setAlpha(1f);
-                                        getPage();
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                });
-            }
-            if (!addedSwipe) {
-                mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-
-                        for (int i = 0; i < threadsList.size(); i++) {
-                            threadsList.get(i).cancel();
-                        }
-                        threadsList.clear();
                         counterOfChats = 0;
-                        keyOfLastChat = null;
-                        valueOfLastChat = 0.0;
-                        numberOfChatsPage = 0;
-                        numberOfTotalChatsArrived = 0;
-                        isLastPage = false;
+
+                        chatAdapter.setChatList(chatListClone);
+                        chatAdapter.notifyDataSetChanged();
+
                         addedSwipe = false;
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        getFirstPage();
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getConversations();
+                        addedSwipe = true;
                     }
-                });
-                addedSwipe = true;
-            }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -556,338 +527,6 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         }
     }
 
-    public void getFirstPage() {
-        final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id).child("chats");
-        Query query = firebaseRef.orderByChild("last_message_date").limitToLast(16);
-        numberOfChatsPage = 1;
-        chatList.clear();
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                numberOfTotalChatsArrived = 0;
-                for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                    if(chats.hasChild("last_message_date")){
-                        numberOfTotalChatsArrived++;
-                    }
-                }
-                for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                    if (chats.hasChild("last_message_date")) {
-                        final Chat chat = new Chat();
-                        chat.chatId = chats.getKey();
-                        if (chats.hasChild("event_id")) {
-                            chat.eventId = chats.child("event_id").getValue().toString();
-                        }
-                        String names ="";
-
-                        int counterOfNames=0;
-                        if(chats.hasChild("event_info")){
-                            // Format date
-                            String dateShort = chats.child("event_info").child("date").getValue().toString();
-                            long dateShortInt = 0;
-                            try {
-                                dateShortInt = Long.parseLong(dateShort);
-                                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM  - HH:mm");
-                                TimeZone tz = TimeZone.getDefault();
-                                formatter.setTimeZone(tz);
-
-                                java.util.Date date = new java.util.Date( dateShortInt * 1000);
-                                dateShort = formatter.format(date);
-                            }
-                            catch (NumberFormatException ex){
-                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                df.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                                try {
-                                    java.util.Date date = df.parse(dateShort);
-
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM - HH:mm");
-                                    formatter.setTimeZone(TimeZone.getDefault());
-                                    dateShort = formatter.format(date);
-
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            // Format sport
-                            String sport = chats.child("event_info").child("sport_code").getValue().toString();
-                            if(sport.compareToIgnoreCase("OTH") == 0){
-                                sport = chats.child("event_info").child("other_sport_name").getValue().toString();
-                            }
-
-                            chat.participantName = dateShort + " - " + sport + " ";
-                        }
-                        else {
-                            for (DataSnapshot users : chats.child("users").getChildren()) {
-
-                                if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                    if (counterOfNames == 0) {
-                                        if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                            names += users.child("name").getValue().toString() + ",";
-                                            counterOfNames++;
-                                        } else {
-                                            names += "Unknown" + ",";
-                                            counterOfNames++;
-                                        }
-                                    } else if (counterOfNames == 1) {
-                                        if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                            if (chats.child("users").getChildrenCount() > 3) {
-                                                names += users.child("name").getValue().toString() + "....";
-                                            } else {
-                                                names += users.child("name").getValue().toString() + ",";
-                                            }
-                                            counterOfNames++;
-                                        } else {
-                                            if (chats.child("users").getChildrenCount() > 3) {
-                                                names += "Unknown" + "....";
-                                            } else {
-                                                names += "Unknown" + ",";
-                                            }
-                                            counterOfNames++;
-                                        }
-                                    }
-                                    if (users.hasChild("image")) {
-                                        chat.image.add(users.child("image").getValue().toString());
-                                    } else {
-                                        chat.image.add("");
-                                    }
-                                    chat.otherParticipantId.add(users.getKey().toString());
-                                }
-                            }
-                            if (counterOfNames == 0) {
-                                chat.participantName = "No participants in group ";
-                            } else {
-                                if (counterOfNames == 1 && chat.eventId == null) {
-                                    chat.participantName = names;
-                                } else {
-                                    // is group
-                                    chat.participantName = "Group: " + names;
-                                }
-                            }
-                        }
-
-                        if (chats.hasChild("seen")) {
-                            chat.lastMessageSeen = chats.child("seen").getValue().toString();
-                        }
-                        chat.lastMessageTime = Double.valueOf(chats.child("last_message_date").getValue().toString());
-                        DatabaseReference lastMessageRef = chats.child("messages").getRef();
-                        Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
-                        lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    chat.lastMessage = child.child("message").getValue().toString();
-                                    chat.lastMessageId = child.getKey().toString();
-                                }
-                                if (counterOfChats > 0 || numberOfTotalChatsArrived < 16) {
-                                    chatList.add(0, chat);
-                                    counterOfChats++;
-                                } else {
-                                    counterOfChats++;
-                                    keyOfLastChat = chat.chatId;
-                                    valueOfLastChat = chat.lastMessageTime;
-                                }
-                                if (numberOfTotalChatsArrived < 16) {
-                                    if (numberOfTotalChatsArrived == counterOfChats) {
-                                        isLastPage = true;
-                                    }
-                                }
-                                if (numberOfTotalChatsArrived == counterOfChats) {
-                                    setAdapter();
-                                    Persistance.getInstance().setConversation(activity,chatList);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }else{
-
-                        if (numberOfTotalChatsArrived == counterOfChats) {
-                            isLastPage = true;
-                            setAdapter();
-                        }
-                    }
-                }
-                if(numberOfTotalChatsArrived == 0){
-                    setAdapter();
-                    isLastPage=true;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("Cancel", databaseError.toString());
-            }
-        });
-    }
-
-    public void getPage() {
-        if (shouldRequestPage) {
-            shouldRequestPage = false;
-            final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id).child("chats");
-            Query query = firebaseRef.orderByChild("last_message_date").limitToLast(16).endAt(valueOfLastChat, keyOfLastChat);
-            counterOfChats = 0;
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    numberOfTotalChatsArrived = 0;
-                    for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                        if(chats.hasChild("last_message_date")){
-                            numberOfTotalChatsArrived++;
-                        }
-                    }
-                    for (DataSnapshot chats : dataSnapshot.getChildren()) {
-                        if (chats.hasChild("last_message_date")) {
-                            final Chat chat = new Chat();
-                            chat.chatId = chats.getKey();
-                            if (chats.hasChild("event_id")) {
-                                chat.eventId = chats.child("event_id").getValue().toString();
-                            }
-
-                            if(chats.hasChild("event_info")){
-                                // Format date
-                                String dateShort = chats.child("event_info").child("date").getValue().toString();
-                                long dateShortInt = 0;
-                                try {
-                                    dateShortInt = Long.parseLong(dateShort);
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM  - HH:mm");
-                                    TimeZone tz = TimeZone.getDefault();
-                                    formatter.setTimeZone(tz);
-
-                                    java.util.Date date = new java.util.Date( dateShortInt * 1000);
-                                    dateShort = formatter.format(date);
-                                }
-                                catch (NumberFormatException ex){
-                                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    df.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                                    try {
-                                        java.util.Date date = df.parse(dateShort);
-
-                                        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM  - HH:mm");
-                                        TimeZone tz = TimeZone.getDefault();
-                                        formatter.setTimeZone(tz);
-
-                                        dateShort = formatter.format(date);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                // Format sport
-                                String sport = chats.child("event_info").child("sport_code").getValue().toString();
-                                if(sport.compareToIgnoreCase("OTH") == 0){
-                                    sport = chats.child("event_info").child("other_sport_name").getValue().toString();
-                                }
-
-                                chat.participantName = dateShort + " - " + sport + " ";
-                            }
-                            else {
-                                String names;
-                                if (chat.eventId != null) {
-                                    names = "Group:";
-                                } else {
-                                    names = "";
-                                }
-                                int counterOfNames = 0;
-                                for (DataSnapshot users : chats.child("users").getChildren()) {
-                                    if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id)) {
-                                        if (counterOfNames == 0) {
-                                            if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                                names += users.child("name").getValue().toString() + ",";
-                                                counterOfNames++;
-                                            } else {
-                                                names += "Unknown" + ",";
-                                                counterOfNames++;
-                                            }
-                                        } else if (counterOfNames == 1) {
-                                            if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                                if (chats.child("users").getChildrenCount() > 3) {
-                                                    names += users.child("name").getValue().toString() + "....";
-                                                } else {
-                                                    names += users.child("name").getValue().toString() + ",";
-                                                }
-                                                counterOfNames++;
-                                            } else {
-                                                if (chats.child("users").getChildrenCount() > 3) {
-                                                    names += "Unknown" + "....";
-                                                } else {
-                                                    names += "Unknown" + ",";
-                                                }
-                                                counterOfNames++;
-                                            }
-                                        }
-
-                                        if (users.hasChild("image")) {
-                                            chat.image.add(users.child("image").getValue().toString());
-                                        }
-                                        chat.otherParticipantId.add(users.getKey().toString());
-                                    }
-                                }
-                                chat.participantName = names;
-                            }
-
-                            if (chats.hasChild("seen")) {
-                                chat.lastMessageSeen = chats.child("seen").getValue().toString();
-                            }
-                                chat.lastMessageTime = Double.valueOf(chats.child("last_message_date").getValue().toString());
-                                DatabaseReference lastMessageRef = chats.child("messages").getRef();
-                                Query lastMessage = lastMessageRef.orderByKey().limitToLast(1);
-                                lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                            chat.lastMessage = child.child("message").getValue().toString();
-                                            chat.lastMessageId = child.getKey().toString();
-                                        }
-                                        if (counterOfChats > 0 || numberOfTotalChatsArrived < 16) {
-                                            chatList.add(numberOfChatsPage * 15, chat);
-                                            counterOfChats++;
-                                        } else {
-                                            counterOfChats++;
-                                            keyOfLastChat = chat.chatId;
-                                            valueOfLastChat = chat.lastMessageTime;
-                                        }
-                                        if (counterOfChats == 16) {
-                                            numberOfChatsPage++;
-                                        }
-                                        if (numberOfTotalChatsArrived < 16) {
-                                            if (numberOfTotalChatsArrived == counterOfChats) {
-                                                isLastPage = true;
-                                            }
-                                        }
-                                        if (numberOfTotalChatsArrived == counterOfChats) {
-                                            setAdapter();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-
-
-                    }else{
-                            if (numberOfTotalChatsArrived == counterOfChats) {
-                                isLastPage = true;
-                                setAdapter();
-                            }
-
-                    }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }
-
-
     public void getFriends(String pageNumber) {
         HashMap<String, String> params = new HashMap<String, String>();
         HashMap<String, String> headers = new HashMap<String, String>();
@@ -925,7 +564,6 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
         isLastPage = false;
         addedSwipe = false;
         mSwipeRefreshLayout.setRefreshing(false);
-        getFirstPage();
     }
 
     private void onInternetLost() {

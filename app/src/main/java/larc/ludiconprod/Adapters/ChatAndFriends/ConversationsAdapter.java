@@ -51,7 +51,7 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
 
     }
 
-    private ArrayList<Chat> list = new ArrayList<>();
+    private ArrayList<Chat> list;
     private Context context;
     private Resources resources;
     private ChatAndFriendsActivity fragment;
@@ -77,9 +77,12 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
         this.listView = (ListView) activity.findViewById(R.id.events_listView2); // era v.
     }
 
-    public void setListOfEvents(ArrayList<Chat> newList) {
-        this.list = newList;
-        this.notifyDataSetChanged();
+    public void setChatList(ArrayList<Chat> chatList){
+        this.list = chatList;
+    }
+
+    public ArrayList<Chat> getChatList(){
+        return  this.list;
     }
 
 

@@ -155,7 +155,7 @@ public class ChatActivity extends Activity {
 
             titleText.setText(participantName.substring(0, participantName.length() - 1));
         }
-        //checkChatExistence(getIntent().getStringExtra("UserId"),this);
+
         isOnChat1to1 = true;
         createChat = false;
 
@@ -177,6 +177,24 @@ public class ChatActivity extends Activity {
             }
         }
         Persistance.getInstance().setUnseenChats(getApplicationContext(),unseenChats);
+
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (!connected) {
+                    onInternetLost();
+                } else {
+                    onInternetRefresh();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+
         if(ChatId.equalsIgnoreCase("isNot")){
             checkChatExistence(getIntent().getStringExtra("UserId"),this);
         }
@@ -274,10 +292,10 @@ public class ChatActivity extends Activity {
             }
 
             // Check if we have event_info:
-            final DatabaseReference firebaseRefEventInfo = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId);
-            //if (/*firebaseRefEventInfo != null*/ false) {
+            //final DatabaseReference firebaseRefEventInfo = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId);
+            final DatabaseReference firebaseRefEventInfo = FirebaseDatabase.getInstance().getReference().child("chats").child(ChatId);
 
-                firebaseRefEventInfo.addListenerForSingleValueEvent(new ValueEventListener() {
+            firebaseRefEventInfo.addListenerForSingleValueEvent(new ValueEventListener() {
                            @Override
                            public void onDataChange(DataSnapshot dataSnapshot) {
                                    String dateShort = "";
@@ -353,88 +371,12 @@ public class ChatActivity extends Activity {
                         titleText.setText("Group chat");
                     }
                 });
-            /*} else {
-                final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("users");
-                firebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String names = "";
-                        int counterOfNames = 0;
-                        for (DataSnapshot users : dataSnapshot.getChildren()) {
-                            if (!users.getKey().equalsIgnoreCase(Persistance.getInstance().getUserInfo(ChatActivity.this).id)) {
-                                if (users.hasChild("image")) {
-                                    otherUsersImage.add(users.child("image").getValue().toString());
-                                } else {
-                                    otherUsersImage.add("");
-                                }
-                                otherUsersId.add(users.getKey().toString());
-                                if (counterOfNames == 0) {
-                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                        names += users.child("name").getValue().toString() + ",";
-                                        counterOfNames++;
-                                    } else {
-                                        names += "Unknown" + ",";
-                                        counterOfNames++;
-                                    }
-                                } else if (counterOfNames == 1) {
-                                    if (users.hasChild("name") && users.child("name").getValue().toString().trim().compareToIgnoreCase("") != 0) {
-                                        if (dataSnapshot.getChildrenCount() > 3) {
-                                            names += users.child("name").getValue().toString() + "....";
-                                        } else {
-                                            names += users.child("name").getValue().toString() + ",";
-                                        }
-                                        counterOfNames++;
-                                    } else {
-                                        if (dataSnapshot.getChildrenCount() > 3) {
-                                            names += "Unknown" + "....";
-                                        } else {
-                                            names += "Unknown" + ",";
-                                        }
-                                        counterOfNames++;
-                                    }
-                                }
-
-                            }
-                        }
-                        if (names.length() > 0) {
-                            titleText.setText(names.substring(0, names.length() - 1));
-                        }
-                        listenForChanges();
-                        Runnable getPage = getFirstPage();
-                        Thread listener = new Thread(getPage);
-                        listener.start();
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }*/
         }
 
         findViewById(R.id.internetRefresh).setAlpha(0);
 
         final float scale = super.getResources().getDisplayMetrics().density;
         this.dp56 = (int) (56 * scale + 0.5f);
-
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (!connected) {
-                    onInternetLost();
-                } else {
-                    onInternetRefresh();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
     }
 
     private void onInternetRefresh() {
@@ -464,12 +406,14 @@ public class ChatActivity extends Activity {
                     for(int i=0;i < otherUsersId.size();i++) {
                         if(message.authorId.equalsIgnoreCase(otherUsersId.get(i))) {
                             message.otherUserImage =otherUsersImage.get(i);
-                            message.name =usersName.get(i);
+                            if(usersName.size() > i) {
+                                message.name = usersName.get(i);
+                            }
                         }
                     }
                     messageList.add(message);
-                    DatabaseReference seenRef=FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
-                    seenRef.setValue(message.messageId);
+                    //DatabaseReference seenRef=FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
+                    //seenRef.setValue(message.messageId);
                     needToScroll=true;
                     setAdapter();
                 }
@@ -517,7 +461,9 @@ public class ChatActivity extends Activity {
                         e.printStackTrace();
                     }
                 }
-                final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("messages");
+                //final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("messages");
+                final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("chats").child(ChatId).child("messages");
+
                 Query query = firebaseRef.limitToLast(21);
                 numberOfChatsPage = 1;
                 messageList.clear();
@@ -536,7 +482,7 @@ public class ChatActivity extends Activity {
                                 for(int i=0;i < otherUsersId.size();i++) {
                                     if(message.authorId.equalsIgnoreCase(otherUsersId.get(i)) && otherUsersImage.get(i) != null) {
                                         message.otherUserImage = otherUsersImage.get(i);
-                                        if(usersName.size()>1) {
+                                        if(usersName.size()>i) {
                                             message.name = usersName.get(i);
                                         }
                                     }
@@ -574,8 +520,8 @@ public class ChatActivity extends Activity {
 
                                 }
                                 if (numberOfTotalChatsArrived == counterOfChats) {
-                                    DatabaseReference seenRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
-                                    seenRef.setValue(messageList.get(messageList.size() - 1).messageId);
+                                    //DatabaseReference seenRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
+                                    //seenRef.setValue(messageList.get(messageList.size() - 1).messageId);
                                     setAdapter();
                                 }
                             }
@@ -609,8 +555,8 @@ public class ChatActivity extends Activity {
                     message.otherUserImage = getIntent().getStringExtra("otherParticipantImage");
                     message.name = getIntent().getStringExtra("otherParticipantName");
                     messageList.add(message);
-                    DatabaseReference seenRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
-                    seenRef.setValue(message.messageId);
+                    //DatabaseReference seenRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("seen");
+                    //seenRef.setValue(message.messageId);
                     needToScroll = true;
                     setAdapter();
                 }
@@ -640,7 +586,9 @@ public class ChatActivity extends Activity {
     }
 
     public void getPage() {
-        final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("messages");
+        //final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId).child("messages");
+        final DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference().child("chats").child(ChatId).child("messages");
+
         Query query = firebaseRef.endAt(null, keyOfLastChat).limitToLast(21);
         counterOfChats = 0;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -658,7 +606,9 @@ public class ChatActivity extends Activity {
                     for(int i=0;i < otherUsersId.size();i++) {
                         if(message.authorId.equalsIgnoreCase(otherUsersId.get(i))) {
                             message.otherUserImage =otherUsersImage.get(i);
-                            message.name =usersName.get(i);
+                            if(usersName.size()>i) {
+                                message.name = usersName.get(i);
+                            }
                             break;
                         }
                     }
@@ -684,8 +634,12 @@ public class ChatActivity extends Activity {
                             Message firstMessage=new Message();
                             if(otherUsersId.size() == 1 && isGroupChat == 0) {
                                 firstMessage.otherUserName = getIntent().getStringExtra("otherParticipantName");
-                                firstMessage.otherUserImage =otherUsersImage.get(0);
-                                firstMessage.name =usersName.get(0);
+                                if(otherUsersImage.size()>0) {
+                                    firstMessage.otherUserImage = otherUsersImage.get(0);
+                                }
+                                if(usersName.size()>0) {
+                                    firstMessage.name = usersName.get(0);
+                                }
                                 firstMessage.setTopImage = true;
                                 messageList.add(0, firstMessage);
                             }else{
