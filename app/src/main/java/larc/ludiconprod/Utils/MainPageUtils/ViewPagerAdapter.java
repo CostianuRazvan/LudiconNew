@@ -13,11 +13,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the EditViewPagerAdapter is created
     Tab1 tab1;
     Tab2 tab2;
-    boolean t1=false, t2=false;
+    Tab3 tab3;
+    boolean t1 = false, t2 = false, t3 = false;
 
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
         super(fm);
 
         this.Titles = mTitles;
@@ -29,23 +30,29 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if(position == 0) // if the position is 0 we are returning the First tab
+        if (position == 0) // if the position is 0 we are returning the First tab
         {
-            if (!t1){
+            if (!t1) {
                 tab1 = new Tab1();
                 t1 = true;
             }
             return tab1;
-        }
-        else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
-        {
-            if(!t2) {
-                tab2 = new Tab2();
-                t2 = true;
+        } else {
+            if (position == 1)// As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
+            {
+                if (!t2) {
+                    tab2 = new Tab2();
+                    t2 = true;
+                }
+                return tab2;
+            } else {
+                if (!t3) {
+                    tab3 = new Tab3();
+                    t3 = true;
+                }
+                return tab3;
             }
-            return tab2;
         }
-
 
     }
 

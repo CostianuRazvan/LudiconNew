@@ -61,8 +61,10 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 import static larc.ludiconprod.Activities.ActivitiesActivity.fradapter;
 import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageAroundMe;
 import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPageMyActivity;
+import static larc.ludiconprod.Activities.ActivitiesActivity.getFirstPagePastEvents;
 import static larc.ludiconprod.Activities.ActivitiesActivity.happeningNowLocation;
 import static larc.ludiconprod.Activities.ActivitiesActivity.myEventList;
+import static larc.ludiconprod.Activities.ActivitiesActivity.pastEventsEventList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.sponsorsList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.startedEventDate;
 
@@ -493,6 +495,76 @@ public class HTTPResponseController {
             }
         };
     }
+
+
+    private Response.Listener<JSONObject> createMyPastEventsSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                //ActivitiesActivity.startHappeningNow.interrupt();
+
+                System.out.println(jsonObject + " pastEvents");
+                synchronized (pastEventsEventList) {
+                    if (getFirstPagePastEvents) {
+                        pastEventsEventList.clear();
+                    }
+                    try {
+                        for (int i = 0; i < jsonObject.getJSONArray("pastEvents").length(); i++) {
+                            Event event = new Event();
+                            event.id = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("id");
+                            int date = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("eventDate");
+                            event.eventDateTimeStamp = date;
+                            java.util.Date date1 = new java.util.Date((long) date * 1000);
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            String displayDate = formatter.format(date1);
+                            event.eventDate = displayDate;
+                            event.placeName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("placeName");
+                            event.sportCode = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("sportName");
+                            if (event.sportCode.equalsIgnoreCase("OTH")) {
+                                event.otherSportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString
+                                        ("otherSportName");
+                            }
+                            event.creatorName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorName");
+                            event.creatorLevel = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("creatorLevel");
+                            event.creatorId = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorId");
+                            event.numberOfParticipants = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("numberOfParticipants");
+                            event.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("pointsGained");
+                            event.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
+                            event.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("ludicoinsGained");
+                            event.latitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("latitude");
+                            event.longitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("longitude");
+                            for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
+                                event.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
+
+                            }
+                            pastEventsEventList.add(event);
+
+                        }
+                        ActivitiesActivity.currentFragment.updateListPastEvents(false);
+                        if (jsonObject.getJSONArray("pastEvents").length() >= 1) {
+                            ActivitiesActivity.NumberOfRefreshPastEvents++;
+                        }
+                        if (getFirstPagePastEvents) {
+                            ArrayList<Event> localEventList = new ArrayList<>();
+                            localEventList.addAll(pastEventsEventList);
+                            Persistance.getInstance().setPastActivities(activity, localEventList);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    if (!ActivitiesActivity.startHappeningNow.isAlive() && ActivitiesActivity.startHappeningNow.getState() == Thread.State.NEW) {
+                        ActivitiesActivity.startHappeningNow.start();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
 
     private Response.Listener<JSONObject> getLocationSuccesListener() {
         return new Response.Listener<JSONObject>() {
@@ -1023,6 +1095,13 @@ public class HTTPResponseController {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+    public void getMyPastEvents(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener, String timeZone) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/pastEvents?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyPastEventsSuccessListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }
 

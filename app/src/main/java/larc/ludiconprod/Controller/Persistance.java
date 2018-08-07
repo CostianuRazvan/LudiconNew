@@ -40,8 +40,9 @@ public class Persistance {
 
     private final String userDetailsString = "UserDetails";
     private final String profileDetailsString = "ProfileDetails";
-    private final String myActivitiesString="MyActivities";
-    private final String aroundMeActivitiesString="AroundMeActivities";
+    private final String myActivitiesString = "MyActivities";
+    private final String myPastActiviesString = "MyPastActivities";
+    private final String aroundMeActivitiesString = "AroundMeActivities";
     private final String balanceString = "BalanceActivity";
     private final String cuponsString = "CouponsActivityCoupons";
     private final String myCuponsString = "CouponsActivityMyCoupons";
@@ -59,14 +60,14 @@ public class Persistance {
         editor.commit();
     }
 
-    public void setUnseenChats(Context activity, ArrayList<String> chatList){
+    public void setUnseenChats(Context activity, ArrayList<String> chatList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences("UnseenChats", 0).edit();
         Gson gson = new Gson();
         editor.putString("UnseenChats", gson.toJson(chatList));
         editor.commit();
     }
 
-    public ArrayList<String> getUnseenChats(Context activity){
+    public ArrayList<String> getUnseenChats(Context activity) {
         String json = null;
         SharedPreferences sharedPreferences = activity.getSharedPreferences("UnseenChats", 0);
         json = sharedPreferences.getString("UnseenChats", "0");
@@ -104,17 +105,18 @@ public class Persistance {
     }
 
 
-    public void setConversation(Activity activity, ArrayList<Chat> chatList){
+    public void setConversation(Activity activity, ArrayList<Chat> chatList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.conversationString, 0).edit();
         Gson gson = new Gson();
         editor.putString(this.conversationString, gson.toJson(chatList));
         editor.commit();
     }
 
-    public ArrayList<Chat> getConversation(Activity activity){
+    public ArrayList<Chat> getConversation(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(this.conversationString, 0);
         String json = sharedPreferences.getString(this.conversationString, "0");
-        ArrayList<Chat> chatList = new ArrayList<>();;
+        ArrayList<Chat> chatList = new ArrayList<>();
+        ;
 
         Type type = new TypeToken<ArrayList<Chat>>() {
         }.getType();
@@ -123,20 +125,21 @@ public class Persistance {
         } else {
             chatList = new Gson().fromJson(json, type);
         }
-        return  chatList;
+        return chatList;
     }
 
-    public void setSponsors(Activity activity, ArrayList<Sponsors> sponsorsList){
+    public void setSponsors(Activity activity, ArrayList<Sponsors> sponsorsList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.SponsorsString, 0).edit();
         Gson gson = new Gson();
         editor.putString(this.SponsorsString, gson.toJson(sponsorsList));
         editor.commit();
     }
 
-    public ArrayList<Sponsors> getSponsors(Activity activity){
+    public ArrayList<Sponsors> getSponsors(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(this.SponsorsString, 0);
         String json = sharedPreferences.getString(this.SponsorsString, "0");
-        ArrayList<Sponsors> sponsorsList = new ArrayList<>();;
+        ArrayList<Sponsors> sponsorsList = new ArrayList<>();
+        ;
 
         Type type = new TypeToken<ArrayList<Sponsors>>() {
         }.getType();
@@ -145,21 +148,28 @@ public class Persistance {
         } else {
             sponsorsList = new Gson().fromJson(json, type);
         }
-        return  sponsorsList;
+        return sponsorsList;
     }
 
+    public void setPastActivities(Activity activity, ArrayList<Event> eventList) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences(this.myPastActiviesString, 0).edit();
+        Gson gson = new Gson();
+        editor.putString(this.myPastActiviesString, gson.toJson(eventList));
+        editor.apply();
+    }
 
-    public void setMyActivities(Activity activity, ArrayList<Event> eventList){
+    public void setMyActivities(Activity activity, ArrayList<Event> eventList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.myActivitiesString, 0).edit();
         Gson gson = new Gson();
         editor.putString(this.myActivitiesString, gson.toJson(eventList));
         editor.apply();
     }
 
-    public ArrayList<Event> getMyActivities(Activity activity){
+    public ArrayList<Event> getMyActivities(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(this.myActivitiesString, 0);
         String json = sharedPreferences.getString(this.myActivitiesString, "0");
-        ArrayList<Event> eventList = new ArrayList<>();;
+        ArrayList<Event> eventList = new ArrayList<>();
+        ;
 
         Type type = new TypeToken<ArrayList<Event>>() {
         }.getType();
@@ -168,21 +178,21 @@ public class Persistance {
         } else {
             eventList = new Gson().fromJson(json, type);
         }
-        return  eventList;
+        return eventList;
     }
 
-    public void setAroundMeActivities(Activity activity, ArrayList<Event> eventList){
+    public void setAroundMeActivities(Activity activity, ArrayList<Event> eventList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.aroundMeActivitiesString, 0).edit();
         Gson gson = new Gson();
         editor.putString(this.aroundMeActivitiesString, gson.toJson(eventList));
         editor.commit();
     }
 
-    public ArrayList<Event> getAroundMeActivities(Activity activity){
+    public ArrayList<Event> getAroundMeActivities(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(this.aroundMeActivitiesString, 0);
         String json = sharedPreferences.getString(this.aroundMeActivitiesString, "0");
         Gson gson = new Gson();
-        ArrayList<Event>eventList=new ArrayList<>();
+        ArrayList<Event> eventList = new ArrayList<>();
         Type type = new TypeToken<ArrayList<Event>>() {
         }.getType();
         if (json.equals("0")) {
@@ -190,7 +200,22 @@ public class Persistance {
         } else {
             eventList = gson.fromJson(json, type);
         }
-        return  eventList;
+        return eventList;
+    }
+
+    public ArrayList<Event> getMyPastActivities(Activity activity) {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(this.myPastActiviesString, 0);
+        String json = sharedPreferences.getString(this.myPastActiviesString, "0");
+        Gson gson = new Gson();
+        ArrayList<Event> eventList = new ArrayList<>();
+        Type type = new TypeToken<ArrayList<Event>>() {
+        }.getType();
+        if (json.equals("0")) {
+            eventList = new ArrayList<>();
+        } else {
+            eventList = gson.fromJson(json, type);
+        }
+        return eventList;
     }
 
     public UserProfile getProfileInfo(Activity activity) {
@@ -226,7 +251,8 @@ public class Persistance {
         if (json.equals("0")) {
             return new ArrayList<>();
         }
-        Type listType = new TypeToken<ArrayList<BalanceActivity.BalanceEntry>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<BalanceActivity.BalanceEntry>>() {
+        }.getType();
 
         return gson.fromJson(json, listType);
     }
@@ -237,14 +263,15 @@ public class Persistance {
         editor.putString(this.balanceString, gson.toJson(entries));
         editor.commit();
     }
-    public void setLocation(Activity activity, HappeningNowLocation locationList){
+
+    public void setLocation(Activity activity, HappeningNowLocation locationList) {
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.locationString, 0).edit();
         Gson gson = new Gson();
         editor.putString(this.locationString, gson.toJson(locationList));
         editor.commit();
     }
 
-    public HappeningNowLocation getLocation(Activity activity){
+    public HappeningNowLocation getLocation(Activity activity) {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(this.locationString, 0);
         String json = sharedPreferences.getString(this.locationString, "0");
         HappeningNowLocation locationsList;
@@ -254,7 +281,7 @@ public class Persistance {
         } else {
             locationsList = new Gson().fromJson(json, HappeningNowLocation.class);
         }
-        return  locationsList;
+        return locationsList;
     }
 
     public ArrayList<Coupon> getCouponsCache(Activity activity) {

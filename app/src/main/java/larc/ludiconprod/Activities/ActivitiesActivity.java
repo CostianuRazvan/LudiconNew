@@ -63,6 +63,7 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Adapters.MainActivity.AroundMeAdapter;
 import larc.ludiconprod.Adapters.MainActivity.MyAdapter;
+import larc.ludiconprod.Adapters.MainActivity.PastEventsAdapter;
 import larc.ludiconprod.Adapters.MainActivity.SimpleDividerItemDecoration;
 import larc.ludiconprod.BottomBarHelper.BottomBarTab;
 import larc.ludiconprod.Controller.HTTPResponseController;
@@ -90,37 +91,49 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     private Context mContext;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence EN_TITLES[] = {"AROUND ME", "MY ACTIVITIES"};
-    CharSequence RO_TITLES[] = {"IN JURUL MEU", "ACTIVITATILE MELE"};
+    CharSequence EN_TITLES[] = {"AROUND ME", "MY ACTIVITIES", "PAST ACTIVITIES"};
+    CharSequence RO_TITLES[] = {"IN JURUL MEU", "ACTIVITATILE MELE", "ACTIVITATI DIN TRECUT"};
 
-    int Numboftabs = 2;
+    int Numboftabs = 3;
     private View v;
     boolean addedSwipeAroundMe = false;
+    boolean addedSwipePastEvents = false;
     boolean addedSwipeMyActivity = false;
     static public boolean getFirstPageAroundMe = true;
     static public boolean getFirstPageMyActivity = true;
+    static public boolean getFirstPagePastEvents = true;
     static public AroundMeAdapter fradapter;
     static public MyAdapter myAdapter;
+    static public PastEventsAdapter pastEventsAdapter;
     static public ActivitiesActivity currentFragment;
-    public static ArrayList<Event> aroundMeEventList = new ArrayList<Event>();
+    public static final ArrayList<Event> aroundMeEventList = new ArrayList<Event>();
+    public static final ArrayList<Event> pastEventsEventList = new ArrayList<Event>();
     static public ArrayList<Sponsors> sponsorsList = new ArrayList<>();
     public static final ArrayList<Event> myEventList = new ArrayList<Event>();
     ImageView heartImageAroundMe;
     TextView noActivitiesTextFieldAroundMe;
     TextView pressPlusButtonTextFieldAroundMe;
+    ImageView heartImagePastEvents;
+    TextView noActivitiesTextFieldPastEvents;
+    TextView pressPlusButtonTextFieldPastEvents;
     ImageView heartImageMyActivity;
     TextView noActivitiesTextFieldMyActivity;
     TextView pressPlusButtonTextFieldMyActivity;
+    static LinearLayoutManager layoutManagerAPastEvents;
     static LinearLayoutManager layoutManagerAroundMe;
     static LinearLayoutManager layoutManagerMyActivities;
     ProgressBar progressBarMyEvents;
     ProgressBar progressBarAroundMe;
+    ProgressBar progressBarPastEvents;
     public static int NumberOfRefreshMyEvents = 0;
     public static int NumberOfRefreshAroundMe = 0;
+    public static int NumberOfRefreshPastEvents = 0;
     public static RecyclerView frlistView;
     public static RecyclerView mylistView;
+    public static RecyclerView pastEventsListView;
     Boolean isFirstTimeAroundMe = false;
     Boolean isFirstTimeMyEvents = false;
+    Boolean isFirstTimePastEvents = false;
     Boolean isGetingPage = false;
     Boolean dataComeArundeMe = false;
     Boolean dataComeMy = false;
@@ -525,12 +538,32 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
         HTTPResponseController.getInstance().getMyEvent(params, headers, activity, urlParams, this);
     }
 
+    //========= Get My Past Events =============
+
+    public void getMyPastEvents(String pageNumber) {
+        ActivitiesActivity.getFirstPagePastEvents = pageNumber.equals("0");
+
+        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, String> urlParams = new HashMap<>();
+        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+
+        //set urlParams
+        urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+        urlParams.put("pageNumber", pageNumber);
+
+        //get Around Me Event
+        HTTPResponseController.getInstance().getMyPastEvents(params, headers, activity, urlParams, this, "GMT+3");
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
 
         if (fradapter != null) fradapter.notifyDataSetChanged();
         if (myAdapter != null) myAdapter.notifyDataSetChanged();
+        if (pastEventsAdapter != null) pastEventsAdapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -639,12 +672,14 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
             myAdapter = new MyAdapter(myEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
             fradapter = new AroundMeAdapter(aroundMeEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
+            pastEventsAdapter = new PastEventsAdapter(pastEventsEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
 
 
             getMyEvents("0");
 
             NumberOfRefreshMyEvents = 0;
             NumberOfRefreshAroundMe = 0;
+            NumberOfRefreshPastEvents = 0;
 
 
             //
@@ -950,6 +985,111 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             e.printStackTrace();
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void updateListPastEvents(final boolean eventHappeningNow) {
+        RelativeLayout ll = (RelativeLayout) v.findViewById(R.id.noInternetLayout);
+        ll.getLayoutParams().height = 0;
+        ll.setLayoutParams(ll.getLayoutParams());
+        if (this.noGps) {
+            this.prepareError("No location services available!");
+        }
+
+
+        // stop swiping on my events
+        final SwipeRefreshLayout mSwipeRefreshLayout1 = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh3);
+        ;
+        pastEventsAdapter.notifyDataSetChanged();
+        pastEventsListView = (RecyclerView) v.findViewById(R.id.events_listView3);
+        heartImagePastEvents = (ImageView) v.findViewById(R.id.heartImagePastEvents);
+        noActivitiesTextFieldPastEvents = (TextView) v.findViewById(R.id.noActivitiesTextFieldPastEvents);
+        pressPlusButtonTextFieldPastEvents = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldPastEvents);
+        progressBarPastEvents = (ProgressBar) v.findViewById(R.id.progressBarPastEvents);
+        progressBarPastEvents.setIndeterminate(true);
+        progressBarPastEvents.setAlpha(0f);
+
+
+        if (!isFirstTimePastEvents) {
+            layoutManagerAPastEvents = new LinearLayoutManager(getContext());
+        }
+
+        if (!isFirstTimePastEvents) {
+
+            layoutManagerAPastEvents.setOrientation(LinearLayoutManager.VERTICAL);
+            pastEventsListView.setLayoutManager(layoutManagerAPastEvents);
+            pastEventsListView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+
+        }
+
+        final FloatingActionButton createNewActivityFloatingButtonPastEvents = (FloatingActionButton) v.findViewById(R.id.floatingButton3);
+        createNewActivityFloatingButtonPastEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, CreateNewActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        if (!isFirstTimePastEvents) {
+            pastEventsListView.setAdapter(pastEventsAdapter);
+        }
+
+
+        if (pastEventsEventList.size() == 0) {
+            heartImagePastEvents.setVisibility(View.VISIBLE);
+            noActivitiesTextFieldPastEvents.setVisibility(View.VISIBLE);
+            pressPlusButtonTextFieldPastEvents.setVisibility(View.VISIBLE);
+        } else {
+            heartImagePastEvents.setVisibility(View.INVISIBLE);
+            noActivitiesTextFieldPastEvents.setVisibility(View.INVISIBLE);
+            pressPlusButtonTextFieldPastEvents.setVisibility(View.INVISIBLE);
+        }
+
+
+        if (pastEventsListView != null) {
+
+            pastEventsListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (layoutManagerAPastEvents.findLastCompletelyVisibleItemPosition() == pastEventsEventList.size() - 1) {
+                        progressBarPastEvents.setAlpha(1f);
+                        getMyPastEvents(String.valueOf(NumberOfRefreshPastEvents));
+                    }
+
+
+                }
+            });
+        }
+
+        if (!addedSwipePastEvents) {
+            mSwipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    System.out.println("intra aici");
+                    getMyPastEvents("0");
+                    getFirstPagePastEvents = true;
+                    mSwipeRefreshLayout1.setRefreshing(false);
+                    NumberOfRefreshPastEvents = 0;
+                    fromSwipe = true;
+                }
+            });
+        }
+        if (!stopHappeningNow.isAlive() && !startHappeningNow.isAlive()) {
+            stopHappeningNow.start();
+            startHappeningNow.start();
+        }
+
+        isFirstTimePastEvents = true;
+
+        int last = layoutManagerAPastEvents.findLastCompletelyVisibleItemPosition();
+        int count = pastEventsAdapter.getItemCount();
+        if (last + 1 < count && !fromSwipe) {
+            layoutManagerAPastEvents.smoothScrollToPosition(pastEventsListView, null, last + 1);
+        }
+        fromSwipe = false;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void updateListOfMyEvents(final boolean eventHappeningNow) {
