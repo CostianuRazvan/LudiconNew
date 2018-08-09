@@ -16,6 +16,9 @@
     <string name="ro_will_play">Va juca</string>
     <string name="ro_will_go_to">Va merge la</string>
     <string name="ro_will_gain">Vei primi</string>
+    <string name="ro_played">Ai jucat </string>
+    <string name="ro_went">Ai fost la</string>
+    <string name="ro_gained">Ai primit</string>
     <string name="ro_hour">" pe ora"</string>
     <string name="ro_players">"JUCATORI "</string>
     <string name="ro_group_chat">CHATUL GRUPULUI</string>
@@ -122,6 +125,9 @@
     <string name="en_will_play">Will play</string>
     <string name="en_will_go_to">Will go to</string>
     <string name="en_will_gain">You will gain</string>
+    <string name="en_played">You played</string>
+    <string name="en_went">You went</string>
+    <string name="en_gained">You gained</string>
     <string name="en_hour">" per hour"</string>
     <string name="en_players">"PLAYERS "</string>
     <string name="en_group_chat">GROUP CHAT</string>

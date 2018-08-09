@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_listview1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#f7f9fc">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/layout1"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="1dp"
             android:theme="@android:style/Widget.Holo.ProgressBar">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/events_listView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:clipToPadding="false"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="8.0dp"
-                android:scrollbars="none"
-                android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                android:clipToPadding="false"/>
+                android:paddingTop="16dp"
+                android:scrollbars="none" />
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
@@ -54,47 +55,48 @@
         android:layout_above="@+id/noActivitiesTextFieldMyActivity"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:visibility="invisible"
-        android:background="@drawable/es_activity" />
+        android:background="@drawable/es_activity"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/noActivitiesTextFieldMyActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textSize="16sp"
-        android:textColor="#d4498b"
-        android:visibility="invisible"
+        android:layout_centerVertical="true"
         android:fontFamily="@string/fontmedium"
-        android:text="No activities!" />
+        android:text="No activities!"
+        android:textColor="#d4498b"
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/pressPlusButtonTextFieldMyActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/noActivitiesTextFieldMyActivity"
-        android:layout_marginTop="10dp"
-        android:textSize="16sp"
-        android:fontFamily="@string/fontmedium"
-        android:textColor="#660c3855"
-        android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:text="Discover &#38; Join Activitiesto&#10;      or Create a new one&#10;by pressing the &#34;Plus Button&#34;" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@string/fontmedium"
+        android:text="Discover &#38; Join Activitiesto&#10;      or Create a new one&#10;by pressing the &#34;Plus Button&#34;"
+        android:textColor="#660c3855"
+        android:textSize="16sp"
+        android:visibility="invisible" />
+
     <ProgressBar
         android:id="@+id/progressBarMyEvents"
         style="@android:style/Widget.Holo.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:alpha="0" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shadow_bottom_to_top"/>
+        android:background="@drawable/shadow_bottom_to_top" />
 
 </RelativeLayout>

@@ -169,6 +169,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     ViewGroup.LayoutParams params;
 
     public static boolean fromSwipe = false;
+    public static boolean fromSwipePastEvents = false;
     public static boolean checkinDone = false;
 
     /* Constructor */
@@ -540,8 +541,9 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
     //========= Get My Past Events =============
 
-    public void getMyPastEvents(String pageNumber) {
+    public void getPastEvents(String pageNumber) {
         ActivitiesActivity.getFirstPagePastEvents = pageNumber.equals("0");
+
 
         HashMap<String, String> params = new HashMap<>();
         HashMap<String, String> headers = new HashMap<>();
@@ -571,6 +573,9 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        v = inflater.inflate(R.layout.activities_acitivity, container, false);
+
+
         FacebookSdk.sdkInitialize(getActivity());
 
 
@@ -592,7 +597,6 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
         isOnActivityPage = true;
         aroundMeEventList.clear();
 
-        v = inflater.inflate(R.layout.activities_acitivity, container, false);
         nrElements = 4;
         while (activity == null) {
             activity = getActivity();
@@ -627,9 +631,9 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             // Creating ViewPager Adapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs
 
             if (getLanguage().equalsIgnoreCase("ro"))
-                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), RO_TITLES, Numboftabs);
+                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), RO_TITLES, Numboftabs, this);
             else
-                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), EN_TITLES, Numboftabs);
+                adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), EN_TITLES, Numboftabs, this);
 
 
             // Assigning ViewPager View and setting the adapter
@@ -638,7 +642,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
             // Assiging the Sliding Tab Layout View
             tabs = (SlidingTabLayout) v.findViewById(R.id.tabs);
-            tabs.setDistributeEvenly(false); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+            tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
             // Setting Custom Color for the Scroll bar indicator of the Tab View
             tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -987,7 +991,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void updateListPastEvents(final boolean eventHappeningNow) {
+    public void updateListPastEvents() {
         RelativeLayout ll = (RelativeLayout) v.findViewById(R.id.noInternetLayout);
         ll.getLayoutParams().height = 0;
         ll.setLayoutParams(ll.getLayoutParams());
@@ -995,9 +999,10 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             this.prepareError("No location services available!");
         }
 
+        Log.d("updatemylist", "UPDATEPASTEVENTS");
 
         // stop swiping on my events
-        final SwipeRefreshLayout mSwipeRefreshLayout1 = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh3);
+        final SwipeRefreshLayout mSwipeRefreshLayout3 = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh3);
         ;
         pastEventsAdapter.notifyDataSetChanged();
         pastEventsListView = (RecyclerView) v.findViewById(R.id.events_listView3);
@@ -1008,18 +1013,20 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
         progressBarPastEvents.setIndeterminate(true);
         progressBarPastEvents.setAlpha(0f);
 
+        if (pastEventsListView == null)
+            Log.d("NOTINITIALIZED", "pastEventsListView");
+
 
         if (!isFirstTimePastEvents) {
             layoutManagerAPastEvents = new LinearLayoutManager(getContext());
-        }
-
-        if (!isFirstTimePastEvents) {
-
             layoutManagerAPastEvents.setOrientation(LinearLayoutManager.VERTICAL);
             pastEventsListView.setLayoutManager(layoutManagerAPastEvents);
             pastEventsListView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         }
+
+        Log.d("NOTINITIALIZED", pastEventsListView.getLayoutManager().toString());
+
 
         final FloatingActionButton createNewActivityFloatingButtonPastEvents = (FloatingActionButton) v.findViewById(R.id.floatingButton3);
         createNewActivityFloatingButtonPastEvents.setOnClickListener(new View.OnClickListener() {
@@ -1036,10 +1043,12 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
 
         if (pastEventsEventList.size() == 0) {
+            Log.d("PASTEVENTSSIZE", pastEventsEventList.size() + "");
             heartImagePastEvents.setVisibility(View.VISIBLE);
             noActivitiesTextFieldPastEvents.setVisibility(View.VISIBLE);
             pressPlusButtonTextFieldPastEvents.setVisibility(View.VISIBLE);
         } else {
+            Log.d("PASTEVENTSSIZE", pastEventsEventList.size() + "");
             heartImagePastEvents.setVisibility(View.INVISIBLE);
             noActivitiesTextFieldPastEvents.setVisibility(View.INVISIBLE);
             pressPlusButtonTextFieldPastEvents.setVisibility(View.INVISIBLE);
@@ -1054,7 +1063,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
                     super.onScrolled(recyclerView, dx, dy);
                     if (layoutManagerAPastEvents.findLastCompletelyVisibleItemPosition() == pastEventsEventList.size() - 1) {
                         progressBarPastEvents.setAlpha(1f);
-                        getMyPastEvents(String.valueOf(NumberOfRefreshPastEvents));
+                        getPastEvents(String.valueOf(NumberOfRefreshPastEvents));
                     }
 
 
@@ -1063,15 +1072,15 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
         }
 
         if (!addedSwipePastEvents) {
-            mSwipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            mSwipeRefreshLayout3.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     System.out.println("intra aici");
-                    getMyPastEvents("0");
+                    getPastEvents("0");
                     getFirstPagePastEvents = true;
-                    mSwipeRefreshLayout1.setRefreshing(false);
+                    mSwipeRefreshLayout3.setRefreshing(false);
                     NumberOfRefreshPastEvents = 0;
-                    fromSwipe = true;
+                    fromSwipePastEvents = true;
                 }
             });
         }
@@ -1084,12 +1093,13 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
         int last = layoutManagerAPastEvents.findLastCompletelyVisibleItemPosition();
         int count = pastEventsAdapter.getItemCount();
-        if (last + 1 < count && !fromSwipe) {
+        if (last + 1 < count && !fromSwipePastEvents) {
             layoutManagerAPastEvents.smoothScrollToPosition(pastEventsListView, null, last + 1);
         }
-        fromSwipe = false;
+        fromSwipePastEvents = false;
     }
 
+    // Update my Events
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void updateListOfMyEvents(final boolean eventHappeningNow) {
@@ -1253,6 +1263,11 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh2);
         mSwipeRefreshLayout.setRefreshing(false);
         NumberOfRefreshAroundMe = 0;
+        getPastEvents("0");
+        getFirstPagePastEvents = true;
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh3);
+        mSwipeRefreshLayout.setRefreshing(false);
+        NumberOfRefreshPastEvents = 0;
     }
 
     private void prepareError(String message) {

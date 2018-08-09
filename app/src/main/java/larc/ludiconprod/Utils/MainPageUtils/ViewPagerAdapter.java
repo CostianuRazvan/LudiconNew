@@ -1,8 +1,13 @@
 package larc.ludiconprod.Utils.MainPageUtils;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
+
+import larc.ludiconprod.Activities.ActivitiesActivity;
 
 /**
  * Created by hp1 on 21-01-2015.
@@ -14,19 +19,21 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     Tab1 tab1;
     Tab2 tab2;
     Tab3 tab3;
+    ActivitiesActivity activity;
     boolean t1 = false, t2 = false, t3 = false;
 
-
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb, ActivitiesActivity activity) {
         super(fm);
 
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
+        this.activity = activity;
 
     }
 
     //This method return the fragment for the every position in the View Pager
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public Fragment getItem(int position) {
 
@@ -46,6 +53,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 }
                 return tab2;
             } else {
+                Log.d("Ajunge aici Tab", "TAB3");
                 if (!t3) {
                     tab3 = new Tab3();
                     t3 = true;

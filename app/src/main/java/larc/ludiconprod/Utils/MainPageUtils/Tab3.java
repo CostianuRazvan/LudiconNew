@@ -1,8 +1,10 @@
 package larc.ludiconprod.Utils.MainPageUtils;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,17 +35,28 @@ public class Tab3 extends BasicFragment {
     public RecyclerView pastEventsView;
     public ArrayList<Event> pastEventsEventList = new ArrayList<Event>();
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.tab3, container, false);
 
+        Typeface typeFace = Typeface.createFromAsset(super.getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
+
         pastEventsEventList = Persistance.getInstance().getMyPastActivities(getActivity());
         ArrayList<Sponsors> sponsorsList = new ArrayList<>();
-        //sponsorsList=Persistance.getInstance().getSponsors(getActivity());
         pastAdapter = new PastEventsAdapter(pastEventsEventList, sponsorsList, getActivity().getApplicationContext(), getActivity(), getResources());
-        updateListOfEventsAroundMe();
-        Typeface typeFace = Typeface.createFromAsset(super.getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
+        updatePastEvents();
+
+        noActivitiesText = (TextView) v.findViewById(R.id.noActivitiesTextFieldPastEvents);
         noActivitiesText.setTypeface(typeFace);
+        pressPlusText = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldPastEvents);
         pressPlusText.setTypeface(typeFace);
 
         translate();
@@ -61,7 +74,7 @@ public class Tab3 extends BasicFragment {
         }
     }
 
-    public void updateListOfEventsAroundMe() {
+    public void updatePastEvents() {
         pastAdapter.notifyDataSetChanged();
         pastEventsView = (RecyclerView) v.findViewById(R.id.events_listView3);
         pastEventsView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
@@ -78,4 +91,5 @@ public class Tab3 extends BasicFragment {
         pressPlusText.setVisibility(View.INVISIBLE);
 
     }
+
 }

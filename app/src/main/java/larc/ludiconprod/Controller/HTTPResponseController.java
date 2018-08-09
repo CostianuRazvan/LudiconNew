@@ -525,23 +525,23 @@ public class HTTPResponseController {
                                 event.otherSportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString
                                         ("otherSportName");
                             }
+                            event.latitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("latitude");
+                            event.longitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("longitude");
                             event.creatorName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorName");
                             event.creatorLevel = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("creatorLevel");
                             event.creatorId = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorId");
+                            event.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
                             event.numberOfParticipants = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("numberOfParticipants");
                             event.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("pointsGained");
-                            event.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
                             event.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("ludicoinsGained");
-                            event.latitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("latitude");
-                            event.longitude = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getDouble("longitude");
                             for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
                                 event.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
 
                             }
                             pastEventsEventList.add(event);
+                            Log.d("AllPastEvents", pastEventsEventList.size() + "");
 
                         }
-                        ActivitiesActivity.currentFragment.updateListPastEvents(false);
                         if (jsonObject.getJSONArray("pastEvents").length() >= 1) {
                             ActivitiesActivity.NumberOfRefreshPastEvents++;
                         }
@@ -550,6 +550,9 @@ public class HTTPResponseController {
                             localEventList.addAll(pastEventsEventList);
                             Persistance.getInstance().setPastActivities(activity, localEventList);
                         }
+
+                        ActivitiesActivity.currentFragment.updateListPastEvents();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1101,6 +1104,7 @@ public class HTTPResponseController {
     public void getMyPastEvents(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener, String timeZone) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        Log.d("getmypastevents", "EVENTS");
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/pastEvents?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyPastEventsSuccessListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }

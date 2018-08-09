@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_listview1"
+    android:id="@+id/layout_listview3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f9fc">
@@ -14,14 +14,14 @@
         android:layout_marginRight="16dp">
 
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh1"
+            android:id="@+id/swipe_refresh3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="1dp"
             android:theme="@android:style/Widget.Holo.ProgressBar">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/events_listView1"
+                android:id="@+id/events_listView3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingButton1"
+        android:id="@+id/floatingButton3"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
@@ -48,18 +48,19 @@
         android:visibility="visible"
         app:backgroundTint="#d4498b" />
 
+
     <ImageView
-        android:id="@+id/heartImageMyActivity"
+        android:id="@+id/heartImagePastEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/noActivitiesTextFieldMyActivity"
+        android:layout_above="@+id/noActivitiesTextFieldPastEvents"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:background="@drawable/es_activity"
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/noActivitiesTextFieldMyActivity"
+        android:id="@+id/noActivitiesTextFieldPastEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -71,10 +72,10 @@
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/pressPlusButtonTextFieldMyActivity"
+        android:id="@+id/pressPlusButtonTextFieldPastEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/noActivitiesTextFieldMyActivity"
+        android:layout_below="@+id/noActivitiesTextFieldPastEvents"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:fontFamily="@string/fontmedium"
@@ -84,7 +85,7 @@
         android:visibility="invisible" />
 
     <ProgressBar
-        android:id="@+id/progressBarMyEvents"
+        android:id="@+id/progressBarPastEvents"
         style="@android:style/Widget.Holo.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
