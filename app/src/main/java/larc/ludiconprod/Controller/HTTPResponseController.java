@@ -174,7 +174,7 @@ public class HTTPResponseController {
                                 @Override
                                 public void onFinish() {
                                     Intent intent = new Intent(activity, ProfileDetailsActivity.class);
-                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     activity.startActivity(intent);
                                     activity.finish();
                                 }
@@ -189,7 +189,7 @@ public class HTTPResponseController {
                                 @Override
                                 public void onFinish() {
                                     Intent intent = new Intent(activity, Main.class);
-                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     intent.putExtra("FirstTime", activity.getIntent().getBooleanExtra("FirstTime", false));
                                     activity.startActivity(intent);
                                     activity.finish();
@@ -215,7 +215,7 @@ public class HTTPResponseController {
                     }, 3000);
                 } else if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
                     Intent intent = new Intent(activity, Main.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("FirstTime", true);
                     activity.startActivity(intent);
                 }
@@ -982,7 +982,7 @@ public class HTTPResponseController {
             if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
                 Intent intent = new Intent(activity, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
             }
         } catch (JSONException e) {

@@ -301,4 +301,6 @@
     <string name="title_activity_rankings">RankingsActivity</string>
 
     <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="title_activity_stripe">StripeActivity</string>
+    <string name="title_activity_stripe_card">StripeCardActivity</string>
 </resources>

@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -88,7 +87,7 @@ public class BalanceActivity extends AppCompatActivity implements Response.Liste
             Typeface typeFace = Typeface.createFromAsset(assets, "fonts/Quicksand-Medium.ttf");
 
             RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.tool_bar);
-            TextView title = (TextView)toolbar.findViewById(R.id.titleText);
+            TextView title = (TextView) toolbar.findViewById(R.id.titleText);
             title.setTypeface(typeFace);
 
             ((TextView) findViewById(R.id.activityLabel)).setTypeface(typeFace);
@@ -115,7 +114,7 @@ public class BalanceActivity extends AppCompatActivity implements Response.Liste
         if (!this.firstTimeBalance) {
             listView.setAdapter(this.balanceAdapter);
         }
-        if(listView != null) {
+        if (listView != null) {
             listView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
@@ -194,10 +193,10 @@ public class BalanceActivity extends AppCompatActivity implements Response.Liste
         try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-            if(trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")){
+            if (trimmedString.equalsIgnoreCase("Invalid Auth Key provided.")) {
                 deleteCachedInfo();
-                Intent intent =new Intent(this,LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 this.startActivity(intent);
             }
         } catch (JSONException e) {
@@ -210,12 +209,12 @@ public class BalanceActivity extends AppCompatActivity implements Response.Liste
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        if(error.getMessage().contains("error")) {
+        if (error.getMessage().contains("error")) {
             String json = trimMessage(error.getMessage(), "error");
-            if (json != null){
+            if (json != null) {
                 Toast.makeText(this, json, Toast.LENGTH_LONG).show();
             }
-        }else {
+        } else {
             Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
         }
         if (error instanceof NetworkError) {

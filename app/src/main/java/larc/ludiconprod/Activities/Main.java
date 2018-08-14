@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import larc.ludiconprod.BottomBarHelper.BottomBar;
@@ -18,11 +19,16 @@ import me.anwarshahriar.calligrapher.Calligrapher;
 public class Main extends BasicActivity {
     public static BottomBar bottomBar;
     public static boolean exit = false;
+    public static FragmentManager fragmentManager;
+    private int tabNumber = 0;
+    private static boolean history = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_five_tabs);
+
+        fragmentManager = getSupportFragmentManager();
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
@@ -60,31 +66,39 @@ public class Main extends BasicActivity {
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_activities) {
                     ChatAndFriendsActivity.isOnChatPage = false;
+                    Bundle bundle = new Bundle();
+                    if (history) {
+                        tabNumber = 2;
+                        history = false;
+                    } else
+                        tabNumber = 0;
+                    bundle.putInt("TAB", tabNumber);
                     ActivitiesActivity main = new ActivitiesActivity();
-                    getSupportFragmentManager().beginTransaction()
+                    main.setArguments(bundle);
+                    fragmentManager.beginTransaction()
                             .replace(R.id.frame, main).commit();
                 } else if (tabId == R.id.tab_profile) {
                     ChatAndFriendsActivity.isOnChatPage = false;
                     ActivitiesActivity.isOnActivityPage = false;
                     MyProfileActivity myProfileActivity = new MyProfileActivity();
-                    getSupportFragmentManager().beginTransaction()
+                    fragmentManager.beginTransaction()
                             .replace(R.id.frame, myProfileActivity).commit();
                 } else if (tabId == R.id.tab_coupons) {
                     ChatAndFriendsActivity.isOnChatPage = false;
                     ActivitiesActivity.isOnActivityPage = false;
                     CouponsActivity coupons = new CouponsActivity();
-                    getSupportFragmentManager().beginTransaction()
+                    fragmentManager.beginTransaction()
                             .replace(R.id.frame, coupons).commit();
                 } else if (tabId == R.id.tab_leaderboard) {
                     ChatAndFriendsActivity.isOnChatPage = false;
                     ActivitiesActivity.isOnActivityPage = false;
                     LeaderboardActivity leaderboard = new LeaderboardActivity();
-                    getSupportFragmentManager().beginTransaction()
+                    fragmentManager.beginTransaction()
                             .replace(R.id.frame, leaderboard).commit();
                 } else if (tabId == R.id.tab_friends) {
                     ActivitiesActivity.isOnActivityPage = false;
                     ChatAndFriendsActivity chatFriends = new ChatAndFriendsActivity();
-                    getSupportFragmentManager().beginTransaction()
+                    fragmentManager.beginTransaction()
                             .replace(R.id.frame, chatFriends).commit();
                 }/*else if(tabId==R.id.tab_food){
                     SettingsActivity settings=new SettingsActivity();
@@ -114,6 +128,11 @@ public class Main extends BasicActivity {
             dialog.setArguments(bundle);
             dialog.show(this.getFragmentManager(), "tag");
         }
+    }
+
+    public static void fullHistory() {
+        history = true;
+        bottomBar.selectTabWithId(R.id.tab_activities);
     }
 
     private void translate() {

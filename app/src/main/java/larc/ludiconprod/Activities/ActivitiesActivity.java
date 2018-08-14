@@ -166,6 +166,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     CallbackManager callbackManager;
     ShareDialog shareDialog;
     int nrElements = 4;
+    int tabNumber;
     ViewGroup.LayoutParams params;
 
     public static boolean fromSwipe = false;
@@ -210,7 +211,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
                 HPShouldBeVisible = true;
                 if (isFirstTimeMyEvents) {
-                    //myEventList.remove(0);
+                   //  myEventList.remove(0);
                     myAdapter.notifyDataSetChanged();
                 }
                 System.out.println("eventStarted");
@@ -574,7 +575,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.activities_acitivity, container, false);
-
+        tabNumber = this.getArguments().getInt("TAB");
 
         FacebookSdk.sdkInitialize(getActivity());
 
@@ -642,7 +643,8 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
             // Assiging the Sliding Tab Layout View
             tabs = (SlidingTabLayout) v.findViewById(R.id.tabs);
-            tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+            tabs.setDistributeEvenly(false); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
 
             // Setting Custom Color for the Scroll bar indicator of the Tab View
             tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -651,9 +653,10 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
                     return getResources().getColor(R.color.tabsScrollColor);
                 }
             });
-
+            pager.setCurrentItem(tabNumber);
             // Setting the ViewPager For the SlidingTabsLayout
             tabs.setViewPager(pager);
+
 
             if (Persistance.getInstance().getLocation(activity).locationList.size() > 0 && !HPShouldBeVisible) {
                 happeningNowLocation = Persistance.getInstance().getLocation(activity);
@@ -1083,7 +1086,10 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
                     fromSwipePastEvents = true;
                 }
             });
+            addedSwipePastEvents = true;
         }
+
+
         if (!stopHappeningNow.isAlive() && !startHappeningNow.isAlive()) {
             stopHappeningNow.start();
             startHappeningNow.start();

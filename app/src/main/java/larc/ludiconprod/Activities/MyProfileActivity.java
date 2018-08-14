@@ -238,7 +238,7 @@ public class MyProfileActivity extends BasicFragment implements Response.Listene
             showFullHistory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startNewActivity();
+                    Main.fullHistory();
                 }
             });
 
