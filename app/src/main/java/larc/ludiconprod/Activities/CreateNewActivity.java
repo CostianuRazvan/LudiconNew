@@ -5,9 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,6 +55,7 @@ import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
+import static android.R.color.transparent;
 import static larc.ludiconprod.Activities.ActivitiesActivity.deleteCachedInfo;
 import static larc.ludiconprod.Activities.ActivitiesActivity.latitude;
 import static larc.ludiconprod.Activities.ActivitiesActivity.longitude;
@@ -98,6 +101,8 @@ public class CreateNewActivity extends BasicActivity implements AdapterView.OnIt
     TextView inviteFriendsTextView;
     ImageView minusButton;
     ImageView plusButton;
+    RelativeLayout toPayRL;
+    TextView paidAmmountTV;
     private GoogleMap m_gmap;
     RelativeLayout backButton;
     TextView tapHereTextView;
@@ -125,6 +130,9 @@ public class CreateNewActivity extends BasicActivity implements AdapterView.OnIt
     EventDetails eventDetails;
     Double lat = Double.MAX_VALUE;
     Double lng = Double.MAX_VALUE;
+    RadioButton yes;
+    RadioButton no;
+    RadioGroup yesOrNoSwitch;
 
     public void translateFields() {
 
@@ -204,6 +212,10 @@ public class CreateNewActivity extends BasicActivity implements AdapterView.OnIt
 
     public void initializeViews() {
 
+        toPayRL = (RelativeLayout) findViewById(R.id.RLPaid);
+        paidAmmountTV = (TextView) findViewById(R.id.paidAmmount);
+        toPayRL.setVisibility(View.GONE);
+        yesOrNoSwitch = (RadioGroup) findViewById(R.id.yesOrNoSwitch);
         activityTextView = (TextView) findViewById(R.id.activityText);
         findViewById(R.id.internetRefresh).setAlpha(0);
         privateText = (TextView) findViewById(R.id.privateText);
@@ -231,6 +243,9 @@ public class CreateNewActivity extends BasicActivity implements AdapterView.OnIt
         createActivityButton = (Button) findViewById(R.id.createActivityButton);
         descriptionTextView = (TextView) findViewById(R.id.description);
         descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
+        yes = (RadioButton) findViewById(R.id.yes);
+        no = (RadioButton) findViewById(R.id.no);
+
         eventDetails = new EventDetails();
     }
 
@@ -382,6 +397,26 @@ public class CreateNewActivity extends BasicActivity implements AdapterView.OnIt
             }
         });
 
+        yesOrNoSwitch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (yes.isChecked()) {
+                    toPayRL.setVisibility(View.VISIBLE);
+                    yes.setBackgroundResource(R.drawable.toggle_male);
+                    no.setBackgroundResource(transparent);
+                    yes.setTextColor(Color.parseColor("#ffffff"));
+                    no.setTextColor(Color.parseColor("#1A0c3855"));
+                }
+                if (no.isChecked()) {
+                    toPayRL.setVisibility(View.GONE);
+                    no.setBackgroundResource(R.drawable.toggle_female);
+                    yes.setBackgroundResource(transparent);
+                    no.setTextColor(Color.parseColor("#ffffff"));
+                    yes.setTextColor(Color.parseColor("#1A0c3855"));
+                }
+
+            }
+        });
 
         InviteFriendsActivity.friendsList.clear();
         InviteFriendsActivity.numberOfOfflineFriends = 0;
