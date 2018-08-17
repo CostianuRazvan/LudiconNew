@@ -85,6 +85,8 @@
     <string name="ro_yes">Da</string>
     <string name="ro_no">Nu</string>
     <string name="ro_confirm">Confirmare?</string>
+    <string name="ro_payment_message">Acest eveniment costa</string>
+    <string name="ro_sum_message">de lei.</string>
     <string name="ro_coupons_message">Esti sigur ca vrei sa accesezi acest cupon?</string>
     <string name="ro_filter">Filtru</string>
     <string name="ro_clear_filter">Curata filtrele</string>
@@ -150,6 +152,8 @@
     <string name="en_maximum_length">You have reached maximum length for this field!</string>
     <string name="en_create_activity">Create Activity</string>
     <string name="en_edit_activity">Edit Activity</string>
+    <string name="en_payment_message">This event costs</string>
+    <string name="en_sum_message">lei.</string>
     <string name="en_tap_here_select_location">Tap here to Select Location</string>
     <string name="en_private_activity">This activity is set as Private and will not be visible in the Activity List.Invite your friends to Join this activity</string>
     <string name="en_type_and_number">Type &amp; number of players</string>

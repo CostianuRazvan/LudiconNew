@@ -11,11 +11,10 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
+import com.stripe.android.view.CardMultilineWidget;
 
 import larc.ludiconprod.R;
 import me.anwarshahriar.calligrapher.Calligrapher;
-
-import static larc.ludiconprod.BuildConfig.APPLICATION_ID;
 
 
 public class StripeCardActivity extends BasicActivity {
@@ -29,13 +28,13 @@ public class StripeCardActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stripe_card);
 
-        CardInputWidget mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
+        CardMultilineWidget mCardInputWidget = (CardMultilineWidget) findViewById(R.id.card_input_widget);
 
         Calligrapher calligrapher = new Calligrapher(this);
         this.setTitle("Ludicon");
         calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
 
-        
+
         card = new Card(
                 "4242424242424242", //card number
                 12, //expMonth
@@ -43,7 +42,7 @@ public class StripeCardActivity extends BasicActivity {
                 "123"//cvc
         );
         progress = new ProgressDialog(this);
-        Button purchase = (Button) findViewById(R.id.button);
+        Button purchase = (Button) findViewById(R.id.BTNPurchase);
         purchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +106,6 @@ public class StripeCardActivity extends BasicActivity {
         progress.dismiss();
     }
 
-    }
+}
 
 

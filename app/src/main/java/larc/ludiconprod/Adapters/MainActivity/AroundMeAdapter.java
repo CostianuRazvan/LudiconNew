@@ -38,9 +38,11 @@ import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Activities.ActivitiesActivity;
+import larc.ludiconprod.Activities.StripeCardActivity;
 import larc.ludiconprod.Activities.UserProfileActivity;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
+import larc.ludiconprod.Dialogs.PaymentDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.General;
@@ -57,6 +59,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Boolean right = true;
     private final String MY_LANGUAGE = "LANGUAGE";
     private final String LANGUAGE_KEY = "com.example.ludicon.language";
+    private static int isWithPayment = 1;
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedBytes = Base64.decode(input, 0);
@@ -418,7 +421,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 // Event details set message for sport played
-                String language = activity.getSharedPreferences(MY_LANGUAGE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en");
+                final String language = activity.getSharedPreferences(MY_LANGUAGE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en");
                 Sport sport = new Sport(list.get(pos).sportCode, language);
                 String weWillPlayString = "";
                 String sportName = "";
@@ -557,23 +560,44 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
 
-                        // TODO Check is paid
-                        // TODO -> If it is paid
-                        // TODO -> Open a Dialog Box with RL made
+                        if (isWithPayment == 1) {
+                            final PaymentDialog paymentDialog = new PaymentDialog(activity, language);
+                            paymentDialog.show();
+
+                            paymentDialog.confirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(activity, StripeCardActivity.class);
+                                    activity.startActivity(intent);
+                                    paymentDialog.dismiss();
+                                }
+                            });
+
+                            paymentDialog.dismiss.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    paymentDialog.dismiss();
+                                }
+                            });
+                        }
+
+
                         // TODO -> Connect YES Button with StripeActivity / Fragment (Irelevant here )
                         // TODO -> Add the card details of the User
                         // TODO -> Check card, register User payment
                         // TODO -> Finish form login, set activity as paid
                         // TODO -> Show a message for the User + Send him on AROUND_ME page.
-                        
 
+                /*
                         HashMap<String, String> params = new HashMap<String, String>();
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
                         params.put("eventId", list.get(pos).id);
                         params.put("userId", Persistance.getInstance().getUserInfo(activity).id);
                         HTTPResponseController.getInstance().joinEvent(activity, params, headers, list.get(pos).id, fragment);
+
                         ((ViewHolder) holder).joinButton.setEnabled(false);
+                        */
                     }
                 });
 
