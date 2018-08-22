@@ -284,5 +284,65 @@
     <string name="submit">SOUMETTRE</string>
     <string name="check_out">CHECK-OUT</string>
     <string name="check_in">CHECK-IN</string>
+    <string name="you">Toi</string>
+    <string name="register_succes">Inscription réussite</string>
+
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_chat_template">ChatTemplateActivity</string>
+    <string name="title_activity_chat_list">ChatListActivity</string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_event_details">EventDetails</string>
+    <string name="title_activity_rankings">RankingsActivity</string>
+
+    <string name="title_activity_ask_range">AskRange</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="title_activity_create_new">CreateNewActivity</string>
+    <string name="title_activity_ask_preferences">AskPreferences</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="fontregular">Quicksand-Regular.ttf</string>
+    <string name="fontmedium">Quicksand-Medium.ttf</string>
+    <string name="fontbold">Quicksand-Bold.ttf</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="pick_image_intent_text"></string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="dummy_content">LUDICON</string>
+    <string name="hello_user">Salut, %1$s!</string>
+
+    <string name="how_was_the_event">Comment s\'est passé l\'événement?</string>
+    <string name="write_your_feedback">Rédiger un avis</string>
+    <string name="how_was_the_location">Comment était l\'emplacement?</string>
+
+    <string name="with">avec</string>
+    <string name="others1">autres</string>
+
+    <string name="mutual_follower">abonnements mutuels</string>
+    <string name="you_are_playing">Tu joues</string>
+    <string name="happening_now">Cela arrive maintenant!</string>
+
+    <string-array name="chooseSex_array">
+        <item>M</item>
+        <item>F</item>
+    </string-array>
+
+    <string-array name="sports_array">
+        <item>Football</item>
+        <item>Volleyball</item>
+        <item>Basketball</item>
+        <item>Squash</item>
+        <item>Ping Pong</item>
+        <item>Tennis</item>
+        <item>Cyclisme</item>
+        <item>Jogging</item>
+        <item>Salle de sport</item>
+        <item>Autre</item>
+    </string-array>
 
 </resources>

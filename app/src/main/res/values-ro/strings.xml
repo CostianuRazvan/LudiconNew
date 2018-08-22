@@ -298,9 +298,6 @@
 
     <string name="check_in">START</string>
 
-
-
-
     <string name="_2_sports">2 sporturi</string>
     <string name="_3_mutual_friends">3 urmăriri comune</string>
     <string name="mutual_follower">urmărire comună</string>
@@ -343,5 +340,10 @@
     <string name="not_this_one">Nu este acesta? Apasă aici si indrodu un nou e-mail.</string>
     <string name="submit">TRIMITE</string>
 
+    <string name="with">cu</string>
+    <string name="others1">alții</string>
 
+    <string name="how_was_the_event">Cum a fost evenimentul?</string>
+    <string name="write_your_feedback">Scrie-ne cum ți s-a părut</string>
+    <string name="how_was_the_location">Cum a fost locația?</string>
 </resources>
