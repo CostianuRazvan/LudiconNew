@@ -1,7 +1,7 @@
 package larc.ludiconprod.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,17 +11,18 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,14 +30,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +43,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Locale;
 
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
@@ -57,6 +55,7 @@ import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.User;
 import larc.ludiconprod.UserProfile;
+import larc.ludiconprod.Utils.EventBrief;
 import larc.ludiconprod.Utils.MyProfileUtils.Bar;
 import larc.ludiconprod.Utils.MyProfileUtils.Iterable;
 import larc.ludiconprod.Utils.MyProfileUtils.TopGraph;
@@ -74,7 +73,90 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
     static public FragmentActivity activity;
     static boolean isActive = false;
     ConfirmationDialog confirmationDialog;
+    LinearLayout lastEvents;
+    RelativeLayout history;
+    Button BtnShowFullHistory;
 
+    ArrayList<String> lastEvName = new ArrayList<>();
+    ArrayList<String> eventDate = new ArrayList<>();
+    ArrayList<String> participantsCount = new ArrayList<>();
+
+    int layout_id_start = 789;
+
+    @SuppressLint("ResourceType")
+    public void add_linLayout(){
+        for (int i = 0; i< lastEvName.size(); i++) {
+
+            LinearLayout linLayout = new LinearLayout(this.getContext());
+            linLayout.setOrientation(LinearLayout.HORIZONTAL);
+            linLayout.setPadding(0, 10, 0, 0);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linLayout.setLayoutParams(params);
+            linLayout.setId(layout_id_start + i);
+
+            if (i != 0) {
+                params.addRule(RelativeLayout.BELOW, linLayout.getId() - 1);
+            }
+
+            ImageView img = new ImageView(this.getContext());
+            if (lastEvName.get(i).equals(getResources().getString(R.string.football))) {
+                img.setImageResource(R.drawable.ic_sport_football);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.basketball))) {
+                img.setImageResource(R.drawable.ic_sport_basketball);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.cycling))) {
+                img.setImageResource(R.drawable.ic_sport_cycling);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.gym))) {
+                img.setImageResource(R.drawable.ic_sport_gym);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.jogging))) {
+                img.setImageResource(R.drawable.ic_sport_jogging);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.ping_pong))) {
+                img.setImageResource(R.drawable.ic_sport_pingpong);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.squash))) {
+                img.setImageResource(R.drawable.ic_sport_squash);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.tennis))) {
+                img.setImageResource(R.drawable.ic_sport_tennis);
+            } else if (lastEvName.get(i).equals(getResources().getString(R.string.volleyball))) {
+                img.setImageResource(R.drawable.ic_sport_voleyball);
+            } else {
+                img.setImageResource(R.drawable.ic_sport_others);
+            }
+
+            RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(60, 60);
+            img.setLayoutParams(imgParams);
+            linLayout.addView(img);
+
+            final TextView et = new TextView(this.getContext());
+            String name = lastEvName.get(i);
+            String date = eventDate.get(i);
+            String count = participantsCount.get(i);
+
+            if (count.equals("1")) {
+                et.setText(date + " " + name + " " + getResources().getString(R.string.with_one_other) + ".");
+            } else {
+                if (Locale.getDefault().getLanguage().startsWith("en")) {
+                    et.setText(date + " " + name + " " + getResources().getString(R.string.with) + " " + count + " " + getResources().getString(R.string.others1) + ".");
+                } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
+                    et.setText(date + " " + name + " " + getResources().getString(R.string.with_others) + " " + count + ".");
+                }else if (Locale.getDefault().getLanguage().startsWith("fr")) {
+                    et.setText(date + " " + name + " " + getResources().getString(R.string.with_others) + " " + count + ".");
+                }
+            }
+
+
+            SpannableStringBuilder spanTxt = new SpannableStringBuilder(et.getText());
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 0, 7, 0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#1573ba")), 7, 13, 0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#acb8c1")), 13, spanTxt.length(), 0);
+            et.setText(spanTxt);
+
+
+            et.setPadding(20, 0, 0, 0);
+            linLayout.addView(et);
+
+            history.addView(linLayout);
+        }
+
+    }
 
     @Nullable
     @Override
@@ -107,15 +189,12 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 }
             });
 
-            UserProfile up = Persistance.getInstance().getProfileInfo(super.getActivity());
-            if (up != null) {
-                this.printInfo(up);
-            }
 
 
             ((TextView) v.findViewById(R.id.profileTitle)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileLudicoins)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileToNextLevel)).setTypeface(typeFace);
+            ((TextView) v.findViewById(R.id.profileToNextLevelText)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileToNextLevelText)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileLevel)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileLevelText)).setTypeface(typeFace);
@@ -132,6 +211,15 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             ((TextView) v.findViewById(R.id.profileTotalPointsLabel)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileTotalEvents)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profileTotalPoints)).setTypeface(typeFace);
+            ((TextView) v.findViewById(R.id.ProfileHistoryLabel)).setTypeface(typeFaceBold);
+            lastEvents = (LinearLayout) v.findViewById(R.id.RVProfileHistory);
+            history = (RelativeLayout) v.findViewById(R.id.history);
+            BtnShowFullHistory = (Button) v.findViewById(R.id.BtnShowFullHistory);
+
+            UserProfile up = Persistance.getInstance().getProfileInfo(super.getActivity());
+            if (up != null) {
+                this.printInfo(up);
+            }
 
             LinearLayout monthsLayout = (LinearLayout) v.findViewById(R.id.months);
             int size = monthsLayout.getChildCount();
@@ -334,7 +422,6 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
         tg.setProgress(6, 35);
         tg.setProgress(7, 50);*/
     }
-
     public void printInfo(UserProfile u) {
         try {
             RelativeLayout ll = (RelativeLayout) v.findViewById(R.id.noInternetLayout);
@@ -370,6 +457,26 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             for (Sport s : u.sports) {
                 sportCodes.add(s.code);
             }
+
+
+            lastEvName.clear();
+            eventDate.clear();
+            participantsCount.clear();
+            for (EventBrief ev : u.lastEvents) {
+                lastEvName.add(ev.sportName_method(ev.sportName));
+                eventDate.add(ev.date);
+                participantsCount.add(ev.participantsCount);
+            }
+
+            add_linLayout();
+
+            BtnShowFullHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, FullHistory.class);
+                    startActivity(intent);
+                }
+            });
 
             LinearLayout sportsLayout = (LinearLayout) v.findViewById(R.id.profileSports);
             ImageView sportImage;
@@ -496,6 +603,12 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 int p = Integer.parseInt(stat.getJSONObject(m).getString("points"));
                 u.eventsM.put(m, e);
                 u.pointsM.put(m, p);
+            }
+
+            JSONArray lastEvents = jsonObject.getJSONArray("lastEvents");
+            u.lastEvents.clear();
+            for (int i = 0; i < lastEvents.length(); ++i) {
+                u.lastEvents.add(new EventBrief(lastEvents.getJSONObject(i)));
             }
 
             Persistance.getInstance().setProfileInfo(super.getActivity(), u);

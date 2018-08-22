@@ -13,17 +13,21 @@ import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.IntentCompat;
 import android.util.Base64;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.facebook.login.LoginManager;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import larc.ludiconprod.Activities.ActivitiesActivity;
 import larc.ludiconprod.Activities.ActivityDetailsActivity;
@@ -41,11 +46,13 @@ import larc.ludiconprod.Activities.ChatActivity;
 import larc.ludiconprod.Activities.ChatAndFriendsActivity;
 import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Activities.CreateNewActivity;
+import larc.ludiconprod.Activities.FullHistory;
 import larc.ludiconprod.Activities.GMapsActivity;
 import larc.ludiconprod.Activities.IntroActivity;
 import larc.ludiconprod.Activities.InviteFriendsActivity;
 import larc.ludiconprod.Activities.LoginActivity;
 import larc.ludiconprod.Activities.Main;
+import larc.ludiconprod.Activities.PopDownloadEnrollmentData;
 import larc.ludiconprod.Activities.ProfileDetailsActivity;
 import larc.ludiconprod.Activities.RegisterActivity;
 import larc.ludiconprod.Activities.ResetPasswordFinalActivity;
@@ -53,6 +60,8 @@ import larc.ludiconprod.Dialogs.PointsReceivedDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.User;
 import larc.ludiconprod.Utils.Event;
+import larc.ludiconprod.Utils.EventBrief;
+import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.util.AuthorizedLocation;
@@ -68,6 +77,9 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.myAdapter;
 import static larc.ludiconprod.Activities.ActivitiesActivity.myEventList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.sponsorsList;
 import static larc.ludiconprod.Activities.ActivitiesActivity.startedEventDate;
+import static larc.ludiconprod.Activities.FullHistory.getFirstPagePastEvents;
+import static larc.ludiconprod.Activities.FullHistory.pageNumberPastEvents;
+import static larc.ludiconprod.Activities.FullHistory.pastEventList;
 
 /**
  * Created by ancuta on 7/12/2017.
@@ -243,6 +255,50 @@ public class HTTPResponseController {
                     activity.startActivity(intent);
                     activity.finish();
                 }
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> exportEnrollDataSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    Toast.makeText(activity, "Enrollment data has been sent to email." , Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> reviewEventSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> reviewLocationSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         };
     }
@@ -503,6 +559,63 @@ public class HTTPResponseController {
         };
     }
 
+    private Response.Listener<JSONObject> createMyPastEventSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                System.out.println(jsonObject + " pastEvents");
+                    if (getFirstPagePastEvents) {
+                        pastEventList.clear();
+                    }
+                    try {
+                        for (int i = 0; i < jsonObject.getJSONArray("pastEvents").length(); i++) {
+                            EventBrief eventBrief = new EventBrief();
+                            eventBrief.id = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("id");
+                            int date = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("eventDate");
+                            eventBrief.eventDateTimeStamp = date;
+                            java.util.Date date1 = new java.util.Date((long) date * 1000);
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            String displayDate = formatter.format(date1);
+                            eventBrief.eventDate = displayDate;
+                            eventBrief.placeName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("placeName");
+                            eventBrief.sportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("sportName");
+                            if (eventBrief.sportName.equalsIgnoreCase("OTH")) {
+                                eventBrief.otherSportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("otherSportName");
+                            }
+                            eventBrief.creatorName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorName");
+                            eventBrief.creatorLevel = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorLevel"));
+                            eventBrief.creatorId = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorId");
+                            eventBrief.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
+                            eventBrief.numberOfParticipants = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("numberOfParticipants"));
+                            for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
+                                eventBrief.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
+
+                            }
+                            eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoins");
+                            eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("points");
+
+                            pastEventList.add(eventBrief);
+                        }
+
+                        FullHistory.currentFragment.updateListOfPastEvents();
+                        if (jsonObject.getJSONArray("pastEvents").length() >= 1) {
+                            FullHistory.NumberOfRefreshPastEvents++;
+                        }
+                        if (getFirstPagePastEvents) {
+                            ArrayList<EventBrief> localEventList = new ArrayList<>();
+                            localEventList.addAll(pastEventList);
+                            Persistance.getInstance().setPastEvents(activity, localEventList);
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        };
+    }
+
     private Response.Listener<JSONObject> getLocationSuccesListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -609,6 +722,8 @@ public class HTTPResponseController {
                                 offlineFriend.userName = friend.userName + activity.getResources().getString(R.string.is_friend);
                             } else if (Locale.getDefault().getLanguage().startsWith("ro")){
                                 offlineFriend.userName = activity.getResources().getString(R.string.is_friend) + friend.userName;
+                            }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                                offlineFriend.userName = activity.getResources().getString(R.string.is_friend) + friend.userName;
                             }
                             offlineFriend.offlineFriend = true;
                             offlineFriend.profileImage = "";
@@ -665,6 +780,8 @@ public class HTTPResponseController {
                         if( Locale.getDefault().getLanguage().startsWith("en")) {
                             friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                         } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                        }else if (Locale.getDefault().getLanguage().startsWith("fr")){
                             friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                         }
                         InviteFriendsActivity.numberOfOfflineFriends++;
@@ -993,6 +1110,15 @@ public class HTTPResponseController {
         };
     }
 
+    private Response.ErrorListener exportDataErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(activity, error.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
     public void setActivity(Activity activity, String email, String password) {
         this.activity = activity;
         this.email = email;
@@ -1185,7 +1311,7 @@ public class HTTPResponseController {
 
     public void getUserProfile(HashMap<String, String> params, HashMap<String, String> headers, String id, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/user?userId=" + id, params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/user?userId=" + id, params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1261,6 +1387,35 @@ public class HTTPResponseController {
     public void valuesForUnauthorized(HashMap<String, String> headers, String urlParams, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         CustomRequest request = new CustomRequest(Request.Method.GET, prodServer + "api/valuesForUnauthorized?" + urlParams, new HashMap<String, String>(), headers, listener, errorListener);
+        requestQueue.add(request);
+    }
+
+    public void getPastEvents(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/pastEvents?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyPastEventSuccessListener(), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+
+    public void exportEnrollData(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/exportEnrollData", params, headers, this.exportEnrollDataSuccesListener(), exportDataErrorListener());
+        requestQueue.add(request);
+    }
+
+    public void reviewEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/reviewEvent", params, headers, this.reviewEventSuccesListener(), errorListener);
+        requestQueue.add(request);
+    }
+
+    public void reviewLocation(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/reviewLocation", params, headers, this.reviewLocationSuccesListener(), errorListener);
         requestQueue.add(request);
     }
 }

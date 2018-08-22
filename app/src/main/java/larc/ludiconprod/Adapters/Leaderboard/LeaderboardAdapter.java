@@ -27,6 +27,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import larc.ludiconprod.Activities.LeaderboardActivity;
 import larc.ludiconprod.Activities.UserProfileActivity;
@@ -92,15 +93,28 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
             ((TextView) view.findViewById(R.id.topText)).setTypeface(typeFace);
 
             SpannableStringBuilder spanTxt = new SpannableStringBuilder("");
-            spanTxt.append(fragment.getResources().getString(R.string.be_on) + " ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 6,0);
-            spanTxt.append(fragment.getResources().getString(R.string.top_50) + " ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 13,0);
+            if (Locale.getDefault().getLanguage().startsWith("en") || Locale.getDefault().getLanguage().startsWith("ro")) {
+                spanTxt.append(fragment.getResources().getString(R.string.be_on) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 6, 0);
+                spanTxt.append(fragment.getResources().getString(R.string.top_50) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 6, 13, 0);
 
-            spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 13, 46,0);
-            spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
-            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 46, 55,0);
+                spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 13, 46, 0);
+                spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 46, 55, 0);
+
+            }else if (Locale.getDefault().getLanguage().startsWith("fr")) {
+                spanTxt.append(fragment.getResources().getString(R.string.be_on) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 0, 13,0);
+                spanTxt.append(fragment.getResources().getString(R.string.top_50) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 13, 20,0);
+
+                spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 20, 52,0);
+                spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 52, 63,0);
+            }
             ((TextView) view.findViewById(R.id.topText)).setText(spanTxt, TextView.BufferType.SPANNABLE);
 
 

@@ -651,7 +651,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             if(HappeningNowStartedAlready){
                 checkinButton = (Button) v.findViewById(R.id.checkinHN);
-                checkinButton.setText(R.string.logout);
+                checkinButton.setText("CHECK-OUT");
 
                 buttonState = 1;
 
@@ -714,8 +714,8 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
         weWillplay.setText(weWillPlayString);
         sportField.setText(sportName);
-        ludicoins.setText(String.valueOf(upcomingEvent.ludicoins));
-        points.setText(String.valueOf(upcomingEvent.points));
+        ludicoins.setText("+ " + String.valueOf(upcomingEvent.ludicoins));
+        points.setText("+ " + String.valueOf(upcomingEvent.points));
         location.setText(upcomingEvent.placeName);
 
         switch (upcomingEvent.sportCode) {
@@ -814,7 +814,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
                         buttonState = 1;
 
-                        checkinButton.setText(R.string.logout);
+                        checkinButton.setText("CHECK-OUT");
                         HappeningNowLocation happeningNowLocation = new HappeningNowLocation();
                         happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
 

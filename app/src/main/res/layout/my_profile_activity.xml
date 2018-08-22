@@ -317,6 +317,48 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp">
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/ProfileHistoryLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/fontbold"
+                    android:gravity="left"
+                    android:text="@string/last_activities"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/RVProfileHistory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/history">
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/BtnShowFullHistory"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/pink_stroke_rounded_button"
+                android:fontFamily="@string/fontmedium"
+                android:text="@string/show_full_history"
+                android:textColor="@color/pinkPressed"
+                android:textSize="14sp" />
+
+
             <TextView
                 android:id="@+id/versusLabel"
                 android:layout_width="match_parent"
