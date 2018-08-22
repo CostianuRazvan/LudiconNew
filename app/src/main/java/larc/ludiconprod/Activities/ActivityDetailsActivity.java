@@ -105,6 +105,10 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
     static public String eventID = null;
     static  public String creatorID = null;
     static ActivityDetailsActivity activity;
+    Button downloadEnrollmentData;
+
+    TextView perHour;
+    TextView youGain;
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedBytes = Base64.decode(input, 0);
@@ -191,6 +195,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         deleteOrCancelEventButton = (Button) findViewById(R.id.deleteOrCancelEventButton);
         joinOrUnjoinButton = (Button) findViewById(R.id.joinOrUnjoinButton);
         backgroundImage = (ImageView) findViewById(R.id.backgroundImage);
+        perHour = (TextView) findViewById(R.id.perHour);
+        youGain = (TextView) findViewById(R.id.youGain);
+        downloadEnrollmentData = (Button) findViewById(R.id.downloadEnrollmentData);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,7 +280,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         }
 
 
-        ludicoinsNumber.setText("+" + String.valueOf(eventDetails.ludicoins));
+        ludicoinsNumber.setText(" +" + String.valueOf(eventDetails.ludicoins));
         pointsNumber.setText("  +" + String.valueOf(eventDetails.points));
         playerNumber.setText(String.valueOf(eventDetails.numberOfParticipants + "/" + String.valueOf(eventDetails.capacity)));
 
@@ -520,7 +527,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
             if (Integer.parseInt(stringDate[1]) - 1 == todayMonth && Integer.parseInt(stringDate[2]) - 1 == todayDay) {
                 date = activity.getResources().getString(R.string.tomorrow) + " " + activity.getResources().getString(R.string.at) + " " + stringDateAndTime[1].substring(0, 5);
             } else {
-                date = dayName + ", " + getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDate[0] + " at " + stringDateAndTime[1].substring(0, 5);
+                date = dayName + ", " + getMonth(Integer.parseInt(stringDate[1])) + " " + stringDate[2] + ", " + stringDate[0] + " " + activity.getResources().getString(R.string.at) + " " + stringDateAndTime[1].substring(0, 5);
             }
         playTimeAndDate.setText(date);
 
@@ -539,6 +546,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         description.setText(eventDetails.description);
         if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.listOfParticipants.size() == 0) {
 
+            if (isFormBasedStr.equals("0")){
+                downloadEnrollmentData.setVisibility(View.GONE);
+            }
             deleteOrCancelEventButton.setText(R.string.delete);
             final String eventid = b.getString("eventId");
             deleteOrCancelEventButton.setOnClickListener(new View.OnClickListener() {
@@ -600,6 +610,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     joinOrUnjoinButton.setText(R.string.unjoin);
                     joinOrUnjoinButton.setBackgroundResource(R.drawable.pink_stroke_rounded_button);
                     joinOrUnjoinButton.setTextColor(Color.parseColor("#d4498b"));
+                    downloadEnrollmentData.setVisibility(View.GONE);
                     //call join api method
 
                     final String eventid = b.getString("eventId");
@@ -644,6 +655,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                         params.height = 0;
                         params.topMargin = 0;
                         chatAndInviteLayout.setLayoutParams(params);
+                        downloadEnrollmentData.setVisibility(View.GONE);
 
                         final String eventid = b.getString("eventId");
                         //call join api method
@@ -685,6 +697,23 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     intent.putExtras(b);
                     startActivity(intent);
                     finish();
+                }
+            });
+        }
+
+        if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id)) {
+            final String eventid = b.getString("eventId");
+            downloadEnrollmentData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ActivityDetailsActivity.this, PopDownloadEnrollmentData.class);
+                    intent.putExtra("isParticipant", false);
+                    intent.putExtra("isEdit", true);
+                    InviteFriendsActivity.isFirstTimeInviteFriends = false;
+                    intent.putExtra("eventId", eventid);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                    //finish();
                 }
             });
         }
@@ -764,6 +793,31 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         inviteFriendsButton.setTypeface(typeFaceBold);
         playTimeAndDate.setTypeface(typeFaceBold);
         joinOrUnjoinButton.setTypeface(typeFaceBold);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        if (displayDate.compareTo(currentDateandTime) < 0){
+            deleteOrCancelEventButton.setVisibility(View.INVISIBLE);
+            editEventButton.setVisibility(View.INVISIBLE);
+            joinOrUnjoinButton.setVisibility(View.INVISIBLE);
+            inviteFriendsButton.setVisibility(View.INVISIBLE);
+            perHour.setVisibility(View.INVISIBLE);
+            downloadEnrollmentData.setVisibility(View.GONE);
+            youGain.setText(R.string.you_gained);
+
+            if (sport.code.equalsIgnoreCase("JOG") ||
+                    sport.code.equalsIgnoreCase("GYM") || sport.code.equalsIgnoreCase("CYC"))
+                weWillPlayString =getResources().getString(R.string.has_went_to);
+            else
+            if (sport.code.equalsIgnoreCase("OTH")) {
+                weWillPlayString = getResources().getString(R.string.has_played);
+            } else
+                weWillPlayString = getResources().getString(R.string.has_played);
+
+            sportPlayed.setText(weWillPlayString);
+
+        }
     }
 
     private void addParticipantsImaeListeners(final HashMap<View, Friend> data) {

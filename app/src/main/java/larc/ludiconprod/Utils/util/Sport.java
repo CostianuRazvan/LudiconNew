@@ -39,6 +39,17 @@ public class Sport {
             SPORT_MAP.put("SQU", "squash");
             SPORT_MAP.put("TEN", "tenis");
             SPORT_MAP.put("VOL", "volei");
+        } else if( Locale.getDefault().getLanguage().startsWith("fr")) {
+            SPORT_MAP.put("BAS", "basketball");
+            SPORT_MAP.put("CYC", "cyclisme");
+            SPORT_MAP.put("FOT", "football");
+            SPORT_MAP.put("GYM", "salle de sport");
+            SPORT_MAP.put("JOG", "jogging");
+            SPORT_MAP.put("OTH", "autres");
+            SPORT_MAP.put("PIN", "ping-pong");
+            SPORT_MAP.put("SQU", "squash");
+            SPORT_MAP.put("TEN", "tennis");
+            SPORT_MAP.put("VOL", "vollyball");
         }
     }
     public final String sportName;

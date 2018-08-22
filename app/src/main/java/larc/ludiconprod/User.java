@@ -1,7 +1,10 @@
 package larc.ludiconprod;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import larc.ludiconprod.Utils.Event;
+import larc.ludiconprod.Utils.EventBrief;
 import larc.ludiconprod.Utils.util.Sport;
 
 /**
@@ -28,6 +31,7 @@ public class User {
     public  String range;
     public int countEventsAttended;
     public  ArrayList<Sport> sports=new ArrayList<Sport>();
+    public  ArrayList<EventBrief> lastEvents = new ArrayList<EventBrief>();
 
 /*
     public User(){

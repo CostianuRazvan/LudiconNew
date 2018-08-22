@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingBottom="56dp"
+
+    android:background="#f7f9fc">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/tool_bar_history"
+            layout="@layout/header_login"
+            android:layout_height="56dp"
+            android:layout_width="match_parent"
+            />
+        <include
+            layout="@layout/no_connection_bar"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layout1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_past_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/events_listViewPastEvents"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="8.0dp"
+                    android:scrollbars="none"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:clipToPadding="false"/>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBarPastEvents"
+            style="@android:style/Widget.Holo.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shadow_bottom_to_top"/>
+
+
+
+
+    </LinearLayout>
+
+    <!--ProgressBar
+        android:id="@+id/activityProgressBar"
+        style="@android:style/Widget.Holo.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:indeterminate="true"/-->
+
+</RelativeLayout>

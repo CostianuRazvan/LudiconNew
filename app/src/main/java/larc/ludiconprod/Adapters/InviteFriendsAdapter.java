@@ -223,6 +223,8 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                                 friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                             } else if (Locale.getDefault().getLanguage().startsWith("ro")){
                                 friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                             }
                             friend.offlineFriend = true;
                             friend.profileImage = "";
@@ -239,6 +241,8 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             if( Locale.getDefault().getLanguage().startsWith("en")) {
                                 friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                             } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }else if (Locale.getDefault().getLanguage().startsWith("fr")){
                                 friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                             }
                             friend.offlineFriend = true;

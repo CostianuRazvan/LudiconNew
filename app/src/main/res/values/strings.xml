@@ -24,7 +24,7 @@
     <string name="dialogbutton1">Settings</string>
     <string name="dialogbutton2">Close</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_activity_ask_preferences">AskPreferences</string>
@@ -54,11 +54,11 @@
         <item>Other</item>
     </string-array>
 
-        <string-array name="chooseSex_array">
-            <item>M</item>
-            <item>F</item>
+    <string-array name="chooseSex_array">
+        <item>M</item>
+        <item>F</item>
 
-        </string-array>
+    </string-array>
 
 
     <string-array name="sports_array">
@@ -143,7 +143,7 @@
     <string name="enroll_with_a_form">ENROLL WITH A FORM</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="enrollment_fields">ENROLLMENT FIELDS</string>
+    <string name="enrollment_fields">ENROLLMENT FORM</string>
     <string name="address">Address</string>
     <string name="phone_no">Phone No.</string>
     <string name="add_custom">Add Custom</string>
@@ -262,8 +262,8 @@
     <string name="remove">REMOVE</string>
     <string name="are_you_sure_you_want_to_reedem_this_coupon">Are you sure you want to reedem this coupon?</string>
 
-    <string name="go_to_eventDetails">Go to EventDetails</string>
-    <string name="go_to_profileDetails">Go to ProfileDetails</string>
+    <string name="go_to_eventDetails">Go to Event Details</string>
+    <string name="go_to_profileDetails">Go to Profile Details</string>
     <string name="select_a_location">Please select a location!</string>
     <string name="insert_your_age">Please insert your age!</string>
     <string name="enter_other_sport_name">Please enter other sport name!</string>
@@ -271,7 +271,7 @@
     <string name="enter_a_time">Please enter a time!</string>
     <string name="too_much_participants_for_this_capacity">Too much participants for this capacity!</string>
     <string name="inviting_friends">Inviting friends...</string>
-    <string name="you_do_not_have_enough_ludicoins_to_redeem_the_coupon">You do not have enough ludicoins to redeem the coupon.</string>
+    <string name="you_do_not_have_enough_ludicoins_to_redeem_the_coupon">You do not have enough ludicoins to redeem the prize.</string>
     <string name="you_are_now_following">You are now following</string>
     <string name="you_are_no_following">You are no following</string>
     <string name="group_chat_isnt_avaible">Group chat isn\'t avaible yet for this event!</string>
@@ -324,14 +324,23 @@
     <string name="valid_till">Valid till</string>
     <string name="invited">INVITED</string>
     <string name="less_than_a_min_ago">less than a min ago</string>
+    <string name="last_activities">LAST ACTIVITIES</string>
+    <string name="show_full_history">VIEW FULL HISTORY</string>
+    <string name="with_one_other">with one other</string>
+    <string name="with">with</string>
+    <string name="others1">others</string>
+    <string name="past_activities">Past Activities</string>
+    <string name="has_played">Has played</string>
+    <string name="you_gained">You gained\t</string>
+    <string name="played">Played</string>
+    <string name="has_went_to">Has went to</string>
+    <string name="download_enrollment_data">EXPORT ENROLL DATA</string>
+    <string name="send_enroll_data_to_email">Send enroll data to email</string>
+    <string name="not_this_one">Not this one? Press here to enter a new email.</string>
+    <string name="submit">SUBMIT</string>
 
-    <string name="min">minute</string>
-    <string name="minutes">minutes</string>
-    <string name="_hour">hour</string>
-    <string name="hours">hours</string>
-    <string name="day">day</string>
-    <string name="days">days</string>
-    <string name="now">now</string>
-
+    <string name="how_was_the_event">How was the Event?</string>
+    <string name="write_your_feedback">Write your feedback</string>
+    <string name="how_was_the_location">How was the Location?</string>
 
 </resources>

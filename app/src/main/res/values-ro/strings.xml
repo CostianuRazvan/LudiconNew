@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ludicon București</string>
+    <string name="app_name">Ludicon</string>
     <string name="errorMessage">E-mail sau parolă incorecte</string>
     <string name="hello_world">Ludicon este aici!</string>
     <string name="action_settings">Setări</string>
@@ -40,7 +40,7 @@
     </string-array>
 
     <string-array name="rankings_array">
-        <item>Forbal</item>
+        <item>Fotbal</item>
         <item>Volei</item>
         <item>Baschet</item>
         <item>Squash</item>
@@ -67,7 +67,7 @@
     <string name="forgot_your_password">Ți-ai uitat parola?</string>
     <string name="enter_your_email_address_below_n_and_we_ll_send_you_password_reset_n_instruction">Scrie-ți adresa de e-mail mai jos și îți vom tirmite un e-mail cu instrucțiuni pentru schimbarea parolei</string>
     <string name="reset_password">RESETEAZĂ PAROLA</string>
-    <string name="new_you_out_here_florin_cool">Ești nou aici FLORIN? Super!</string>
+    <string name="new_you_out_here_florin_cool">Ești nou aici FLORIN? Cool!</string>
     <string name="we_believe_you_enjoy_ludicon_too_take_a_moment_amp_set_up_your_profile"><![CDATA[Configurează-ți profilul și apoi jocul va începe! Foarte curând, vei putea întâlni sportivi ca și tine alături de care să participi la evenimente.]]></string>
     <string name="male">Masculin</string>
     <string name="female">Feminin</string>
@@ -111,7 +111,7 @@
     <string name="enroll_with_a_form">ÎNSCRIERE CU FORMULAR</string>
     <string name="yes">Da</string>
     <string name="no">Nu</string>
-    <string name="enrollment_fields">CÂMPURI DE ÎNSCRIERE</string>
+    <string name="enrollment_fields">FORMULAR DE ÎNSCRIERE</string>
     <string name="address">Adresă</string>
     <string name="phone_no">Număr de telefon</string>
     <string name="add_custom">Adaugă câmp</string>
@@ -121,6 +121,7 @@
     <string name="invite_friends">INVITĂ PRIETENI</string>
     <string name="create_activity">CREEAZĂ ACTIVITATE</string>
     <string name="select_location">SELECTEAZĂ LOCAȚIA</string>
+    <string name="select_location1">Selectează locația</string>
     <string name="as_event_creator_please_make_sure_you_book_the_desired_interval_at_the_selected_sport_venue">Ca organizator al activității, te rugăm să te asiguri că ai rezervat intervalul preferat pentru locul de desfășurare!</string>
     <string name="to_create_your_own_location_press_long_tap_on_the_map">Pentru a crea propria locație, apăsați lung pe hartă!</string>
     <string name="all">TOȚI</string>
@@ -152,7 +153,7 @@
     <string name="my_profile">Profilul meu</string>
     <string name="to_next_level">\u0020 până la următorul nivel</string>
     <string name="statistics">STATISTICI</string>
-    <string name="total_activities">Total activitati:</string>
+    <string name="total_activities">Total activități:</string>
     <string name="total_points">Total puncte:</string>
     <string name="logout">DECONECTEAZĂ-TE</string>
     <string name="age">Vârsta</string>
@@ -172,7 +173,7 @@
     <string name="browse_prizes">VEZI PREMIILE</string>
     <string name="activity1">Activitate</string>
     <string name="player_profile">Profilul utilizatorului</string>
-
+    <string name="check_out">CHECK-OUT</string>
     <string name="around_me">ÎN JURUL MEU</string>
     <string name="my_activities">ACTIVITĂȚILE MELE</string>
     <string name="prizes">PREMII</string>
@@ -328,5 +329,19 @@
     <string name="day">zi</string>
     <string name="days">zile</string>
     <string name="now">acum</string>
+    <string name="last_activities">ULTIMELE ACTIVITĂȚI</string>
+    <string name="show_full_history">VEZI TOT ISTORICUL</string>
+    <string name="with_others">cu alţi</string>
+    <string name="with_one_other">cu încă o persoană</string>
+    <string name="past_activities">Activități din trecut</string>
+    <string name="has_played">A jucat</string>
+    <string name="you_gained">Ai obţinut\t</string>
+    <string name="played">A jucat</string>
+    <string name="has_went_to">A mers la</string>
+    <string name="download_enrollment_data">DESCARCĂ DATE FORMULAR</string>
+    <string name="send_enroll_data_to_email">Trimite formularele pe e-mail</string>
+    <string name="not_this_one">Nu este acesta? Apasă aici si indrodu un nou e-mail.</string>
+    <string name="submit">TRIMITE</string>
+
 
 </resources>

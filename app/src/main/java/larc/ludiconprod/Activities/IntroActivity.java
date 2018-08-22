@@ -310,6 +310,13 @@ public class IntroActivity extends Activity {
                     .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 29,
                     termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+            ss.setSpan(clickableSpan, 33, 53, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 33, 53, 0);
+            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 28, termsAndPrivacyPolicy
+                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 28,
+                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         termsAndPrivacyPolicy.setText(ss);
         termsAndPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());

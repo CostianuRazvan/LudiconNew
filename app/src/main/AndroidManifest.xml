@@ -293,6 +293,20 @@
             android:theme="@style/AppTheme.CustomTheme1">
         </activity>
 
+        <activity android:name=".Activities.FullHistory"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
+
+        <activity android:name=".Activities.PopDownloadEnrollmentData"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
+
+        <activity android:name=".Activities.RateReview"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
     </application>
 
 </manifest>

@@ -253,6 +253,10 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                     if (Integer.valueOf(timeElapsed) == 1) {
                         holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.min));
                     } else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.minutes));
+                }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                    if (Integer.valueOf(timeElapsed) == 1) {
+                        holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.min));
+                    } else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed) + " " + activity.getResources().getString(R.string.minutes));
                 }
             } else
                 if (timeElapsed < 1440) {
@@ -262,12 +266,20 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                         if (Integer.valueOf(timeElapsed / 60) == 1){
                             holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hour));
                         }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hours));
+                    }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                        if (Integer.valueOf(timeElapsed / 60) == 1){
+                            holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hour));
+                        }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 60) + " " + activity.getResources().getString(R.string.hours));
                     }
                 } else
                     if (timeElapsed < 10080) {
                         if( Locale.getDefault().getLanguage().startsWith("en")) {
                             holder.timeElapsed.setText(Integer.valueOf(timeElapsed / 1440) + " days ago");
                         }else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                            if (Integer.valueOf(timeElapsed / 1440) ==1){
+                                holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.day));
+                            }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.days));
+                        }else if (Locale.getDefault().getLanguage().startsWith("fr")){
                             if (Integer.valueOf(timeElapsed / 1440) ==1){
                                 holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.day));
                             }else holder.timeElapsed.setText(activity.getResources().getString(R.string.now) + " " + Integer.valueOf(timeElapsed / 1440) + " " + activity.getResources().getString(R.string.days));
