@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroFitAdapter {
 
     private Retrofit retrofit;
+    private static Retrofit retrofitInstance;
     String authKey;
     RecyclerView recyclerView;
 
@@ -26,6 +27,11 @@ public class RetroFitAdapter {
         this.authKey = authKey;
         this.recyclerView = recyclerView;
     }
+
+    public static Retrofit getInstance() {
+        return retrofitInstance;
+    }
+
 
     private OkHttpClient getClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -63,6 +69,8 @@ public class RetroFitAdapter {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient())
                 .build();
+
+        retrofitInstance = retrofit;
     }
 
     public void getEvents(String userId, int pageNumber) {

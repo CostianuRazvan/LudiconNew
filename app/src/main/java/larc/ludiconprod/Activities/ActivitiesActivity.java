@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -17,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -69,6 +71,7 @@ import larc.ludiconprod.BottomBarHelper.BottomBarTab;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
+import larc.ludiconprod.Manifest;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.HappeningNowLocation;
@@ -211,7 +214,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
 
                 HPShouldBeVisible = true;
                 if (isFirstTimeMyEvents) {
-                   //  myEventList.remove(0);
+                    //  myEventList.remove(0);
                     myAdapter.notifyDataSetChanged();
                 }
                 System.out.println("eventStarted");
@@ -682,7 +685,7 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
             pastEventsAdapter = new PastEventsAdapter(pastEventsEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
 
 
-            getMyEvents("0");
+             getMyEvents("0");
 
             NumberOfRefreshMyEvents = 0;
             NumberOfRefreshAroundMe = 0;
@@ -1215,14 +1218,22 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         try {
+            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                String permission[] = {android.Manifest.permission_group.LOCATION};
+                ActivityCompat.requestPermissions(getActivity(), permission, 1);
+            }
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            System.out.println(location.getLatitude() + " locatie");
-            latitude = location.getLatitude();
-
-            longitude = location.getLongitude();
+            if (location == null) {
+                latitude = 44.4226;
+                longitude = 26.1237;
+            } else {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
             getAroundMeEvents("0", latitude, longitude);
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
+            Log.d("Permission not granted", "NO");
         }
     }
 
@@ -1259,16 +1270,17 @@ public class ActivitiesActivity extends BasicFragment implements GoogleApiClient
     }
 
     private void onInternetRefresh() {
-        getMyEvents("0");
-        getFirstPageMyActivity = true;
-        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh1);
-        mSwipeRefreshLayout.setRefreshing(false);
-        NumberOfRefreshMyEvents = 0;
+        Log.d("latitude", latitude + " " + longitude + " ");
         getAroundMeEvents("0", latitude, longitude);
         getFirstPageAroundMe = true;
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh2);
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh2);
         mSwipeRefreshLayout.setRefreshing(false);
         NumberOfRefreshAroundMe = 0;
+        getMyEvents("0");
+        getFirstPageMyActivity = true;
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh1);
+        mSwipeRefreshLayout.setRefreshing(false);
+        NumberOfRefreshMyEvents = 0;
         getPastEvents("0");
         getFirstPagePastEvents = true;
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh3);

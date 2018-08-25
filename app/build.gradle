@@ -97,9 +97,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.0.0'
     implementation 'de.hdodenhof:circleimageview:2.0.0'
     implementation 'com.stripe:stripe-android:6.1.2'
-
-
-
+    implementation 'com.stripe:stripe-java:3.7.0'
 
 }
 
