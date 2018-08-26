@@ -191,15 +191,15 @@
     <string name="new_password">New password</string>
     <string name="retype_password">Retype Password</string>
     <string name="save_changes">SAVE CHANGES</string>
-    <string name="no_prizes_yet">No prizes, yet!</string>
-    <string name="come_back_later_join_activities_10_and_gain_ludicoins">Come back later. Some hot prizes will be available for you!</string>
+    <string name="no_quests_yet">No quests, yet!</string>
+    <string name="come_back_later_join_activities_10_and_gain_ludicoins">Come back later. Exciting quests will be available for you!</string>
     <string name="discount_code">DISCOUNT CODE:</string>
     <string name="valid_till_20_july_2017">Valid till 20 July 2017</string>
     <string name="_20_off">20% OFF</string>
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Use this voucher to recive 1% OFF for all football activities from Monday yo Friday</string>
     <string name="use_ludicoins_to_redeem_our_10_partners_prises">Use Ludicoins to redeem our partners prizes</string>
-    <string name="browse_prizes">BROWSE PRIZES</string>
+    <string name="browse_quests">BROWSE QUESTS</string>
     <string name="activity1">Activity</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="are_you_sure_you_want_to_unfollow">Are you sure you want to unfollow</string>
@@ -207,8 +207,8 @@
 
     <string name="around_me">AROUNDE ME</string>
     <string name="my_activities">MY ACTIVITIES</string>
-    <string name="prizes">PRIZES</string>
-    <string name="my_prizes">MY PRIZES</string>
+    <string name="quests">QUESTS</string>
+    <string name="my_quests">MY QUESTS</string>
     <string name="this_month">THIS MONTH</string>
     <string name="months_3">3 MONTHS</string>
     <string name="all_time">ALL TIME</string>
@@ -295,11 +295,11 @@
     <string name="and_gained">And gained:  </string>
 
     <string name="tab_activities">Activities</string>
-    <string name="tab_prizes">Prizes</string>
+    <string name="tab_quests">Quests</string>
     <string name="tab_leaderboard">Leaderboard</string>
     <string name="tab_chat">Chat&amp;Following</string>
     <string name="tab_profile">Profile</string>
-    <string name="get_in_now_only">GET IN NOW! only\t</string>
+    <string name="get_in_now_only">START QUEST!</string>
 
     <string name="_2_sports">2 sports</string>
     <string name="_3_mutual_friends">3 mutual follower</string>
@@ -320,6 +320,7 @@
     <string name="we_cant_take_your_location">Sorry, we can\'t take your location, please try again later</string>
     <string name="no_location_services_available">No location services available!</string>
     <string name="valid_till">Valid till</string>
+    <string name="unlimited_time">Unlimited time to finish</string>
     <string name="invited">INVITED</string>
     <string name="less_than_a_min_ago">less than a min ago</string>
     <string name="last_activities">LAST ACTIVITIES</string>

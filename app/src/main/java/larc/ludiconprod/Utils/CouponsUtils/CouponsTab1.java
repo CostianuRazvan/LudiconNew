@@ -23,13 +23,14 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Coupon;
 import larc.ludiconprod.Utils.Event;
+import larc.ludiconprod.Utils.Quest;
 
 /**
  * Created by alex_ on 18.08.2017.
  */
 
 public class CouponsTab1 extends Fragment {
-    public ArrayList<Coupon> coupons = new ArrayList<>();
+    public ArrayList<Quest> coupons = new ArrayList<>();
     public CouponsAdapter fradapter;
     public CouponsActivity fragment;
     View v;
@@ -39,7 +40,7 @@ public class CouponsTab1 extends Fragment {
         v = inflater.inflate(R.layout.couponstab1, container, false);
 
         try {
-            coupons = Persistance.getInstance().getCouponsCache(super.getActivity());
+            //coupons = //new ArrayList<Quest>();//Persistance.getInstance().getCouponsCache(super.getActivity());
             fradapter = new CouponsAdapter(coupons, getActivity().getApplicationContext(), getActivity(), getResources(), fragment);
             updateCoupons();
 

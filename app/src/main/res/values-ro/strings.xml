@@ -162,7 +162,7 @@
     <string name="new_password">Parola nouă</string>
     <string name="retype_password">Rescrie parola</string>
     <string name="save_changes">SALVEAZĂ MODIFICĂRILE</string>
-    <string name="no_prizes_yet">Încă nu ai niciun premiu!</string>
+    <string name="no_quests_yet">Încă nu ai nici o misiune finalizată!</string>
     <string name="come_back_later_join_activities_10_and_gain_ludicoins">Întoarce-te mai târziu!\n Câteva premii vor fi disponibile\n pentru tine!</string>
     <string name="discount_code">CODUL DE REDUCERE:</string>
     <string name="valid_till_20_july_2017">Valid pană pe 20 July 2017</string>
@@ -170,14 +170,14 @@
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Utilizează acest voucher pentru a primi 1% REDUCERE pentru toate activitățile de fotbal de luni până vineri</string>
     <string name="use_ludicoins_to_redeem_our_10_partners_prises">Folosește Ludicoins pentru a obține premiile oferite de partenerii noștri!</string>
-    <string name="browse_prizes">VEZI PREMIILE</string>
+    <string name="browse_quests">VEZI MISIUNILE</string>
     <string name="activity1">Activitate</string>
     <string name="player_profile">Profilul utilizatorului</string>
     <string name="check_out">CHECK-OUT</string>
     <string name="around_me">ÎN JURUL MEU</string>
     <string name="my_activities">ACTIVITĂȚILE MELE</string>
-    <string name="prizes">PREMII</string>
-    <string name="my_prizes">PREMIILE MELE</string>
+    <string name="quests">MISIUNI</string>
+    <string name="my_quests">MISIUNILE MELE</string>
     <string name="this_month">LUNA ASTA</string>
     <string name="months_3">3 LUNI</string>
     <string name="all_time">DE LA ÎNCEPUT</string>
@@ -262,10 +262,10 @@
     <string name="congratulations">Felicitări!</string>
     <string name="you_leveled_up">Ai trecut la nivelul următor!</string>
     <string name="and_gained">Și ai câștigat:  </string>
-    <string name="get_in_now_only">CUMPĂRĂ ACUM! Doar\t</string>
+    <string name="get_in_now_only">ÎNCEPE MISIUNEA!</string>
 
     <string name="tab_activities">Activități</string>
-    <string name="tab_prizes">Premii</string>
+    <string name="tab_quests">Misiuni</string>
     <string name="tab_leaderboard">Clasament</string>
     <string name="tab_chat">Chat&amp;Urmăriri</string>
     <string name="tab_profile">Profilul meu</string>
@@ -317,6 +317,7 @@
     <string name="we_cant_take_your_location">Ne pare rău, nu putem să îţi luăm locația, încearcă din nou mai târziu</string>
     <string name="no_location_services_available">Nu sunt disponibile serviciile de localizare!</string>
     <string name="valid_till">Valabil până la</string>
+    <string name="unlimited_time">Fără dată limită de finalizare</string>
     <string name="invited">INVITAT</string>
     <string name="less_than_a_min_ago">mai puțin de un minut</string>
     <string name="min">minut</string>

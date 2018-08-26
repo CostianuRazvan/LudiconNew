@@ -91,7 +91,7 @@ public class IntroActivity extends Activity {
             params.put("password", Persistance.getInstance().getUserInfo(IntroActivity.this).password);
             HashMap<String, String> headers = new HashMap<String, String>();
             headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-            HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/login/");
+            HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/login/");
 
         }
     }
@@ -199,7 +199,7 @@ public class IntroActivity extends Activity {
 
                                 HashMap<String, String> headers = new HashMap<String, String>();
                                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-                                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
                             } catch (Exception e) {
                                 e.printStackTrace();
 
@@ -216,7 +216,7 @@ public class IntroActivity extends Activity {
 
                                 HashMap<String, String> headers = new HashMap<String, String>();
                                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-                                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
                             }
                         }
                     }
@@ -248,7 +248,7 @@ public class IntroActivity extends Activity {
 
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
             }
         }
 
@@ -446,7 +446,7 @@ public class IntroActivity extends Activity {
                         logo.animate().translationY(300f);
                         logo.animate().translationY(-300f).setDuration(1000);
 
-                        HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                        HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
                     }
 
                     @Override
@@ -454,7 +454,7 @@ public class IntroActivity extends Activity {
                         System.out.println("bitmapfailed");
 
                         // Fallback strategy
-                        //HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                        //HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
 
                         facebookButton.setVisibility(View.VISIBLE);
                         loginButton.setVisibility(View.VISIBLE);
@@ -469,7 +469,7 @@ public class IntroActivity extends Activity {
                         logo.animate().translationY(300f);
                         logo.animate().translationY(-300f).setDuration(1000);
 
-                        HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "http://207.154.236.13/api/register/");
+                        HTTPResponseController.getInstance().returnResponse(params, headers, IntroActivity.this, "https://ludicon.app/api/register/");
                         System.out.println("bitmaponprepare");
                     }
                 });

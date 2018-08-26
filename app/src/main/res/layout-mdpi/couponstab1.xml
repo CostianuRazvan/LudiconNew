@@ -49,7 +49,7 @@
         android:textColor="#d4498b"
         android:visibility="invisible"
         android:fontFamily="@string/fontmedium"
-        android:text="@string/no_prizes_yet" />
+        android:text="@string/no_quests_yet" />
 
     <TextView
         android:id="@+id/noCouponsText"

@@ -135,7 +135,7 @@
     <string name="new_password">Nouveau mot de passe</string>
     <string name="retype_password">Retaper le mot de passe</string>
     <string name="save_changes">SAUVEGARDER LES MODIFICATIONS</string>
-    <string name="no_prizes_yet">Pas de prix pour le moment!</string>
+    <string name="no_quests_yet">Pas de quête pour le moment!</string>
     <string name="come_back_later_join_activities_10_and_gain_ludicoins">Revenez plus tard! Certains prix seront disponibles pour vous!</string>
     <string name="discount_code">CODE DE RÉDUCTION:</string>
     <string name="valid_till_20_july_2017">Valable jusqu’au 20 July 2017</string>
@@ -143,14 +143,14 @@
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Utiliser ce bon pour</string>
     <string name="use_ludicoins_to_redeem_our_10_partners_prises">Utilisez Ludicoins pour échanger nos prix partenaires!</string>
-    <string name="browse_prizes">PARCOURIR LES PRIX</string>
+    <string name="browse_quests">PARCOURIR LES QUÊTE</string>
     <string name="activity1">Activité</string>
     <string name="player_profile">Profile du joueur</string>
 
     <string name="around_me">AUTOUR DE MOI</string>
     <string name="my_activities">MES ACTIVITÉS</string>
-    <string name="prizes">PRIX</string>
-    <string name="my_prizes">MES PRIX</string>
+    <string name="quests">QUÊTES</string>
+    <string name="my_quests">MES QUÊTES</string>
     <string name="this_month">CE MOIS</string>
     <string name="months_3">3 MOIS</string>
     <string name="all_time">TOUT LE TEMPS</string>
@@ -234,10 +234,10 @@
     <string name="congratulations">Félicitations!</string>
     <string name="you_leveled_up">Vous avez atteint un nouveau niveau!</string>
     <string name="and_gained">Et gagné:  </string>
-    <string name="get_in_now_only">OBTENEZ-LE MAINTENANT! SEULEMENT \t</string>
+    <string name="get_in_now_only">COMMENCER LA QUÊTE!</string>
 
     <string name="tab_activities">Activités</string>
-    <string name="tab_prizes">Prix</string>
+    <string name="tab_quests">QUÊTE</string>
     <string name="tab_leaderboard">Classement</string>
     <string name="tab_chat">Chat&amp;Suivis</string>
     <string name="tab_profile">Mon profile</string>
@@ -260,6 +260,7 @@
     <string name="we_cant_take_your_location">Désolé, nous ne pouvons pas vous localiser , essayez plus tard</string>
     <string name="no_location_services_available">Service de localisation indisponible!</string>
     <string name="valid_till">Valable jusqu’au</string>
+    <string name="unlimited_time">Temps illimité pour finir</string>
     <string name="invited">INVITÉ</string>
     <string name="less_than_a_min_ago">moins d\'une minute</string>
     <string name="min">minute</string>

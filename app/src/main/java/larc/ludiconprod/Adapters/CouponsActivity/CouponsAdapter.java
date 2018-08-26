@@ -31,10 +31,11 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Coupon;
+import larc.ludiconprod.Utils.Quest;
 
 public class CouponsAdapter extends BaseAdapter implements ListAdapter {
 
-    private ArrayList<Coupon> list = new ArrayList<>();
+    private ArrayList<Quest> list = new ArrayList<>();
     private Context context;
     private Activity activity;
     private Resources resources;
@@ -50,7 +51,7 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
         TextView ludicoinsCode;
     }
 
-    public CouponsAdapter(ArrayList<Coupon> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
+    public CouponsAdapter(ArrayList<Quest> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
         this.list = list;
         this.context = context;
         this.activity = activity;
@@ -80,7 +81,7 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
         if (list.size() > 0) {
             final CouponsAdapter.ViewHolder holder;
 
-            final Coupon currentCoupon = list.get(position);
+            final Quest currentQuest = list.get(position);
 
             // Initialize the view
             if (view == null) {
@@ -100,8 +101,6 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                 holder.description.setTypeface(typeFace);
                 holder.validDate = (TextView) view.findViewById(R.id.validDate);
                 holder.validDate.setTypeface(typeFace);
-                holder.ludicoinsCode = (TextView) view.findViewById(R.id.ludicoins);
-                holder.ludicoinsCode.setTypeface(typeFace);
 
                 ((TextView) view.findViewById(R.id.getItText)).setTypeface(typeFaceBold);
 
@@ -134,8 +133,8 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                             headers.put("apiKey", HTTPResponseController.API_KEY);
 
                             params.put("userId", Persistance.getInstance().getUserInfo(activity).id);
-                            params.put("couponBlockId", currentCoupon.couponBlockId);
-                            HTTPResponseController.getInstance().redeemCoupon(params, headers, activity, fragment, fragment);
+                            params.put("couponBlockId", currentQuest.questId);
+                            //HTTPResponseController.getInstance().redeemCoupon(params, headers, activity, fragment, fragment);
                             confirmationDialog.dismiss();
                         }
                     });
@@ -152,22 +151,28 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                 }
             });
 
-            holder.title.setText(currentCoupon.title);
-            if (!currentCoupon.companyPicture.equals("")) {
-                Bitmap bitmap = MyAdapter.decodeBase64(currentCoupon.companyPicture);
+            holder.title.setText(currentQuest.title);
+            if (!currentQuest.picture.equals("")) {
+                Bitmap bitmap = MyAdapter.decodeBase64(currentQuest.picture);
                 holder.locationImage.setImageBitmap(bitmap);
             } else {
                 holder.locationImage.setImageResource(R.drawable.ph_company);
             }
 
-            holder.location.setText(currentCoupon.companyName);
-            holder.title.setText(currentCoupon.title);
-            holder.ludicoinsCode.setText(currentCoupon.ludicoins + " ");
-            holder.description.setText(currentCoupon.description);
+            holder.location.setText("Created by Ludicon"); //currentQuest.companyName);
+            holder.title.setText(currentQuest.title);
+            holder.description.setText(currentQuest.description);
 
-            Date date = new Date(currentCoupon.expiryDate * 1000);
-            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-            holder.validDate.setText(activity.getResources().getString(R.string.valid_till) + " " + fmt.format(date));
+
+            if(currentQuest.expiryDate == 0){
+                holder.validDate.setText(activity.getResources().getString(R.string.unlimited_time));
+            }
+            else {
+                Date date = new Date(currentQuest.expiryDate * 1000);
+                SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+
+                holder.validDate.setText(activity.getResources().getString(R.string.valid_till) + " " + fmt.format(date));
+            }
         }
 
         return view;

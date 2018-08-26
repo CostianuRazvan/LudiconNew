@@ -62,7 +62,7 @@ public class Main extends FragmentActivity implements Serializable {
 
 
         bottomBar.getTabAtPosition(0).setTitle(getResources().getString(R.string.tab_activities));
-        bottomBar.getTabAtPosition(1).setTitle(getResources().getString(R.string.tab_prizes));
+        bottomBar.getTabAtPosition(1).setTitle(getResources().getString(R.string.tab_quests));
         bottomBar.getTabAtPosition(2).setTitle(getResources().getString(R.string.tab_leaderboard));
         bottomBar.getTabAtPosition(3).setTitle(getResources().getString(R.string.tab_chat));
         bottomBar.getTabAtPosition(4).setTitle(getResources().getString(R.string.tab_profile));

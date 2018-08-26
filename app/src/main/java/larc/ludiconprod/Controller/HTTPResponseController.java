@@ -87,7 +87,7 @@ import static larc.ludiconprod.Activities.FullHistory.pastEventList;
 
 public class HTTPResponseController {
 
-    String prodServer = "http://207.154.236.13/";
+    String prodServer = "https://ludicon.app/";
     public static final String firebaseRefference = "https://ludicon-chat-cf900.firebaseio.com/";
     public static final String API_KEY = "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33";
 
@@ -1339,7 +1339,7 @@ public class HTTPResponseController {
 
     public void getCoupons(String params, HashMap<String, String> headers, final CouponsActivity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity.getActivity());
-        CustomRequest request = new CustomRequest(Request.Method.GET, prodServer + "api/coupons?" + params, new HashMap<String, String>(), headers, listener, activity);
+        CustomRequest request = new CustomRequest(Request.Method.GET, prodServer + "api/quests?" + params, new HashMap<String, String>(), headers, listener, activity);
         requestQueue.add(request);
     }
 

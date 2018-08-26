@@ -50,7 +50,7 @@
         android:textColor="#d4498b"
         android:visibility="invisible"
         android:fontFamily="@string/fontmedium"
-        android:text="@string/no_prizes_yet" />
+        android:text="@string/no_quests_yet" />
 
     <TextView
         android:id="@+id/noMyCouponsText"
@@ -81,7 +81,7 @@
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:background="@drawable/pink_button_selector"
-        android:text="@string/browse_prizes"/>
+        android:text="@string/browse_quests"/>
 
     <ProgressBar
         android:id="@+id/progressMyCoupons"
