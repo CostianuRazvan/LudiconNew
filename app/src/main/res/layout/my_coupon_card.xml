@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/aroundMeCardLayout"
-        android:background="@drawable/bg_coupon"
         android:id="@+id/imageViewBackground"
         android:layout_above="@+id/discountCodeLayout"/>
 
@@ -19,68 +18,139 @@
         android:id="@+id/couponsCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ph_company"
-                android:id="@+id/locationImage"/>
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="#d4498b"
-                    android:text="@string/_20_off" />
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/locationImage"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ph_company" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="#02b9ad"
-                    android:text="Smart Football Club" />
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="12dp"
+
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_20_off"
+                        android:textColor="#d4498b"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Smart Football Club"
+                        android:textColor="#02b9ad"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                     <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                         android:layout_centerVertical="true"
+                       >
+
+                        <TextView
+                            android:id="@+id/pointsToWin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="And gain 125 "
+                            android:textColor="#02b9ad"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/pointsIMV"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_toEndOf="@+id/pointsToWin"
+                            android:src="@drawable/ic_user_points" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#1573ba"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="@string/use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday"/>
+            android:layout_marginTop="16dp"
+            android:text="@string/use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday"
+            android:textColor="#1573ba" />
 
-        <TextView
-            android:id="@+id/validDate"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            android:textColor="#400c3855"
-            android:text="@string/valid_till_20_july_2017"/>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/validDate"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/valid_till_20_july_2017"
+                android:textColor="#400c3855" />
+
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
+                android:padding="0dp"
+                android:text="@string/progress"
+                android:textColor="#400c3855"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/progressValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="40dp"
+                android:text="3/10"
+                android:textColor="#d4498b"
+                android:textSize="12sp" />
+        </RelativeLayout>
 
     </LinearLayout>
     <LinearLayout

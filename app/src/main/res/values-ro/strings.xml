@@ -164,12 +164,12 @@
     <string name="save_changes">SALVEAZĂ MODIFICĂRILE</string>
     <string name="no_quests_yet">Încă nu ai nici o misiune finalizată!</string>
     <string name="come_back_later_join_activities_10_and_gain_ludicoins">Întoarce-te mai târziu!\n Câteva premii vor fi disponibile\n pentru tine!</string>
-    <string name="discount_code">CODUL DE REDUCERE:</string>
+    <string name="discount_code">ANULEAZĂ MISIUNE</string>
     <string name="valid_till_20_july_2017">Valid pană pe 20 July 2017</string>
     <string name="_20_off">20% REDUCERE</string>
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Utilizează acest voucher pentru a primi 1% REDUCERE pentru toate activitățile de fotbal de luni până vineri</string>
-    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Folosește Ludicoins pentru a obține premiile oferite de partenerii noștri!</string>
+    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Acceptă misiuni pentru a-ți începe progresul!</string>
     <string name="browse_quests">VEZI MISIUNILE</string>
     <string name="activity1">Activitate</string>
     <string name="player_profile">Profilul utilizatorului</string>
@@ -225,7 +225,7 @@
     <string name="cool">Super!</string>
     <string name="its_you">Eşti tu :)</string>
     <string name="remove">ELIMINĂ</string>
-    <string name="are_you_sure_you_want_to_reedem_this_coupon">Sigur doreşti să cumperi acest premiu?</string>
+    <string name="are_you_sure_you_want_to_reedem_this_coupon">Sigur doreşti să începi acest eveniment?</string>
     <string name="unfollow">NU MAI URMĂRI</string>
     <string name="are_you_sure_you_want_to_unfollow">Sigur doreşti să nu mai urmăreşti pe</string>
     <string name="you_are_now_following">Acum urmăreşti pe</string>
@@ -347,4 +347,6 @@
     <string name="how_was_the_event">Cum a fost evenimentul?</string>
     <string name="write_your_feedback">Scrie-ne cum ți s-a părut</string>
     <string name="how_was_the_location">Cum a fost locația?</string>
+    <string name="progress">PROGRESS</string>
+    <string name="are_you_sure_you_want_to_cancel_this_quest">Are you sure you want to cancel this quest?</string>
 </resources>

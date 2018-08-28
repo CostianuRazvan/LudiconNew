@@ -1345,7 +1345,7 @@ public class HTTPResponseController {
 
     public void getMyCoupons(String params, HashMap<String, String> headers, CouponsActivity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity.getActivity());
-        CustomRequest request = new CustomRequest(Request.Method.GET, prodServer + "api/coupons?" + params, new HashMap<String, String>(), headers, listener, errorListener);
+        CustomRequest request = new CustomRequest(Request.Method.GET, prodServer + "api/myQuests?" + params, new HashMap<String, String>(), headers, listener, errorListener);
         requestQueue.add(request);
     }
 
@@ -1354,6 +1354,17 @@ public class HTTPResponseController {
         CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/redeemCoupon", params, headers, listener, errorListener);
         requestQueue.add(request);
     }
+    public void startQuest(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/acceptQuest", params, headers, listener, errorListener);
+        requestQueue.add(request);
+    }
+    public void cancelQuest(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/cancelQuest", params, headers, listener, errorListener);
+        requestQueue.add(request);
+    }
+
 
     public void friendRequest(final HashMap<String, String> params, HashMap<String, String> headers, final Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
@@ -1377,7 +1388,7 @@ public class HTTPResponseController {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         Log.v("log", "request");
         System.out.println("request trimis 1");
-        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/savePoints", params, headers, this.savePointsSuccessListener(), errorListener);
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/savePoints", params, headers, this.savePointsSuccessListener(), errorListener);
         requestQueue.add(request);
         System.out.println("request trimis");
     }

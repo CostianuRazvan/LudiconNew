@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Downloader;
 
 import org.json.JSONObject;
 
@@ -49,6 +53,8 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
         TextView description;
         TextView validDate;
         TextView ludicoinsCode;
+        TextView pointsToWin;
+        TextView progressValue;
     }
 
     public CouponsAdapter(ArrayList<Quest> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
@@ -101,6 +107,8 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                 holder.description.setTypeface(typeFace);
                 holder.validDate = (TextView) view.findViewById(R.id.validDate);
                 holder.validDate.setTypeface(typeFace);
+                holder.pointsToWin =  (TextView) view.findViewById(R.id.pointsToWinCoupons);
+                holder.pointsToWin.setTypeface(typeFace);
 
                 ((TextView) view.findViewById(R.id.getItText)).setTypeface(typeFaceBold);
 
@@ -130,11 +138,11 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
                         public void onClick(View view) {
                             HashMap<String, String> params = new HashMap<String, String>();
                             HashMap<String, String> headers = new HashMap<String, String>();
-                            headers.put("apiKey", HTTPResponseController.API_KEY);
+                            headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
 
                             params.put("userId", Persistance.getInstance().getUserInfo(activity).id);
-                            params.put("couponBlockId", currentQuest.questId);
-                            //HTTPResponseController.getInstance().redeemCoupon(params, headers, activity, fragment, fragment);
+                            params.put("questId", currentQuest.questId);
+                            HTTPResponseController.getInstance().startQuest(params, headers, activity, fragment.onRequestSuccessListener(), fragment);
                             confirmationDialog.dismiss();
                         }
                     });
@@ -163,6 +171,12 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
             holder.title.setText(currentQuest.title);
             holder.description.setText(currentQuest.description);
 
+            holder.pointsToWin.setText("And gain " + currentQuest.points);
+
+            SpannableStringBuilder spanTxt = new SpannableStringBuilder( holder.pointsToWin.getText());
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#400c3855")), 0, 9, 0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#02b9ad")), 9, spanTxt.length(), 0);
+            holder.pointsToWin.setText(spanTxt);
 
             if(currentQuest.expiryDate == 0){
                 holder.validDate.setText(activity.getResources().getString(R.string.unlimited_time));
@@ -177,4 +191,5 @@ public class CouponsAdapter extends BaseAdapter implements ListAdapter {
 
         return view;
     }
+
 }

@@ -137,12 +137,12 @@
     <string name="save_changes">SAUVEGARDER LES MODIFICATIONS</string>
     <string name="no_quests_yet">Pas de quête pour le moment!</string>
     <string name="come_back_later_join_activities_10_and_gain_ludicoins">Revenez plus tard! Certains prix seront disponibles pour vous!</string>
-    <string name="discount_code">CODE DE RÉDUCTION:</string>
+    <string name="discount_code">ANNULER LA QUÊTE</string>
     <string name="valid_till_20_july_2017">Valable jusqu’au 20 July 2017</string>
     <string name="_20_off">RÉDUCTION DE 20%</string>
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Utiliser ce bon pour</string>
-    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Utilisez Ludicoins pour échanger nos prix partenaires!</string>
+    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Accepter une quête et réclamer votre titre!</string>
     <string name="browse_quests">PARCOURIR LES QUÊTE</string>
     <string name="activity1">Activité</string>
     <string name="player_profile">Profile du joueur</string>
@@ -197,7 +197,7 @@
     <string name="cool">Cool!</string>
     <string name="its_you">C\'est toi :)</string>
     <string name="remove">ÉLIMINER</string>
-    <string name="are_you_sure_you_want_to_reedem_this_coupon">Êtes vous sûr de vouloir utiliser ce code de réduction?</string>
+    <string name="are_you_sure_you_want_to_reedem_this_coupon">Êtes vous sûr de vouloir commencer cette quête?</string>
     <string name="unfollow">SE DÉSABONNER</string>
     <string name="are_you_sure_you_want_to_unfollow">Êtes vous sûr de vouloir suivre</string>
     <string name="you_are_now_following">Vous suivez maintenant</string>
@@ -327,6 +327,8 @@
     <string name="mutual_follower">abonnements mutuels</string>
     <string name="you_are_playing">Tu joues</string>
     <string name="happening_now">Cela arrive maintenant!</string>
+    <string name="progress">PROGRESS</string>
+    <string name="are_you_sure_you_want_to_cancel_this_quest">Are you sure you want to cancel this quest?</string>
 
     <string-array name="chooseSex_array">
         <item>M</item>
