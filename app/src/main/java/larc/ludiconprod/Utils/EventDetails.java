@@ -33,4 +33,5 @@ public class EventDetails {
     public ArrayList<Friend> listOfParticipants=new ArrayList<Friend>();
     public Boolean isFormBased;
     public ArrayList<String> formParameters = new ArrayList<String>();
+    public String eventURL;
 }

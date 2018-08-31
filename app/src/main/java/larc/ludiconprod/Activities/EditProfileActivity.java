@@ -1,6 +1,8 @@
 package larc.ludiconprod.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 
 import larc.ludiconprod.Adapters.EditProfile.EditActivitiesAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
@@ -73,6 +76,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private SeekBar range;
     private ImageView image;
     private boolean imageChanged;
+
+    String language;
 
     @Nullable
     @Override
@@ -223,6 +228,14 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         user.authKey = old.authKey;
         user.gender = "" + this.sex;
 
+        user.language = Locale.getDefault().getDisplayLanguage();
+        language = user.language.substring(0,2).toLowerCase();
+        SharedPreferences prefs = getSharedPreferences("CommonPrefs",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("language", language);
+        editor.commit();
+
         user.firstName = this.firstName.getText().toString();
 
 
@@ -307,6 +320,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             Sport sport = new Sport(sports.get(i));
             user.sports.add(sport);
         }
+        params.put("language", language);
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("authKey", old.authKey);

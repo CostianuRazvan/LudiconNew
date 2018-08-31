@@ -1,6 +1,8 @@
 package larc.ludiconprod.Activities;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,9 +108,15 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
     static  public String creatorID = null;
     static ActivityDetailsActivity activity;
     Button downloadEnrollmentData;
+    Button editEnrollmentData;
+    TextView eventURL;
+    TextView descriptionLabel;
 
     TextView perHour;
     TextView youGain;
+
+    private ClipboardManager myClipboard;
+    private ClipData myClip;
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedBytes = Base64.decode(input, 0);
@@ -130,7 +138,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         urlParams.put("eventId", eventid);
         urlParams.put("userId", Persistance.getInstance().getUserInfo(ActivityDetailsActivity.this).id);
         urlParams.put("pageNumber", pageNumber);
-        HTTPResponseController.getInstance().getParticipants(params, headers, ActivityDetailsActivity.this, urlParams);
+        HTTPResponseController.getInstance().getParticipants(params, headers, ActivityDetailsActivity.this, urlParams, true);
     }
 
 
@@ -198,6 +206,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         perHour = (TextView) findViewById(R.id.perHour);
         youGain = (TextView) findViewById(R.id.youGain);
         downloadEnrollmentData = (Button) findViewById(R.id.downloadEnrollmentData);
+        editEnrollmentData = (Button) findViewById(R.id.editEnrollmentData);
+        eventURL = (TextView) findViewById(R.id.eventURL);
+        descriptionLabel = (TextView) findViewById(R.id.descriptionLabel);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +265,29 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
             friend.level = b.getIntegerArrayList("participantsLevel").get(i);
             eventDetails.listOfParticipants.add(friend);
         }
+        eventDetails.eventURL = b.getString("eventURL");
+
+        eventURL.setText(eventDetails.eventURL);
+
+
+        myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+        eventURL.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String text;
+                text = eventURL.getText().toString();
+
+                myClip = ClipData.newPlainText("text", text);
+                myClipboard.setPrimaryClip(myClip);
+
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.link_copied),
+                        Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
         if (!eventDetails.creatorProfilePicture.equals("")) {
             Bitmap bitmap = decodeBase64(eventDetails.creatorProfilePicture);
             creatorImageProfile.setImageBitmap(bitmap);
@@ -543,6 +577,10 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         latitude = eventDetails.latitude;
         longitude = eventDetails.longitude;
 
+        if (eventDetails.description.equals("")){
+            descriptionLabel.setVisibility(View.GONE);
+        }
+
         description.setText(eventDetails.description);
         if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.listOfParticipants.size() == 0) {
 
@@ -611,6 +649,9 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                     joinOrUnjoinButton.setBackgroundResource(R.drawable.pink_stroke_rounded_button);
                     joinOrUnjoinButton.setTextColor(Color.parseColor("#d4498b"));
                     downloadEnrollmentData.setVisibility(View.GONE);
+                    if (eventDetails.isFormBased == true) {
+                        editEnrollmentData.setVisibility(View.VISIBLE);
+                    }
                     //call join api method
 
                     final String eventid = b.getString("eventId");
@@ -645,6 +686,21 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                         }
                     });
 
+                    editEnrollmentData.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            HashMap<String, String> params = new HashMap<String, String>();
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            HashMap<String, String> urlParams = new HashMap<>();
+                            headers.put("authKey", Persistance.getInstance().getUserInfo(ActivityDetailsActivity.this).authKey);
+                            final String eventid = b.getString("eventId");
+                            eventID = eventid;
+                            urlParams.put("eventId", eventid);
+                            urlParams.put("userId", Persistance.getInstance().getUserInfo(ActivityDetailsActivity.this).id);
+                            HTTPResponseController.getInstance().enrollmentData(params, headers, ActivityDetailsActivity.this, urlParams, ActivityDetailsActivity.this, true);
+                        }
+                    });
+
                 } else
                     if (!eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.isParticipant == 0) {
                         deleteOrCancelEventButton.setVisibility(View.INVISIBLE);
@@ -676,6 +732,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
                                     intent.putExtra("eventId", eventid);
                                     intent.putExtra("userId", Persistance.getInstance().getUserInfo(ActivityDetailsActivity.this).id);
                                     intent.putExtra("formParameters", eventDetails.formParameters);
+                                    intent.putExtra("editEnrollData", false);
                                     startActivity(intent);
                                     joinOrUnjoinButton.setEnabled(false);
                                     finish();

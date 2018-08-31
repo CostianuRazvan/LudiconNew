@@ -18,6 +18,8 @@ import larc.ludiconprod.Utils.Chat;
 import larc.ludiconprod.Utils.Coupon;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.EventBrief;
+import larc.ludiconprod.Utils.EventDetails;
+import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.UserPosition;
 import larc.ludiconprod.Utils.util.Sponsors;
@@ -52,6 +54,8 @@ public class Persistance {
     private final String happeningNowEvent = "HappeningNowEvent";
     private final String SponsorsString = "Sponsors";
     private final String pastEventsString="PastEvents";
+    private final String eventString="Event";
+
 
     public void setUserInfo(Activity activity, User user) {
 
@@ -148,6 +152,28 @@ public class Persistance {
             sponsorsList = new Gson().fromJson(json, type);
         }
         return  sponsorsList;
+    }
+
+    public void setEventToReview(Activity activity, Event event){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(this.eventString, 0).edit();
+        Gson gson = new Gson();
+        editor.putString(this.eventString, gson.toJson(event));
+        editor.apply();
+    }
+
+    public Event getEventToReview(Activity activity) {
+        String json = null;
+        System.out.println(activity + "activity");
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(eventString, 0);
+        json = sharedPreferences.getString(eventString, "0");
+        Gson gson = new Gson();
+        Event event;
+        if (json.equals("0")) {
+            event = new Event();
+        } else {
+            event = gson.fromJson(json, Event.class);
+        }
+        return event;
     }
 
 

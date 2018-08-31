@@ -316,10 +316,6 @@
     <string name="dummy_content">LUDICON</string>
     <string name="hello_user">Salut, %1$s!</string>
 
-    <string name="how_was_the_event">Comment s\'est passé l\'événement?</string>
-    <string name="write_your_feedback">Rédiger un avis</string>
-    <string name="how_was_the_location">Comment était l\'emplacement?</string>
-
     <string name="with">avec</string>
     <string name="others1">autres</string>
 
@@ -345,4 +341,18 @@
         <item>Autre</item>
     </string-array>
 
+    <string name="how_was_the_event">Comment s\'est passé l'événement?</string>
+    <string name="write_your_feedback">Rédiger un avis...</string>
+    <string name="how_was_the_location">Comment était l\'emplacement?</string>
+    <string name="very_poor">Très mauvais</string>
+    <string name="poor">Mauvais</string>
+    <string name="common">Moyen</string>
+    <string name="rare">Bien</string>
+    <string name="epic">Très bien</string>
+    <string name="legendary">Excellent</string>
+    <string name="how_were_the_participants">Comment étaient les participants?</string>
+    <string name="edit_enrollment_data">MODIFIER LES CHAMPS D\'INSCRIPTION</string>
+    <string name="skip">SAUTER</string>
+    <string name="event_url">URL DE L\'ÉVÉNEMENT</string>
+    <string name="link_copied">Lien copié</string>
 </resources>

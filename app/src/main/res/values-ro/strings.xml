@@ -174,6 +174,8 @@
     <string name="activity1">Activitate</string>
     <string name="player_profile">Profilul utilizatorului</string>
     <string name="check_out">CHECK-OUT</string>
+    <string name="check_in">CHECK-IN</string>
+
     <string name="around_me">ÎN JURUL MEU</string>
     <string name="my_activities">ACTIVITĂȚILE MELE</string>
     <string name="prizes">PREMII</string>
@@ -296,8 +298,6 @@
     <string name="happening_now">Se întâmplă acum!</string>
     <string name="you_are_playing">Ești la </string>
 
-    <string name="check_in">START</string>
-
     <string name="_2_sports">2 sporturi</string>
     <string name="_3_mutual_friends">3 urmăriri comune</string>
     <string name="mutual_follower">urmărire comună</string>
@@ -342,8 +342,19 @@
 
     <string name="with">cu</string>
     <string name="others1">alții</string>
-
     <string name="how_was_the_event">Cum a fost evenimentul?</string>
-    <string name="write_your_feedback">Scrie-ne cum ți s-a părut</string>
-    <string name="how_was_the_location">Cum a fost locația?</string>
+    <string name="write_your_feedback">Scrie o recenzie...</string>
+    <string name="how_was_the_location">Cum a fost locaţia?</string>
+    <string name="very_poor">Foarte slab</string>
+    <string name="poor">Slab</string>
+    <string name="common">Mediocru</string>
+    <string name="rare">Bun</string>
+    <string name="epic">Foarte bun</string>
+    <string name="legendary">Grozav</string>
+    <string name="how_were_the_participants">Cum au fost participanţii?</string>
+    <string name="edit_enrollment_data">MODIFICĂ FORMULARUL DE ÎNSCRIERE</string>
+    <string name="skip">SKIP</string>
+    <string name="event_url">LINKUL EVENIMENTULUI</string>
+    <string name="link_copied">Link copiat</string>
+
 </resources>

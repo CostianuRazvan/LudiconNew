@@ -338,8 +338,15 @@
     <string name="submit">SUBMIT</string>
 
     <string name="how_was_the_event">How was the Event?</string>
-    <string name="write_your_feedback">Write your feedback</string>
+    <string name="write_your_feedback">Write a review...</string>
     <string name="how_was_the_location">How was the Location?</string>
+    <string name="very_poor">Very poor</string>
+    <string name="poor">Poor</string>
+    <string name="common">Common</string>
+    <string name="rare">Rare</string>
+    <string name="epic">Epic</string>
+    <string name="legendary">Legendary</string>
+    <string name="how_were_the_participants">How were the Participants?</string>
 
     <string name="check_out">CHECK-OUT</string>
     <string name="with_others">with others</string>
@@ -351,4 +358,14 @@
     <string name="day">day</string>
     <string name="days">days</string>
     <string name="select_location1">Select location</string>
+    <string name="edit_enrollment_data">EDIT ENROLLMENT DATA</string>
+    <string name="skip">SKIP</string>
+    <string name="event_url">EVENT URL</string>
+    <string name="link_copied">Link Copied</string>
+
+    <string name="social_rating">SOCIAL RATING</string>
+    <string name="based_on">Based on</string>
+    <string name="reviews">reviews</string>
+    <string name="view_all_reviews">SEE ALL REVIEWS</string>
+    <string name="reviews1">Reviews</string>
 </resources>

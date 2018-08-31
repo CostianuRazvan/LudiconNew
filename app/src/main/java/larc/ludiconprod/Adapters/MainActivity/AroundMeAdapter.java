@@ -489,6 +489,7 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             intent.putExtra("eventId", list.get(pos).id);
                             intent.putExtra("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
                             intent.putExtra("userId", Persistance.getInstance().getUserInfo(activity).id);
+                            intent.putExtra("editEnrollData", false);
                             activity.startActivity(intent);
 
                         }

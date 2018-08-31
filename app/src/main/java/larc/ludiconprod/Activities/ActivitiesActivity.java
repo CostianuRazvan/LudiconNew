@@ -66,6 +66,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Adapters.MainActivity.AroundMeAdapter;
@@ -87,6 +88,7 @@ import larc.ludiconprod.Utils.util.Sponsors;
 import larc.ludiconprod.Utils.util.Sport;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
+import static android.content.Context.MODE_PRIVATE;
 import static larc.ludiconprod.Activities.Main.bottomBar;
 
 /**
@@ -249,6 +251,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             HTTPResponseController.getInstance().savePoints(params, headers, activity, this);
             Persistance.getInstance().setHappeningNow(null, activity);
+            Persistance.getInstance().setEventToReview(activity, currentEvent);
         }
     }
 
@@ -434,6 +437,22 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 });
             }
 
+            SharedPreferences shared = activity.getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
+            String channel = (shared.getString("language", ""));
+            if (!Locale.getDefault().getDisplayLanguage().substring(0,2).toLowerCase().equals(channel)){
+                String language = Locale.getDefault().getDisplayLanguage().substring(0,2).toLowerCase();
+                SharedPreferences prefs = activity.getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("language", language);
+                editor.commit();
+
+                HashMap<String, String> params1 = new HashMap<>();
+                params1.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+                params1.put("language", language);
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                HTTPResponseController.getInstance().updateUser(params1, headers, activity);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
