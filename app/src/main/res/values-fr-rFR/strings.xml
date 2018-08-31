@@ -341,7 +341,7 @@
         <item>Autre</item>
     </string-array>
 
-    <string name="how_was_the_event">Comment s\'est passé l'événement?</string>
+    <string name="how_was_the_event">Comment s\'est passé l\'événement?</string>
     <string name="write_your_feedback">Rédiger un avis...</string>
     <string name="how_was_the_location">Comment était l\'emplacement?</string>
     <string name="very_poor">Très mauvais</string>
@@ -355,4 +355,10 @@
     <string name="skip">SAUTER</string>
     <string name="event_url">URL DE L\'ÉVÉNEMENT</string>
     <string name="link_copied">Lien copié</string>
+
+    <string name="social_rating">REVUE SOCIALE</string>
+    <string name="based_on">Basé sur</string>
+    <string name="reviews">avis</string>
+    <string name="view_all_reviews">VOIR TOUS LES AVIS</string>
+    <string name="reviews1">Avis</string>
 </resources>

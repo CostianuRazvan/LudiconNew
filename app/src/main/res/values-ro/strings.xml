@@ -357,4 +357,9 @@
     <string name="event_url">LINKUL EVENIMENTULUI</string>
     <string name="link_copied">Link copiat</string>
 
+    <string name="social_rating">RATING SOCIAL</string>
+    <string name="based_on">Bazat pe</string>
+    <string name="reviews">recenzii</string>
+    <string name="view_all_reviews">VEZI TOATE RECENZIILE</string>
+    <string name="reviews1">Recenzii</string>
 </resources>
