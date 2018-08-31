@@ -653,9 +653,9 @@ public class HTTPResponseController {
                         for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
                             eventBrief.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
 
-                        }
-                        eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoins");
-                        eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("points");
+                            }
+                            eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoinsGained");
+                            eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("pointsGained");
 
                         pastEventList.add(eventBrief);
                     }
@@ -1119,56 +1119,6 @@ public class HTTPResponseController {
         };
     }
 
-    /*private Response.Listener<JSONObject> getReviewsSuccesListener() {
-        return new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Bundle b = new Bundle();
-                System.out.println(jsonObject + " reviews");
-                try {
-                    b.putDouble("socialRate", jsonObject.getDouble("socialRate"));
-                    b.putInt("countSocialRate", jsonObject.getInt("countSocialRate"));
-                    b.putDouble("excellentPerc", jsonObject.getDouble("excellentPerc"));
-                    b.putDouble("goodPerc", jsonObject.getDouble("goodPerc"));
-                    b.putDouble("averagePerc", jsonObject.getDouble("averagePerc"));
-                    b.putDouble("bellowAveragePerc", jsonObject.getDouble("bellowAveragePerc"));
-                    b.putDouble("poorPerc", jsonObject.getDouble("poorPerc"));
-                    ArrayList<String> id = new ArrayList<>();
-                    ArrayList<String> userId = new ArrayList<>();
-                    ArrayList<String> userName = new ArrayList<>();
-                    ArrayList<String> userImage = new ArrayList<>();
-                    ArrayList<String> review = new ArrayList<>();
-                    ArrayList<String> rate = new ArrayList<>();
-                    ArrayList<String> reviewDate = new ArrayList<>();
-                    for (int i = 0; i < jsonObject.getJSONArray("reviews").length(); i++) {
-                        id.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("id"));
-                        userId.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userId"));
-                        userName.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userName"));
-                        userImage.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userImage"));
-                        review.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("review"));
-                        rate.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("rate"));
-                        reviewDate.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewDate"));
-                    }
-                    b.putStringArrayList("id", id);
-                    b.putStringArrayList("userId", userId);
-                    b.putStringArrayList("userName", userName);
-                    b.putStringArrayList("userImage", userImage);
-                    b.putStringArrayList("review", review);
-                    b.putStringArrayList("rate", rate);
-                    b.putStringArrayList("reviewDate", reviewDate);
-
-                    Intent intent = new Intent(activity, FullPageView.class);
-                    intent.putExtras(b);
-                    activity.startActivity(intent);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-    }*/
-
     public String trimMessage(String json, String key) {
         String trimmedString = null;
         if (activity.getLocalClassName().toString().equals("Activities.LoginActivity")) {
@@ -1606,10 +1556,4 @@ public class HTTPResponseController {
         requestQueue.add(jsObjRequest);
     }
 
-    /*public void getReviews(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener, boolean editEnrollData) {
-        setActivity(activity, params.get("email"), params.get("password"));
-        RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/reviews/userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.getReviewsSuccesListener(), errorListener);
-        requestQueue.add(jsObjRequest);
-    }*/
 }

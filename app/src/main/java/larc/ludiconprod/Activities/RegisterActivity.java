@@ -224,7 +224,7 @@ public class RegisterActivity extends FragmentActivity {
                             params.put("isCustom", "0");
                             HashMap<String, String> headers = new HashMap<String, String>();
                             headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
-                            HTTPResponseController.getInstance().returnResponse(params, headers, RegisterActivity.this, "http://207.154.236.13/api/register/");
+                            HTTPResponseController.getInstance().returnResponse(params, headers, RegisterActivity.this, "https://ludicon.info/api/register/");
                             isButtonSubmitEnabled = false;
                         } catch (Exception e) {
                             e.printStackTrace();
