@@ -5,7 +5,7 @@ import java.util.Date;
 
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.EventBrief;
-import larc.ludiconprod.Utils.util.ReviewBrief;
+//import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sport;
 
 /**

@@ -581,12 +581,12 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
             descriptionLabel.setVisibility(View.GONE);
         }
 
+        if (isFormBasedStr.equals("0")){
+            downloadEnrollmentData.setVisibility(View.GONE);
+        }
+
         description.setText(eventDetails.description);
         if (eventDetails.creatorId.equals(Persistance.getInstance().getUserInfo(this).id) && eventDetails.listOfParticipants.size() == 0) {
-
-            if (isFormBasedStr.equals("0")){
-                downloadEnrollmentData.setVisibility(View.GONE);
-            }
             deleteOrCancelEventButton.setText(R.string.delete);
             final String eventid = b.getString("eventId");
             deleteOrCancelEventButton.setOnClickListener(new View.OnClickListener() {

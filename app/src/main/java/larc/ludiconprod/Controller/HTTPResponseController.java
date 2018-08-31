@@ -47,7 +47,7 @@ import larc.ludiconprod.Activities.ChatAndFriendsActivity;
 import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Activities.CreateNewActivity;
 import larc.ludiconprod.Activities.FullHistory;
-import larc.ludiconprod.Activities.FullPageView;
+//import larc.ludiconprod.Activities.FullPageView;
 import larc.ludiconprod.Activities.GMapsActivity;
 import larc.ludiconprod.Activities.IntroActivity;
 import larc.ludiconprod.Activities.InviteFriendsActivity;
@@ -91,7 +91,7 @@ import static larc.ludiconprod.Activities.FullHistory.pastEventList;
 
 public class HTTPResponseController {
 
-    String prodServer = "http://207.154.236.13/";
+    String prodServer = "https://ludicon.info/";
     public static final String firebaseRefference = "https://ludicon-chat-cf900.firebaseio.com/";
     public static final String API_KEY = "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33";
 
