@@ -313,6 +313,7 @@
     <string name="you_play_something">Jucați ceva</string>
     <string name="press_back_again_to_exit">Apasă din nou pentru a ieși.</string>
     <string name="is_friend">Prietenul lui\t\t</string>
+    <string name="is_friend_girl">Prietena lui\t\t</string>
 
     <string name="we_cant_take_your_location">Ne pare rău, nu putem să îţi luăm locația, încearcă din nou mai târziu</string>
     <string name="no_location_services_available">Nu sunt disponibile serviciile de localizare!</string>
@@ -362,4 +363,12 @@
     <string name="reviews">recenzii</string>
     <string name="view_all_reviews">VEZI TOATE RECENZIILE</string>
     <string name="reviews1">Recenzii</string>
+    <string name="excellent">Excelent</string>
+    <string name="good">Bun</string>
+    <string name="average">Mediu</string>
+    <string name="below_average">Sub mediu</string>
+    <string name="popup_to_review">Popup-uri pentru recenzii</string>
+    <string name="event">Evenimentul</string>
+    <string name="users">Participanţii</string>
+    <string name="trusted">OFICIAL</string>
 </resources>

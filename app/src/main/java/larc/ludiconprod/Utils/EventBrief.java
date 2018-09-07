@@ -119,7 +119,7 @@ public class EventBrief {
             } else if (sportName.equals("TEN")) {
                 sport = "Tennis";
             } else if (sportName.equals("VOL")) {
-                sport = "Vollyball";
+                sport = "Volley-ball";
             } else {
                 sport = "Autres";
             }

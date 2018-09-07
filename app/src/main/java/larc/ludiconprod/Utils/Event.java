@@ -29,5 +29,6 @@ public class Event {
     public ArrayList<String> participansProfilePicture = new ArrayList<String>();
     public boolean isFormBased;
     public ArrayList<String> formParameters = new ArrayList<String>();
+    public int authorizedLevel;
 
 }

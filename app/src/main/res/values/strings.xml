@@ -338,7 +338,7 @@
     <string name="submit">SUBMIT</string>
 
     <string name="how_was_the_event">How was the Event?</string>
-    <string name="write_your_feedback">Write a review...</string>
+    <string name="write_your_feedback">Write your feedback</string>
     <string name="how_was_the_location">How was the Location?</string>
     <string name="very_poor">Very poor</string>
     <string name="poor">Poor</string>
@@ -368,4 +368,13 @@
     <string name="reviews">reviews</string>
     <string name="view_all_reviews">SEE ALL REVIEWS</string>
     <string name="reviews1">Reviews</string>
+    <string name="excellent">Excellent</string>
+    <string name="good">Good</string>
+    <string name="average">Average</string>
+    <string name="below_average">Below Average</string>
+    <string name="popup_to_review">Pop-ups to Review</string>
+    <string name="event">Event</string>
+    <string name="users">Users</string>
+    <string name="trusted">TRUSTED</string>
+
 </resources>

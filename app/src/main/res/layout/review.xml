@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:id="@+id/userLayout">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/userImageProfile"
+            android:background="@drawable/ph_user"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daniel Grigore"
+            android:textColor="@color/pink"
+            android:id="@+id/userName"
+            android:textSize="18sp"
+            android:fontFamily="@string/fontmedium"
+            android:layout_marginTop="17dp"
+            android:layout_toRightOf="@+id/userImageProfile"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/userName"
+            android:textColor="@color/lightGray"
+            android:textSize="15sp"
+            android:fontFamily="@string/fontmedium"
+            android:layout_marginTop="20dp"
+            android:id="@+id/date"
+            android:text="03.09.2018"
+            android:gravity="right"
+            android:layout_marginRight="15dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/review"
+            android:text="Review"
+            android:textSize="18dp"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/black" />
+
+
+        <RelativeLayout
+            android:id="@+id/stars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/review"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/star1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/icon_star_line" />
+
+            <ImageView
+                android:id="@+id/star2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/star1"
+                android:src="@drawable/icon_star_line" />
+
+            <ImageView
+                android:id="@+id/star3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/star2"
+                android:src="@drawable/icon_star_line" />
+
+            <ImageView
+                android:id="@+id/star4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/star3"
+                android:src="@drawable/icon_star_line" />
+
+            <ImageView
+                android:id="@+id/star5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_toRightOf="@+id/star4"
+                android:src="@drawable/icon_star_line" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

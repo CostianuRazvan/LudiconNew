@@ -83,7 +83,7 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
                     rateText = "1.0";
-                    rate.setText(rateText + " " + getResources().getString(R.string.very_poor) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.poor) + "!");
                 }
                 return true;
             }
@@ -107,7 +107,7 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                     stars3.setBackgroundResource(R.drawable.icon_star_line);
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.poor) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.below_average) + "!");
                 }
                 return true;
             }
@@ -131,7 +131,7 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                     }
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.common) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.average)+ "!");
                 }
                 return true;
             }
@@ -155,7 +155,7 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                         rateText = "4.0";
                     }
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.rare) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.good) + "!");
                 }
                 return true;
             }
@@ -175,12 +175,11 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                     if (screenX <= viewX / 2) {
                         stars5.setBackgroundResource(R.drawable.icon_star_half);
                         rateText = "4.5";
-                        rate.setText(rateText + " " + getResources().getString(R.string.epic) + "!");
                     } else {
                         stars5.setBackgroundResource(R.drawable.icon_star_full);
                         rateText = "5.0";
-                        rate.setText(rateText + " " + getResources().getString(R.string.legendary) + "!");
                     }
+                    rate.setText(rateText + " " + getResources().getString(R.string.excellent) + "!");
                 }
                 return true;
             }
@@ -201,7 +200,9 @@ public class ReviewLocation extends Activity implements Response.ErrorListener  
                 params.put("review", review.getText().toString());
                 HTTPResponseController.getInstance().reviewLocation(params, headers, ReviewLocation.this, null);
 
-                getParticipants("0", b, eventDetails);
+                if (Persistance.getInstance().getUserInfo(ReviewLocation.this).rateUsers.equals("true")) {
+                    getParticipants("0", b, eventDetails);
+                }
 
                 finish();
             }

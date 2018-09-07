@@ -48,6 +48,7 @@ import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Activities.CreateNewActivity;
 import larc.ludiconprod.Activities.FullHistory;
 //import larc.ludiconprod.Activities.FullPageView;
+import larc.ludiconprod.Activities.FullPageView;
 import larc.ludiconprod.Activities.GMapsActivity;
 import larc.ludiconprod.Activities.IntroActivity;
 import larc.ludiconprod.Activities.InviteFriendsActivity;
@@ -69,6 +70,7 @@ import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.util.AuthorizedLocation;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sponsors;
 import larc.ludiconprod.Utils.util.Sport;
 
@@ -522,6 +524,7 @@ public class HTTPResponseController {
                                 event.formParameters.add(jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("formParameters").getString(j));
                             }
                         }
+                        event.authorizedLevel = jsonObject.getJSONArray("aroundMe").getJSONObject(i).getInt("authorizedLevel");
 
                         aroundMeEventList.add(event);
                     }
@@ -593,6 +596,7 @@ public class HTTPResponseController {
                                 event.participansProfilePicture.add(jsonObject.getJSONArray("myEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
 
                             }
+                            event.authorizedLevel = jsonObject.getJSONArray("myEvents").getJSONObject(i).getInt("authorizedLevel");
                             myEventList.add(event);
 
                         }
@@ -652,10 +656,9 @@ public class HTTPResponseController {
                         eventBrief.numberOfParticipants = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("numberOfParticipants"));
                         for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
                             eventBrief.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
-
-                            }
-                            eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoinsGained");
-                            eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("pointsGained");
+                        }
+                        eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoinsGained");
+                        eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("pointsGained");
 
                         pastEventList.add(eventBrief);
                     }
@@ -672,6 +675,58 @@ public class HTTPResponseController {
 
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> createReviewsSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Bundle b = new Bundle();
+                System.out.println(jsonObject + " reviews");
+                try {
+                    b.putDouble("socialRate", jsonObject.getDouble("socialRate"));
+                    b.putInt("countSocialRate", jsonObject.getInt("countSocialRate"));
+                    b.putInt("excellentPerc", jsonObject.getInt("excellentPerc"));
+                    b.putInt("goodPerc", jsonObject.getInt("goodPerc"));
+                    b.putInt("averagePerc", jsonObject.getInt("averagePerc"));
+                    b.putInt("bellowAveragePerc", jsonObject.getInt("bellowAveragePerc"));
+                    b.putInt("poorPerc", jsonObject.getInt("poorPerc"));
+
+                    ArrayList<String> idList = new ArrayList<>();
+                    ArrayList<String> userIdList = new ArrayList<>();
+                    ArrayList<String> userNameList = new ArrayList<>();
+                    ArrayList<String> userImageList = new ArrayList<>();
+                    ArrayList<String> reviewList = new ArrayList<>();
+                    ArrayList<String> rateList = new ArrayList<>();
+                    ArrayList<String> reviewDateList = new ArrayList<>();
+                    for (int i = 0; i < jsonObject.getJSONArray("reviews").length(); i++) {
+                        idList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("id"));
+                        userIdList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userId"));
+                        userNameList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userName"));
+                        userImageList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userPicture"));
+                        reviewList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewPreview"));
+                        rateList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("socialRate"));
+                        reviewDateList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewDate"));
+
+                    }
+                    b.putStringArrayList("idList", idList);
+                    b.putStringArrayList("userIdList", userIdList);
+                    b.putStringArrayList("userNameList", userNameList);
+                    b.putStringArrayList("userPictureList", userImageList);
+                    b.putStringArrayList("reviewPreviewList", reviewList);
+                    b.putStringArrayList("socialRateList", rateList);
+                    b.putStringArrayList("reviewDateList", reviewDateList);
+
+                    Intent intent = new Intent(activity, FullPageView.class);
+                    intent.putExtras(b);
+                    activity.startActivity(intent);
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -801,8 +856,6 @@ public class HTTPResponseController {
                             offlineFriend.isOfflineParticipant = true;
                             offlineFriend.userID = friend.userID;
                             InviteFriendsActivity.participantList.add(offlineFriend);
-                            stringNameList.add(offlineFriend.userName);
-                            stringImageList.add(offlineFriend.profileImage);
                             idList.add(offlineFriend.userID);
                         }
                     }
@@ -862,9 +915,17 @@ public class HTTPResponseController {
                         if (Locale.getDefault().getLanguage().startsWith("en")) {
                             friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                         } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
-                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }else{
+                                friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }
                         } else if (Locale.getDefault().getLanguage().startsWith("fr")) {
-                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }else{
+                                friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
+                            }
                         }
                         InviteFriendsActivity.numberOfOfflineFriends++;
                         InviteFriendsActivity.friendsList.add(1, friend);
@@ -1290,7 +1351,7 @@ public class HTTPResponseController {
     public void getAroundMeEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber") + "&userLatitude=" + urlParams.get("userLatitude") +
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber") + "&userLatitude=" + urlParams.get("userLatitude") +
                 "&userLongitude=" + urlParams.get("userLongitude") + "&userRange=" + urlParams.get("userRange") + "&userSports=" + urlParams.get("userSports"), params, headers, this.createAroundMeEventSuccesListener(), errorListener);
 
 
@@ -1300,7 +1361,7 @@ public class HTTPResponseController {
     public void getMyEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1386,7 +1447,7 @@ public class HTTPResponseController {
             listener = this.createRequestSuccessListener();
         }
 
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/user", params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1_1/user", params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1426,7 +1487,7 @@ public class HTTPResponseController {
 
     public void getUserProfile(HashMap<String, String> params, HashMap<String, String> headers, String id, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/user?userId=" + id, params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1_1/user?userId=" + id, params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1553,6 +1614,13 @@ public class HTTPResponseController {
         eventid = eventId;
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/editEnrollmentData/", params, headers, this.editEnrollmentDataSuccesListener(), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+    public void getReviews(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/reviews?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createReviewsSuccessListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }
 

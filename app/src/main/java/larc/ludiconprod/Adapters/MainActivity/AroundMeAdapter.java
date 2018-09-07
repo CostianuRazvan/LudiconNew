@@ -92,6 +92,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressBar progressBar;
         View view;
         RelativeLayout friendsNumberLayout;
+        ImageView trustedCrown;
+        TextView trustedText;
 
         public ViewHolder(View view) {
             super(view);
@@ -114,6 +116,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.creatorLevelAroundMe = (TextView) view.findViewById(R.id.creatorLevelAroundMe);
             this.progressBar = (ProgressBar) view.findViewById(R.id.cardProgressBar);
             this.friendsNumberLayout=(RelativeLayout)view.findViewById(R.id.friendsNumberLayout) ;
+            this.trustedCrown = (ImageView) view.findViewById(R.id.trustedCrown);
+            this.trustedText = (TextView) view.findViewById(R.id.trustedText);
             this.progressBar.setAlpha(0);
 
             Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");
@@ -496,6 +500,14 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     }
                 });
+
+                if (list.get(pos).authorizedLevel == 1 ){
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.VISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.VISIBLE);
+                }else{
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.INVISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.INVISIBLE);
+                }
 
                 System.out.println(list.get(pos).id + " eventid:" + pos + "  " + list.get(pos).numberOfParticipants + " profilepicture" + list.get(position).participansProfilePicture.size());
                 break;

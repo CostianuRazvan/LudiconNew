@@ -6,6 +6,7 @@ import java.util.Date;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.EventBrief;
 //import larc.ludiconprod.Utils.util.ReviewBrief;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sport;
 
 /**
@@ -34,10 +35,12 @@ public class User {
     public  ArrayList<Sport> sports=new ArrayList<Sport>();
     public  ArrayList<EventBrief> lastEvents = new ArrayList<EventBrief>();
     public String language;
-    /*public String socialRate;
+    public String socialRate;
     public int countSocialRate;
     public  ArrayList<ReviewBrief> socialReviews = new ArrayList<ReviewBrief>();
-*/
+    public String rateUsers;
+    public String rateLocation;
+    public String rateEvent;
 /*
     public User(){
         this.authKey="";

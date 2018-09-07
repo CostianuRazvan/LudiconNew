@@ -65,7 +65,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private SlidingTabLayout tabs;
     private EditActivitiesAdapter myAdapter;
 
-    private int sex = 0;
+    private int sex;
+    private String strEvent;
+    private String strLocation;
+    private String strUsers;
     private EditText firstName;
     private EditText lastName;
     private TextView date;
@@ -78,6 +81,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private boolean imageChanged;
 
     String language;
+    String rateEvent;
+    String rateLocation;
+    String rateUsers;
 
     @Nullable
     @Override
@@ -153,7 +159,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     public boolean sameProfileInfo() {
         UserProfile old = Persistance.getInstance().getProfileInfo(this);
 
-        old.gender = "" + this.sex;
+        old.gender = "" + getSex();
         old.firstName = this.firstName.getText().toString();
         old.lastName = this.lastName.getText().toString();
         old.range = 1 + this.range.getProgress() + "";
@@ -170,6 +176,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             Sport sport = new Sport(sports.get(i));
             old.sports.add(sport);
         }
+
+        old.rateEvent = getEventReview();
+        old.rateLocation = getLocationReview();
+        old.rateUsers = getUsersReview();
 
         Persistance.getInstance().setProfileInfo(this, old);
 
@@ -193,6 +203,19 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         if (u.sports.size() != old.sports.size()) {
             return false;
         }
+
+        if (!u.rateEvent.equals(old.rateEvent)){
+            return false;
+        }
+
+        if (!u.rateLocation.equals(old.rateLocation)){
+            return false;
+        }
+
+        if (!u.rateUsers.equals(old.rateUsers)){
+            return false;
+        }
+
         Collections.sort(u.sports, new Comparator<Sport>() {
             @Override
             public int compare(Sport a, Sport b) {
@@ -226,7 +249,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         User user = new User();
         user.id = old.id;
         user.authKey = old.authKey;
-        user.gender = "" + this.sex;
+        user.gender = "" + getSex();
+        user.rateEvent = getEventReview();
+        user.rateLocation = getLocationReview();
+        user.rateUsers = getUsersReview();
 
         user.language = Locale.getDefault().getDisplayLanguage();
         language = user.language.substring(0,2).toLowerCase();
@@ -237,6 +263,22 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         editor.commit();
 
         user.firstName = this.firstName.getText().toString();
+
+        if (user.rateEvent.equals("true")){
+            rateEvent = "1";
+        }else if (user.rateEvent.equals("false")){
+            rateEvent = "0";
+        }
+        if (user.rateLocation.equals("true")){
+            rateLocation = "1";
+        }else if (user.rateLocation.equals("false")){
+            rateLocation = "0";
+        }
+        if (user.rateUsers.equals("true")){
+            rateUsers = "1";
+        }else if (user.rateUsers.equals("false")){
+            rateUsers = "0";
+        }
 
 
         if (user.firstName.isEmpty()) {
@@ -321,6 +363,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             user.sports.add(sport);
         }
         params.put("language", language);
+        params.put("rateEvent", rateEvent);
+        params.put("rateLocation", rateLocation);
+        params.put("rateUsers", rateUsers);
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("authKey", old.authKey);
@@ -395,7 +440,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         startActivity(intent);
 
         User t = Persistance.getInstance().getUserInfo(this);
-        t.gender = "" + this.sex;
+        t.gender = "" + getSex();
         t.firstName = this.firstName.getText().toString();
         t.lastName = this.lastName.getText().toString();
         t.range = 1 + this.range.getProgress() + "";
@@ -404,6 +449,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             Sport sport = new Sport(sports.get(i));
             t.sports.add(sport);
         }
+        t.rateEvent = getEventReview();
+        t.rateLocation = getLocationReview();
+        t.rateUsers = getUsersReview();
         Persistance.getInstance().setUserInfo(this, t);
 
         finish();
@@ -415,6 +463,30 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     public void setSex(int sex) {
         this.sex = sex;
+    }
+
+    public void setEventReview(String strEvent) {
+        this.strEvent = strEvent;
+    }
+
+    public String getEventReview() {
+        return strEvent;
+    }
+
+    public void setLocationReview(String strLocation) {
+        this.strLocation = strLocation;
+    }
+
+    public String getLocationReview() {
+        return strLocation;
+    }
+
+    public void setUsersReview(String strUsers) {
+        this.strUsers = strUsers;
+    }
+
+    public String getUsersReview() {
+        return strUsers;
     }
 
     public EditText getFirstName() {

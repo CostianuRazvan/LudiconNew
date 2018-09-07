@@ -70,7 +70,7 @@ public class ReviewEvent extends Activity {
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
                     rateText = "1.0";
-                    rate.setText(rateText + " " + getResources().getString(R.string.very_poor) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.poor) + "!");
                 }
                 return true;
             }
@@ -94,7 +94,7 @@ public class ReviewEvent extends Activity {
                     stars3.setBackgroundResource(R.drawable.icon_star_line);
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.poor) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.below_average) + "!");
                 }
                 return true;
             }
@@ -118,7 +118,7 @@ public class ReviewEvent extends Activity {
                     }
                     stars4.setBackgroundResource(R.drawable.icon_star_line);
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.common) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.average) + "!");
                 }
                 return true;
             }
@@ -142,7 +142,7 @@ public class ReviewEvent extends Activity {
                         rateText = "4.0";
                     }
                     stars5.setBackgroundResource(R.drawable.icon_star_line);
-                    rate.setText(rateText + " " + getResources().getString(R.string.rare) + "!");
+                    rate.setText(rateText + " " + getResources().getString(R.string.good) + "!");
                 }
                 return true;
             }
@@ -162,12 +162,11 @@ public class ReviewEvent extends Activity {
                     if (screenX <= viewX / 2) {
                         stars5.setBackgroundResource(R.drawable.icon_star_half);
                         rateText = "4.5";
-                        rate.setText(rateText + " " + getResources().getString(R.string.epic) + "!");
                     } else {
                         stars5.setBackgroundResource(R.drawable.icon_star_full);
                         rateText = "5.0";
-                        rate.setText(rateText + " " + getResources().getString(R.string.legendary) + "!");
                     }
+                    rate.setText(rateText + " " + getResources().getString(R.string.excellent) + "!");
                 }
                 return true;
             }
@@ -185,8 +184,13 @@ public class ReviewEvent extends Activity {
                 params.put("review", review.getText().toString());
                 HTTPResponseController.getInstance().reviewEvent(params, headers, ReviewEvent.this, null);
 
-                Intent intent = new Intent(ReviewEvent.this, ReviewLocation.class);
-                startActivity(intent);
+                if (Persistance.getInstance().getUserInfo(ReviewEvent.this).rateLocation.equals("true")) {
+                    Intent intent = new Intent(ReviewEvent.this, ReviewLocation.class);
+                    startActivity(intent);
+                }else if (Persistance.getInstance().getUserInfo(ReviewEvent.this).rateUsers.equals("true")) {
+                    Intent intent = new Intent(ReviewEvent.this, ReviewParticipants.class);
+                    startActivity(intent);
+                }
 
                 finish();
             }

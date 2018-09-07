@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +61,7 @@ import larc.ludiconprod.Utils.EventBrief;
 import larc.ludiconprod.Utils.MyProfileUtils.Bar;
 import larc.ludiconprod.Utils.MyProfileUtils.Iterable;
 import larc.ludiconprod.Utils.MyProfileUtils.TopGraph;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sport;
 
 /**
@@ -76,10 +79,20 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
     LinearLayout lastEvents;
     RelativeLayout history;
     Button BtnShowFullHistory;
+    RelativeLayout socialReviews;
+    Button allReviews;
+    LinearLayout reviewLayout;
+    LinearLayout buttonLayout;
+    LinearLayout rateLayout;
 
     ArrayList<String> lastEvName = new ArrayList<>();
     ArrayList<String> eventDate = new ArrayList<>();
     ArrayList<String> participantsCount = new ArrayList<>();
+
+    ArrayList<String> userReviewName = new ArrayList<>();
+    ArrayList<String> userReviewDate = new ArrayList<>();
+    ArrayList<String> userReview = new ArrayList<>();
+    ArrayList<Double> userSocialRate = new ArrayList<>();
 
     int layout_id_start = 789;
 
@@ -138,7 +151,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
                     et.setText(date + " " + name + " " + getResources().getString(R.string.with_others) + " " + count + ".");
                 }else if (Locale.getDefault().getLanguage().startsWith("fr")) {
-                    et.setText(date + " " + name + " " + getResources().getString(R.string.with_others) + " " + count + ".");
+                    et.setText(date + " " + name + " " + getResources().getString(R.string.with) + " " + count + " " + getResources().getString(R.string.others1) + ".");
                 }
             }
 
@@ -160,9 +173,163 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
 
     }
 
+    @SuppressLint("ResourceType")
+    public void addReview(){
+
+        for (int i = 0; i < userReview.size(); i++){
+
+            RelativeLayout layout = new RelativeLayout(this.getContext());
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout.setLayoutParams(layoutParams);
+            layout.setId(layout_id_start + i);
+
+            if (i != 0) {
+                layoutParams.addRule(RelativeLayout.BELOW, layout.getId() - 1);
+            }
+
+            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params3 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params4 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+            TextView name = new TextView(this.getContext());
+            name.setId(1);
+            name.setText(userReviewName.get(i).toString());
+            name.setTextSize(16);
+            name.setTextColor(getResources().getColor(R.color.pink));
+            name.setPadding(30,20,0,0);
+
+            TextView review = new TextView(this.getContext());
+            params2.addRule(RelativeLayout.BELOW, name.getId());
+            review.setId(2);
+            review.setText("\"" + userReview.get(i).toString() + "\"");
+            review.setTextColor(getResources().getColor(R.color.black));
+            review.setTextSize(16);
+            review.setPadding(60,5,0,0);
+
+            TextView date = new TextView(this.getContext());
+            params3.addRule(RelativeLayout.RIGHT_OF, name.getId());
+            date.setId(3);
+            date.setText(userReviewDate.get(i).toString());
+            date.setTextColor(getResources().getColor(R.color.lightGray));
+            date.setTextSize(14);
+            date.setPadding(0,25,30,0);
+            date.setGravity(Gravity.RIGHT);
+
+            RelativeLayout stars = new RelativeLayout(this.getContext());
+            params4.addRule(RelativeLayout.RIGHT_OF, review.getId());
+            params4.addRule(RelativeLayout.BELOW, date.getId());
+            stars.setId(4);
+            stars.setPadding(0,15,30,0);
+            stars.setGravity(Gravity.RIGHT);
+
+            RelativeLayout.LayoutParams paramsStar1 = new RelativeLayout.LayoutParams(60, 60);
+            RelativeLayout.LayoutParams paramsStar2 = new RelativeLayout.LayoutParams(60, 60);
+            RelativeLayout.LayoutParams paramsStar3 = new RelativeLayout.LayoutParams(60, 60);
+            RelativeLayout.LayoutParams paramsStar4 = new RelativeLayout.LayoutParams(60, 60);
+            RelativeLayout.LayoutParams paramsStar5 = new RelativeLayout.LayoutParams(60, 60);
+
+            final ImageView star1 = new ImageView(this.getContext());
+            star1.setId(5);
+            star1.setImageResource(R.drawable.icon_star_full);
+            star1.setPadding(5,0,0,0);
+            star1.setLayoutParams(paramsStar1);
+            final ImageView star2 = new ImageView(this.getContext());
+            star2.setId(6);
+            star2.setImageResource(R.drawable.icon_star_full);
+            star2.setPadding(5,0,0,0);
+            paramsStar2.addRule(RelativeLayout.RIGHT_OF, star1.getId());
+            final ImageView star3 = new ImageView(this.getContext());
+            star3.setId(7);
+            star3.setImageResource(R.drawable.icon_star_full);
+            star3.setPadding(5,0,0,0);
+            paramsStar3.addRule(RelativeLayout.RIGHT_OF, star2.getId());
+            final ImageView star4 = new ImageView(this.getContext());
+            star4.setId(8);
+            star4.setImageResource(R.drawable.icon_star_full);
+            star4.setPadding(5,0,0,0);
+            paramsStar4.addRule(RelativeLayout.RIGHT_OF, star3.getId());
+            final ImageView star5 = new ImageView(this.getContext());
+            star5.setId(9);
+            star5.setImageResource(R.drawable.icon_star_full);
+            star5.setPadding(5,0,0,0);
+            paramsStar5.addRule(RelativeLayout.RIGHT_OF, star4.getId());
+
+            if (userSocialRate.get(i) == 1){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_line);
+                star3.setImageResource(R.drawable.icon_star_line);
+                star4.setImageResource(R.drawable.icon_star_line);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 1 && userSocialRate.get(i) <= 1.5){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_half);
+                star3.setImageResource(R.drawable.icon_star_line);
+                star4.setImageResource(R.drawable.icon_star_line);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) >1.5 && userSocialRate.get(i) <= 2){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_line);
+                star4.setImageResource(R.drawable.icon_star_line);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 2 && userSocialRate.get(i) <= 2.5){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_half);
+                star4.setImageResource(R.drawable.icon_star_line);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 2.5 && userSocialRate.get(i) <= 3){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_full);
+                star4.setImageResource(R.drawable.icon_star_line);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 3 && userSocialRate.get(i) <= 3.5){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_full);
+                star4.setImageResource(R.drawable.icon_star_half);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 3.5 && userSocialRate.get(i) <= 4){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_full);
+                star4.setImageResource(R.drawable.icon_star_full);
+                star5.setImageResource(R.drawable.icon_star_line);
+            }else if (userSocialRate.get(i) > 4 && userSocialRate.get(i) <= 4.5){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_full);
+                star4.setImageResource(R.drawable.icon_star_full);
+                star5.setImageResource(R.drawable.icon_star_half);
+            }else if (userSocialRate.get(i) >4.5 && userSocialRate.get(i) <= 5){
+                star1.setImageResource(R.drawable.icon_star_full);
+                star2.setImageResource(R.drawable.icon_star_full);
+                star3.setImageResource(R.drawable.icon_star_full);
+                star4.setImageResource(R.drawable.icon_star_full);
+                star5.setImageResource(R.drawable.icon_star_full);
+            }
+
+            stars.addView(star1,paramsStar1);
+            stars.addView(star2,paramsStar2);
+            stars.addView(star3,paramsStar3);
+            stars.addView(star4,paramsStar4);
+            stars.addView(star5,paramsStar5);
+
+            layout.addView(name, params1);
+            layout.addView(date, params3);
+            layout.addView(review, params2);
+            layout.addView(stars, params4);
+
+            socialReviews.addView(layout);
+        }
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = inflater.getContext();
 
         v = inflater.inflate(R.layout.my_profile_activity, container, false);
@@ -204,6 +371,8 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             ((TextView) v.findViewById(R.id.profilePointsText)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profilePosition)).setTypeface(typeFace);
             ((TextView) v.findViewById(R.id.profilePositionText)).setTypeface(typeFace);
+            ((TextView) v.findViewById(R.id.socialRate)).setTypeface(typeFace);
+            ((TextView) v.findViewById(R.id.countSocialRate)).setTypeface(typeFace);
 
             ((TextView) v.findViewById(R.id.profilePracticeSportsLabel)).setTypeface(typeFaceBold);
             ((TextView) v.findViewById(R.id.profilePracticeSportsCountLabel)).setTypeface(typeFace);
@@ -217,8 +386,13 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             lastEvents = (LinearLayout) v.findViewById(R.id.RVProfileHistory);
             history = (RelativeLayout) v.findViewById(R.id.history);
             BtnShowFullHistory = (Button) v.findViewById(R.id.BtnShowFullHistory);
+            socialReviews = (RelativeLayout) v.findViewById(R.id.socialReviews);
+            allReviews = (Button) v.findViewById(R.id.allReviews);
+            buttonLayout = (LinearLayout) v.findViewById(R.id.buttonLayout);
+            reviewLayout = (LinearLayout) v.findViewById(R.id.reviewLayout);
+            rateLayout = (LinearLayout) v.findViewById(R.id.rateLayout);
 
-            UserProfile up = Persistance.getInstance().getProfileInfo(super.getActivity());
+            final UserProfile up = Persistance.getInstance().getProfileInfo(super.getActivity());
             if (up != null) {
                 this.printInfo(up);
             }
@@ -269,6 +443,19 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                         });
                     }
 
+            });
+            allReviews.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    HashMap<String, String> urlParams = new HashMap<String, String>();
+                    headers.put("authKey", up.authKey);
+
+                    //set urlParams
+                    urlParams.put("userId", up.id);
+                    HTTPResponseController.getInstance().getReviews(params, headers, activity, urlParams, null);
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -445,13 +632,21 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             TextView points = (TextView) v.findViewById(R.id.profilePoints);
             TextView position = (TextView) v.findViewById(R.id.profilePosition);
             TextView ludiconis = (TextView) v.findViewById(R.id.profileLudicoins);
+            TextView socialRate = (TextView) v.findViewById(R.id.socialRate);
+            TextView countSocialRate = (TextView) v.findViewById(R.id.countSocialRate);
 
             name.setText(u.firstName + " " + u.lastName);
             level.setText("" + u.level);
             points.setText("" + u.points);
             position.setText("" + u.position);
             ludiconis.setText("" + u.ludicoins);
-
+            if (u.socialRate.equalsIgnoreCase("null")){
+                rateLayout.setVisibility(View.GONE);
+            }else{
+                rateLayout.setVisibility(View.VISIBLE);
+            }
+            socialRate.setText(u.socialRate);
+            countSocialRate.setText(getResources().getString(R.string.based_on) + " " + u.countSocialRate + " " + getResources().getString(R.string.reviews));
             ProgressBar levelBar = (ProgressBar) v.findViewById(R.id.profileLevelBar);
             levelBar.setProgress(u.points * levelBar.getMax() / u.pointsOfNextLevel);
 
@@ -479,6 +674,24 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                     startActivity(intent);
                 }
             });
+
+            userReviewName.clear();
+            userReviewDate.clear();
+            userReview.clear();
+            userSocialRate.clear();
+            for (ReviewBrief rb : u.socialReviews){
+                userReviewName.add(rb.userName);
+                userReviewDate.add(rb.date);
+                userReview.add(rb.reviewPreview);
+                userSocialRate.add(Double.valueOf(rb.socialRate));
+            }
+
+            addReview();
+
+            if (userReview.size() == 0){
+                reviewLayout.setVisibility(View.GONE);
+                buttonLayout.setVisibility(View.GONE);
+            }
 
             LinearLayout sportsLayout = (LinearLayout) v.findViewById(R.id.profileSports);
             ImageView sportImage;
@@ -613,10 +826,26 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 u.lastEvents.add(new EventBrief(lastEvents.getJSONObject(i)));
             }
 
+            JSONArray socialReviews = jsonObject.getJSONArray("socialReviews");
+            u.socialReviews.clear();
+            for (int i = 0; i < socialReviews.length(); ++i) {
+                u.socialReviews.add(new ReviewBrief(socialReviews.getJSONObject(i)));
+            }
+
+            u.socialRate = jsonObject.getString("socialRate");
+            u.countSocialRate = Integer.parseInt(jsonObject.getString("countSocialRate"));
+
+            u.rateEvent = jsonObject.getString("rateEvent");
+            u.rateLocation = jsonObject.getString("rateLocation");
+            u.rateUsers = jsonObject.getString("rateUsers");
+
             Persistance.getInstance().setProfileInfo(super.getActivity(), u);
 
             User t = Persistance.getInstance().getUserInfo(activity);
             t.age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(jsonObject.getString("yearBorn"));
+            t.rateUsers = jsonObject.getString("rateUsers");
+            t.rateLocation = jsonObject.getString("rateLocation");
+            t.rateEvent = jsonObject.getString("rateEvent");
             Persistance.getInstance().setUserInfo(activity, t);
 
             MyProfileActivity mpa = (MyProfileActivity) this;

@@ -33,6 +33,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Activities.ChatActivity;
@@ -252,10 +253,17 @@ public class MessageAdapter extends BaseAdapter implements ListAdapter {
                 paramsMy.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 holder.myLayout.setLayoutParams(paramsMy);
 
-                java.util.Date date1 = new java.util.Date(currentMessage.date.longValue() * 1000);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd,HH:mm");
-                String displayDate = formatter.format(date1);
-                holder.myMessageTime.setText(displayDate);
+                if( Locale.getDefault().getLanguage().startsWith("en") || Locale.getDefault().getLanguage().startsWith("ro")) {
+                    java.util.Date date1 = new java.util.Date(currentMessage.date.longValue() * 1000);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd,HH:mm");
+                    String displayDate = formatter.format(date1);
+                    holder.myMessageTime.setText(displayDate);
+                }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                    java.util.Date date1 = new java.util.Date(currentMessage.date.longValue() * 1000);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy,HH:mm");
+                    String displayDate = formatter.format(date1);
+                    holder.myMessageTime.setText(displayDate);
+                }
             }
             else if(currentMessage.authorId != null && !currentMessage.authorId.equalsIgnoreCase(Persistance.getInstance().getUserInfo(activity).id) && !currentMessage.setTopImage){
                 holder.otherParticipantLayout.setVisibility(View.VISIBLE);

@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import larc.ludiconprod.Activities.ReviewEvent;
+import larc.ludiconprod.Activities.ReviewLocation;
+import larc.ludiconprod.Activities.ReviewParticipants;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
 
@@ -106,8 +108,16 @@ public class PointsReceivedDialog extends DialogFragment {
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ReviewEvent.class);
-                startActivity(intent);
+                if (Persistance.getInstance().getUserInfo(getActivity()).rateEvent.equals("true")) {
+                    Intent intent = new Intent(getActivity(), ReviewEvent.class);
+                    startActivity(intent);
+                }else if (Persistance.getInstance().getUserInfo(getActivity()).rateLocation.equals("true")){
+                    Intent intent = new Intent(getActivity(), ReviewLocation.class);
+                    startActivity(intent);
+                }else if (Persistance.getInstance().getUserInfo(getActivity()).rateUsers.equals("true")){
+                    Intent intent = new Intent(getActivity(), ReviewParticipants.class);
+                    startActivity(intent);
+                }
                 PointsReceivedDialog.this.getDialog().cancel();
             }
         });

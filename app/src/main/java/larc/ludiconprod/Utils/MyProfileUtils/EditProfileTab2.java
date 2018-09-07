@@ -49,6 +49,16 @@ public class EditProfileTab2 extends Fragment {
     private RelativeLayout passwordLayout;
     private TextWatcher textWatcher;
 
+    private RadioGroup editEventReview;
+    private RadioGroup editLocationReview;
+    private RadioGroup editUsersReview;
+    private RadioButton editWithEvent;
+    private RadioButton editWithoutEvent;
+    private RadioButton editWithLocation;
+    private RadioButton editWithoutLocation;
+    private RadioButton editWithUser;
+    private RadioButton editWithoutUser;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.edittab2, container, false);
@@ -108,6 +118,16 @@ public class EditProfileTab2 extends Fragment {
             email.setText(u.email);
             email.setTypeface(typeFace);
             ImageView image = (ImageView) v.findViewById(R.id.editImage);
+            editEventReview = (RadioGroup) v.findViewById(R.id.editEventReview);
+            editLocationReview = (RadioGroup) v.findViewById(R.id.editLocationReview);
+            editUsersReview = (RadioGroup) v.findViewById(R.id.editUsersReview);
+            editWithEvent = (RadioButton) v.findViewById(R.id.editWithEvent);
+            editWithoutEvent = (RadioButton) v.findViewById(R.id.editWithoutEvent);
+            editWithLocation = (RadioButton) v.findViewById(R.id.editWithLocation);
+            editWithoutLocation = (RadioButton) v.findViewById(R.id.editWithoutLocation);
+            editWithUser = (RadioButton) v.findViewById(R.id.editWithUser);
+            editWithoutUser = (RadioButton) v.findViewById(R.id.editWithoutUser);
+
 
             if (u.profileImage != null && !u.profileImage.isEmpty()) {
                 Bitmap im = IntroActivity.decodeBase64(u.profileImage);
@@ -135,9 +155,11 @@ public class EditProfileTab2 extends Fragment {
             if(u.gender.equals("0")){
                 male.setChecked(true);
                 male.setTextColor(Color.parseColor("#ffffff"));
+                epa.setSex(0);
             } else if(u.gender.equals("1")) {
                 female.setChecked(true);
                 female.setTextColor(Color.parseColor("#ffffff"));
+                epa.setSex(1);
             }
 
             if(male.isChecked()) {
@@ -173,6 +195,147 @@ public class EditProfileTab2 extends Fragment {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(1);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
+                }
+            });
+
+            if (u.rateEvent.equals("true")){
+                editWithEvent.setChecked(true);
+                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
+                epa.setEventReview("true");
+            }else if(u.rateEvent.equals("false")){
+                editWithoutEvent.setChecked(true);
+                editWithoutEvent.setTextColor(Color.parseColor("#ffffff"));
+                epa.setEventReview("false");
+            }
+
+            if(editWithEvent.isChecked()) {
+                editWithEvent.setBackgroundResource(R.drawable.pink_button_selector);
+                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
+            } else{
+                editWithoutEvent.setBackgroundResource(R.drawable.green_button_selected);
+                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
+            }
+
+            editEventReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                    if(editWithEvent.isChecked()){
+                        editWithEvent.setBackgroundResource(R.drawable.pink_button_selector);
+                        editWithoutEvent.setBackgroundResource(transparent);
+                        editWithEvent.setTextColor(Color.parseColor("#ffffff"));
+                        editWithoutEvent.setTextColor(Color.parseColor("#1A0c3855"));
+                        epa.setEventReview("true");
+                    }
+                    else{
+                        editWithoutEvent.setBackgroundResource(R.drawable.green_button_selected);
+                        editWithEvent.setBackgroundResource(transparent);
+                        editWithEvent.setTextColor(Color.parseColor("#1A0c3855"));
+                        editWithoutEvent.setTextColor(Color.parseColor("#ffffff"));
+                        epa.setEventReview("false");
+                    }
+
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+
+                }
+            });
+
+            if (u.rateLocation.equals("true")){
+                editWithLocation.setChecked(true);
+                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
+                epa.setLocationReview("true");
+            }else if (u.rateLocation.equals("false")){
+                editWithoutLocation.setChecked(true);
+                editWithoutLocation.setTextColor(Color.parseColor("#ffffff"));
+                epa.setLocationReview("false");
+            }
+
+            if(editWithLocation.isChecked()) {
+                editWithLocation.setBackgroundResource(R.drawable.pink_button_selector);
+                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
+            } else{
+                editWithoutLocation.setBackgroundResource(R.drawable.green_button_selected);
+                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
+            }
+
+            editLocationReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                    if(editWithLocation.isChecked()){
+                        editWithLocation.setBackgroundResource(R.drawable.pink_button_selector);
+                        editWithoutLocation.setBackgroundResource(transparent);
+                        editWithLocation.setTextColor(Color.parseColor("#ffffff"));
+                        editWithoutLocation.setTextColor(Color.parseColor("#1A0c3855"));
+                        epa.setLocationReview("true");
+                    }
+                    else{
+                        editWithoutLocation.setBackgroundResource(R.drawable.green_button_selected);
+                        editWithLocation.setBackgroundResource(transparent);
+                        editWithLocation.setTextColor(Color.parseColor("#1A0c3855"));
+                        editWithoutLocation.setTextColor(Color.parseColor("#ffffff"));
+                        epa.setLocationReview("false");
+                    }
+
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+
+                }
+            });
+
+            if (u.rateUsers.equals("true")){
+                editWithUser.setChecked(true);
+                editWithUser.setTextColor(Color.parseColor("#ffffff"));
+                epa.setUsersReview("true");
+            }else if (u.rateUsers.equals("false")) {
+                editWithoutUser.setChecked(true);
+                editWithoutUser.setTextColor(Color.parseColor("#ffffff"));
+                epa.setUsersReview("false");
+            }
+
+            if(editWithUser.isChecked()) {
+                editWithUser.setBackgroundResource(R.drawable.pink_button_selector);
+                editWithUser.setTextColor(Color.parseColor("#ffffff"));
+            } else{
+                editWithoutUser.setBackgroundResource(R.drawable.green_button_selected);
+                editWithUser.setTextColor(Color.parseColor("#ffffff"));
+            }
+
+            editUsersReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                    if(editWithUser.isChecked()){
+                        editWithUser.setBackgroundResource(R.drawable.pink_button_selector);
+                        editWithoutUser.setBackgroundResource(transparent);
+                        editWithUser.setTextColor(Color.parseColor("#ffffff"));
+                        editWithoutUser.setTextColor(Color.parseColor("#1A0c3855"));
+                        epa.setUsersReview("true");
+                    }
+                    else{
+                        editWithoutUser.setBackgroundResource(R.drawable.green_button_selected);
+                        editWithUser.setBackgroundResource(transparent);
+                        editWithUser.setTextColor(Color.parseColor("#1A0c3855"));
+                        editWithoutUser.setTextColor(Color.parseColor("#ffffff"));
+                        epa.setUsersReview("false");
+                    }
+
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+
                 }
             });
 
