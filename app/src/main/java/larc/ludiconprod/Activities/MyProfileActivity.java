@@ -143,7 +143,13 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             String date = eventDate.get(i);
             String count = participantsCount.get(i);
 
-            if (count.equals("1")) {
+            int countInt = Integer.parseInt(count) - 1;
+            count = countInt + "";
+
+            if(count.equals("0")){
+                et.setText(date + " " + name + " " + getResources().getString(R.string.with_no_other) + ".");
+            }
+            else if (count.equals("1")) {
                 et.setText(date + " " + name + " " + getResources().getString(R.string.with_one_other) + ".");
             } else {
                 if (Locale.getDefault().getLanguage().startsWith("en")) {
@@ -176,6 +182,8 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
     @SuppressLint("ResourceType")
     public void addReview(){
 
+        final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
+
         for (int i = 0; i < userReview.size(); i++){
 
             RelativeLayout layout = new RelativeLayout(this.getContext());
@@ -197,16 +205,20 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             name.setId(1);
             name.setText(userReviewName.get(i).toString());
             name.setTextSize(16);
-            name.setTextColor(getResources().getColor(R.color.pink));
+            name.setTextColor(Color.parseColor("#d4498b"));
             name.setPadding(30,20,0,0);
+            name.setTypeface(typeFace);
+
 
             TextView review = new TextView(this.getContext());
             params2.addRule(RelativeLayout.BELOW, name.getId());
             review.setId(2);
             review.setText("\"" + userReview.get(i).toString() + "\"");
             review.setTextColor(getResources().getColor(R.color.black));
-            review.setTextSize(16);
+            review.setTextSize(13);
             review.setPadding(60,5,0,0);
+            review.setTextColor(Color.parseColor("#acb8c1"));
+            review.setTypeface(typeFace);
 
             TextView date = new TextView(this.getContext());
             params3.addRule(RelativeLayout.RIGHT_OF, name.getId());
@@ -216,6 +228,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             date.setTextSize(14);
             date.setPadding(0,25,30,0);
             date.setGravity(Gravity.RIGHT);
+            date.setTypeface(typeFace);
 
             RelativeLayout stars = new RelativeLayout(this.getContext());
             params4.addRule(RelativeLayout.RIGHT_OF, review.getId());

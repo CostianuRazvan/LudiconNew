@@ -331,6 +331,7 @@
     <string name="show_full_history">VEZI TOT ISTORICUL</string>
     <string name="with_others">cu alţi</string>
     <string name="with_one_other">cu încă o persoană</string>
+    <string name="with_no_other">singur/ă</string>
     <string name="past_activities">Activități din trecut</string>
     <string name="has_played">A jucat</string>
     <string name="you_gained">Ai obţinut\t</string>

@@ -275,6 +275,7 @@
     <string name="show_full_history">VOIR L\'HISTORIQUE COMPLET</string>
     <string name="with_others">avec d\'autres</string>
     <string name="with_one_other">avec un autre</string>
+    <string name="with_no_other">sans autre</string>
     <string name="past_activities">Activités passées</string>
     <string name="has_played">Joué</string>
     <string name="you_gained">Vous avez gagné\t</string>

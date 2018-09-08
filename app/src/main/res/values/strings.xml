@@ -316,6 +316,7 @@
     <string name="you_play_something">You play something</string>
     <string name="press_back_again_to_exit">Press back again to exit.</string>
     <string name="is_friend">\'s\tFriend</string>
+    <string name="is_friend_girl">\'s\tFriend</string>
 
     <string name="we_cant_take_your_location">Sorry, we can\'t take your location, please try again later</string>
     <string name="no_location_services_available">No location services available!</string>
@@ -325,6 +326,7 @@
     <string name="last_activities">LAST ACTIVITIES</string>
     <string name="show_full_history">VIEW FULL HISTORY</string>
     <string name="with_one_other">with one other</string>
+    <string name="with_no_other">with no other</string>
     <string name="with">with</string>
     <string name="others1">others</string>
     <string name="past_activities">Past Activities</string>
