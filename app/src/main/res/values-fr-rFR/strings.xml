@@ -368,8 +368,24 @@
     <string name="good">Bien</string>
     <string name="average">Moyen</string>
     <string name="below_average">Sous la moyen</string>
-    <string name="popup_to_review">Pop-ups à revoir</string>
-    <string name="event">Événement</string>
-    <string name="users">Utilisateurs</string>
+    <string name="select_reviewing_preferences">Sélectionner les préférences de révision</string>
+    <string name="review_events">Revoir une événement</string>
+    <string name="review_locations">Revoir un lieu</string>
+    <string name="review_users">Revoir des utilisateurs</string>
     <string name="trusted">OFFICIEL</string>
+    <string name="check_in_all">Check-in tous</string>
+    <string name="checkinall_button">CHECK-IN TOUS</string>
+    <string name="social_rating1">Revue sociale :</string>
+
+    <string name="block_this_user">Block this user?</string>
+    <string name="unblock_this_user">Unblock this user?</string>
+    <string name="cancel">Cancel</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
+    <string name="once_you_block_this_user">Once you block this user, you won\'t be able to receive any messages sent by him!</string>
+    <string name="once_you_unblock_this_user">Once you unblock this user, you will be able to receive messages sent by him!</string>
+    <string name="block_this_group_chat">Block this group chat?</string>
+    <string name="unblock_this_group_chat">Unblock this group chat?</string>
+    <string name="once_you_block_this_group_chat">Once you block this group chat, you will not receive any message notifications anymore!</string>
+    <string name="once_you_unblock_this_group_chat">Once you unblock this group chat you will start receiving message notifications again!</string>
 </resources>

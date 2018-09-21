@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -224,7 +225,7 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             params3.addRule(RelativeLayout.RIGHT_OF, name.getId());
             date.setId(3);
             date.setText(userReviewDate.get(i).toString());
-            date.setTextColor(getResources().getColor(R.color.lightGray));
+            date.setTextColor(Color.parseColor("#acb8c1"));
             date.setTextSize(14);
             date.setPadding(0,25,30,0);
             date.setGravity(Gravity.RIGHT);
@@ -460,14 +461,9 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             allReviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    HashMap<String, String> urlParams = new HashMap<String, String>();
-                    headers.put("authKey", up.authKey);
-
-                    //set urlParams
-                    urlParams.put("userId", up.id);
-                    HTTPResponseController.getInstance().getReviews(params, headers, activity, urlParams, null);
+                    Intent intent = new Intent(mContext, FullPageView.class);
+                    intent.putExtra("userId", up.id);
+                    startActivity(intent);
                 }
             });
         } catch (Exception e) {
@@ -657,8 +653,9 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 rateLayout.setVisibility(View.GONE);
             }else{
                 rateLayout.setVisibility(View.VISIBLE);
+                DecimalFormat df = new DecimalFormat("#.00");
+                socialRate.setText(df.format(Double.valueOf(u.socialRate)));
             }
-            socialRate.setText(u.socialRate);
             countSocialRate.setText(getResources().getString(R.string.based_on) + " " + u.countSocialRate + " " + getResources().getString(R.string.reviews));
             ProgressBar levelBar = (ProgressBar) v.findViewById(R.id.profileLevelBar);
             levelBar.setProgress(u.points * levelBar.getMax() / u.pointsOfNextLevel);

@@ -273,7 +273,7 @@
                             android:text="@string/position"
                             android:fontFamily="@string/fontmedium"
                             android:textSize="12sp"
-                            android:textColor="@color/lightGray"/>
+                            android:textColor="#acb8c1"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -298,9 +298,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@string/fontbold"
+                        android:fontFamily="@string/fontmedium"
                         android:text="@string/social_rating"
-                        android:textColor="@color/black"
+                        android:textColor="#0c3855"
                         android:textSize="16sp" />
 
                     <TextView
@@ -326,7 +326,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@string/fontmedium"
                         android:text="4.23"
-                        android:textColor="@color/pink"
+                        android:textColor="#d4498b"
                         android:textSize="16dp" />
                 </LinearLayout>
 
@@ -367,9 +367,10 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/view_all_reviews"
-                    android:textColor="@color/pink"
+                    android:textColor="#d4498b"
                     android:textSize="16sp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@string/fontmedium"/>
 
             </LinearLayout>
 
@@ -452,7 +453,7 @@
                 android:background="@drawable/pink_stroke_rounded_button"
                 android:fontFamily="@string/fontmedium"
                 android:text="@string/show_full_history"
-                android:textColor="@color/pinkPressed"
+                android:textColor="#d4498b"
                 android:textSize="14sp" />
 
 

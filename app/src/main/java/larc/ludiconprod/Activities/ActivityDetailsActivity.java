@@ -11,6 +11,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
 import android.util.Base64;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +32,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,6 +118,12 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
     Button editEnrollmentData;
     TextView eventURL;
     TextView descriptionLabel;
+    ImageView blockingIV;
+    RelativeLayout blocking;
+    public int isBlocked;
+
+    private EventDetails mEventDetails;
+    String eventid;
 
     TextView perHour;
     TextView youGain;
@@ -140,6 +153,61 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         urlParams.put("pageNumber", pageNumber);
         HTTPResponseController.getInstance().getParticipants(params, headers, ActivityDetailsActivity.this, urlParams, true);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mEventDetails.isParticipant == 1){
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ActivityDetailsActivity.this).id).child("chats").child(mEventDetails.chatId);
+            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.hasChild("blk")) {
+                        if (snapshot.child("blk").getValue().toString().equals("1")) {
+                            isBlocked = 1;
+                        }else{
+                            isBlocked = 0;
+                        }
+                    } else {
+                        isBlocked = 0;
+                    }
+
+                    ViewGroup.LayoutParams params = blocking.getLayoutParams();
+                    params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                    params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                    blocking.setLayoutParams(params);
+
+                    if (isBlocked == 0) {
+                        groupChatButton.setVisibility(View.VISIBLE);
+                        blockingIV.setImageResource(R.drawable.ic_unblock);
+
+                    }
+                    if (isBlocked == 1) {
+                        groupChatButton.setVisibility(View.GONE);
+                        blockingIV.setImageResource(R.drawable.ic_block);
+                    }
+
+                    blockingIV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(ActivityDetailsActivity.this, BlockUserPopup.class);
+                            intent.putExtra("isBlocked", isBlocked);
+                            intent.putExtra("isUserBlock", "false");
+                            intent.putExtra("chatIdEvent", mEventDetails.chatId);
+                            intent.putExtra("eventId", eventid);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+
 
 
     @Override
@@ -209,6 +277,8 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
         editEnrollmentData = (Button) findViewById(R.id.editEnrollmentData);
         eventURL = (TextView) findViewById(R.id.eventURL);
         descriptionLabel = (TextView) findViewById(R.id.descriptionLabel);
+        blockingIV = (ImageView) this.findViewById(R.id.blockingIV);
+        blocking = (RelativeLayout) this.findViewById(R.id.blocking);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +339,8 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
 
         eventURL.setText(eventDetails.eventURL);
 
-
+        eventid = b.getString("eventId");
+        mEventDetails = eventDetails;
         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
         eventURL.setOnLongClickListener(new View.OnLongClickListener() {
@@ -875,6 +946,7 @@ public class ActivityDetailsActivity extends Activity implements OnMapReadyCallb
             sportPlayed.setText(weWillPlayString);
 
         }
+
     }
 
     private void addParticipantsImaeListeners(final HashMap<View, Friend> data) {

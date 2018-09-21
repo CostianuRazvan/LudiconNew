@@ -230,10 +230,15 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 final ArrayList<String> chatIds = new ArrayList<String>();
 
-                for (DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()) {
+                for (final DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()) {
 
                     String chatKey = uniqueKeySnapshot.getKey();
-                    chatIds.add(chatKey);
+                    if( uniqueKeySnapshot.hasChild("blk") && uniqueKeySnapshot.child("blk").getValue().toString().equals("1")){
+                        // chat is blocked
+                    }
+                    else {
+                        chatIds.add(chatKey);
+                    }
 
                     generalChats.child(chatKey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -332,8 +337,12 @@ public class ChatAndFriendsActivity extends Fragment implements Response.ErrorLi
                                                 chat.lastMessage = childMsg.child("message").getValue().toString();
                                                 chat.lastMessageId = childMsg.getKey().toString();
 
-                                                chatList.add(chat);
-                                                chatIds.remove(dataSnapshotChat.getKey());
+                                                if( uniqueKeySnapshot.hasChild("blk") && uniqueKeySnapshot.child("blk").getValue().toString().equals("1")) {
+
+                                                }else {
+                                                    chatList.add(chat);
+                                                    chatIds.remove(dataSnapshotChat.getKey());
+                                                }
 
                                                 if (chatIds.size() == 0) {
                                                     System.out.println("hoooray");

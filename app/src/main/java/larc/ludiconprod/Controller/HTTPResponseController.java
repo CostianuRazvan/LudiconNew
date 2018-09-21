@@ -44,6 +44,7 @@ import larc.ludiconprod.Activities.ActivityDetailsActivity;
 import larc.ludiconprod.Activities.BalanceActivity;
 import larc.ludiconprod.Activities.ChatActivity;
 import larc.ludiconprod.Activities.ChatAndFriendsActivity;
+import larc.ludiconprod.Activities.CheckInAll;
 import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Activities.CreateNewActivity;
 import larc.ludiconprod.Activities.FullHistory;
@@ -69,6 +70,7 @@ import larc.ludiconprod.Utils.EventBrief;
 import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
+import larc.ludiconprod.Utils.Review;
 import larc.ludiconprod.Utils.util.AuthorizedLocation;
 import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sponsors;
@@ -86,6 +88,8 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.startedEventDate;
 import static larc.ludiconprod.Activities.FullHistory.getFirstPagePastEvents;
 import static larc.ludiconprod.Activities.FullHistory.pageNumberPastEvents;
 import static larc.ludiconprod.Activities.FullHistory.pastEventList;
+import static larc.ludiconprod.Activities.FullPageView.getFirstPageReviews;
+import static larc.ludiconprod.Activities.FullPageView.reviewsList;
 
 /**
  * Created by ancuta on 7/12/2017.
@@ -120,6 +124,7 @@ public class HTTPResponseController {
     boolean flag = false;
     Activity oldActivity;
     Boolean isEdit = false;
+    public static Review review;
 
 
     public static Bitmap decodeBase64(String input) {
@@ -211,7 +216,6 @@ public class HTTPResponseController {
                         activity.startActivity(intent);
                     }
                 } else if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
-
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -313,6 +317,41 @@ public class HTTPResponseController {
             public void onResponse(JSONObject jsonObject) {
                 try {
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> savePointsAsAdminSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    System.out.println(" save points as admin on succes");
+                    System.out.println(jsonObject.getInt("points") + " points");
+                    SharedPreferences.Editor editor = activity.getSharedPreferences("HappeningNowEvent", 0).edit();
+                    editor.clear();
+                    editor.commit();
+                    editor = activity.getSharedPreferences("locationsList", 0).edit();
+                    editor.clear();
+                    editor.commit();
+
+                    startedEventDate = Integer.MAX_VALUE;
+                    ArrayList<Event> recacheList = new ArrayList<>();
+                    for (int i = 0; i < myEventList.size(); i++) {
+                        recacheList.add(myEventList.get(i));
+                        if (i == 9) {
+                            break;
+                        }
+                    }
+                    Persistance.getInstance().setMyActivities(activity, recacheList);
+
+                    myEventList.clear();
+                    ActivitiesActivity.currentFragment.getMyEvents("0");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -686,45 +725,45 @@ public class HTTPResponseController {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                Bundle b = new Bundle();
                 System.out.println(jsonObject + " reviews");
+                if (getFirstPageReviews) {
+                    reviewsList.clear();
+                }
                 try {
-                    b.putDouble("socialRate", jsonObject.getDouble("socialRate"));
-                    b.putInt("countSocialRate", jsonObject.getInt("countSocialRate"));
-                    b.putInt("excellentPerc", jsonObject.getInt("excellentPerc"));
-                    b.putInt("goodPerc", jsonObject.getInt("goodPerc"));
-                    b.putInt("averagePerc", jsonObject.getInt("averagePerc"));
-                    b.putInt("bellowAveragePerc", jsonObject.getInt("bellowAveragePerc"));
-                    b.putInt("poorPerc", jsonObject.getInt("poorPerc"));
-
-                    ArrayList<String> idList = new ArrayList<>();
-                    ArrayList<String> userIdList = new ArrayList<>();
-                    ArrayList<String> userNameList = new ArrayList<>();
-                    ArrayList<String> userImageList = new ArrayList<>();
-                    ArrayList<String> reviewList = new ArrayList<>();
-                    ArrayList<String> rateList = new ArrayList<>();
-                    ArrayList<String> reviewDateList = new ArrayList<>();
-                    for (int i = 0; i < jsonObject.getJSONArray("reviews").length(); i++) {
-                        idList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("id"));
-                        userIdList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userId"));
-                        userNameList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userName"));
-                        userImageList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userPicture"));
-                        reviewList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewPreview"));
-                        rateList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("socialRate"));
-                        reviewDateList.add(jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewDate"));
-
+                    if(getFirstPageReviews) {
+                        review = new Review();
+                        review.socialRate = jsonObject.getString("socialRate");
+                        review.countSocialRate = jsonObject.getInt("countSocialRate");
+                        review.excellentPerc = jsonObject.getInt("excellentPerc");
+                        review.goodPerc = jsonObject.getInt("goodPerc");
+                        review.averagePerc = jsonObject.getInt("averagePerc");
+                        review.bellowAveragePerc = jsonObject.getInt("bellowAveragePerc");
+                        review.poorPerc = jsonObject.getInt("poorPerc");
                     }
-                    b.putStringArrayList("idList", idList);
-                    b.putStringArrayList("userIdList", userIdList);
-                    b.putStringArrayList("userNameList", userNameList);
-                    b.putStringArrayList("userPictureList", userImageList);
-                    b.putStringArrayList("reviewPreviewList", reviewList);
-                    b.putStringArrayList("socialRateList", rateList);
-                    b.putStringArrayList("reviewDateList", reviewDateList);
 
-                    Intent intent = new Intent(activity, FullPageView.class);
-                    intent.putExtras(b);
-                    activity.startActivity(intent);
+                    for (int i = 0; i < jsonObject.getJSONArray("reviews").length(); i++) {
+                        ReviewBrief reviewBrief = new ReviewBrief();
+                        reviewBrief.id = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("id");
+                        reviewBrief.userId = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userId");
+                        reviewBrief.userName = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userName");
+                        reviewBrief.userPicture = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userPicture");
+                        reviewBrief.reviewPreview = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewPreview");
+                        reviewBrief.socialRateReview = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("socialRate");
+                        reviewBrief.reviewDate = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewDate");
+
+                        reviewsList.add(reviewBrief);
+                    }
+
+                    FullPageView.currentFragment.updateListOfReviews();
+                    if (jsonObject.getJSONArray("reviews").length() >= 1) {
+                        FullPageView.NumberOfRefreshReviews++;
+                    }
+                    if (getFirstPageReviews) {
+                        ArrayList<ReviewBrief> localReviewList = new ArrayList<>();
+                        localReviewList.addAll(reviewsList);
+                        Persistance.getInstance().setReviews(activity, localReviewList);
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -828,6 +867,7 @@ public class HTTPResponseController {
                     ArrayList<String> stringNameList = new ArrayList<>();
                     ArrayList<String> stringImageList = new ArrayList<>();
                     ArrayList<String> idList = new ArrayList<>();
+                    ArrayList<Integer> levelList = new ArrayList<>();
                     for (int i = 0; i < jsonObject.getJSONArray("participants").length(); i++) {
                         Friend friend = new Friend();
                         friend.userID = jsonObject.getJSONArray("participants").getJSONObject(i).getString("userId");
@@ -839,9 +879,18 @@ public class HTTPResponseController {
                         friend.isInvited = false;
 
                         InviteFriendsActivity.participantList.add(friend);
-                        stringNameList.add(friend.userName);
-                        stringImageList.add(friend.profileImage);
-                        idList.add(friend.userID);
+                        if (activity.getLocalClassName().toString().equals("Activities.ReviewLocation")) {
+                            if (!Persistance.getInstance().getUserInfo(activity).id.equals(friend.userID)) {
+                                stringNameList.add(friend.userName);
+                                stringImageList.add(friend.profileImage);
+                                idList.add(friend.userID);
+                            }
+                        }else if (activity.getLocalClassName().toString().equals("Activities.Main")) {
+                            stringNameList.add(friend.userName);
+                            stringImageList.add(friend.profileImage);
+                            idList.add(friend.userID);
+                            levelList.add(friend.level);
+                        }
                         for (int j = 0; j < friend.numberOfOffliners; j++) {
                             Friend offlineFriend = new Friend();
                             if (Locale.getDefault().getLanguage().startsWith("en")) {
@@ -856,7 +905,6 @@ public class HTTPResponseController {
                             offlineFriend.isOfflineParticipant = true;
                             offlineFriend.userID = friend.userID;
                             InviteFriendsActivity.participantList.add(offlineFriend);
-                            idList.add(offlineFriend.userID);
                         }
                     }
 
@@ -871,11 +919,21 @@ public class HTTPResponseController {
                             InviteFriendsActivity.justSeeParticipants = true;
                             activity.startActivity(intent);
                         } else {
-                            Intent intent = new Intent(activity, ReviewParticipants.class);
-                            intent.putExtra("participantsNameList", stringNameList);
-                            intent.putExtra("participantsImageList", stringImageList);
-                            intent.putExtra("userIdList", idList);
-                            activity.startActivity(intent);
+                            if (activity.getLocalClassName().toString().equals("Activities.ReviewLocation")) {
+                                Intent intent = new Intent(activity, ReviewParticipants.class);
+                                intent.putExtra("participantsNameList", stringNameList);
+                                intent.putExtra("participantsImageList", stringImageList);
+                                intent.putExtra("userIdList", idList);
+                                activity.startActivity(intent);
+                            }else if (activity.getLocalClassName().toString().equals("Activities.Main")) {
+                                Intent intent = new Intent(activity, CheckInAll.class);
+                                intent.putExtra("participantsNameList", stringNameList);
+                                intent.putExtra("participantsImageList", stringImageList);
+                                intent.putExtra("userIdList", idList);
+                                intent.putExtra("levelList", levelList);
+                                activity.startActivity(intent);
+                            }
+
                         }
                         //activity.finish();
                     } else {
@@ -915,17 +973,9 @@ public class HTTPResponseController {
                         if (Locale.getDefault().getLanguage().startsWith("en")) {
                             friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                         } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
-                            if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
-                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
-                            }else{
-                                friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
-                            }
+                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                         } else if (Locale.getDefault().getLanguage().startsWith("fr")) {
-                            if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
-                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
-                            }else{
-                                friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
-                            }
+                            friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                         }
                         InviteFriendsActivity.numberOfOfflineFriends++;
                         InviteFriendsActivity.friendsList.add(1, friend);
@@ -1454,7 +1504,7 @@ public class HTTPResponseController {
     public void getParticipants(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, boolean showParticipants) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/eventParticipants?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.getParticipantsSuccesListener(showParticipants), (Response.ErrorListener) activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/eventParticipants?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.getParticipantsSuccesListener(showParticipants), null);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1622,6 +1672,13 @@ public class HTTPResponseController {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/reviews?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createReviewsSuccessListener(), errorListener);
         requestQueue.add(jsObjRequest);
+    }
+
+    public void savePointsAsAdmin(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1/savePointsAsAdmin", params, headers, this.savePointsAsAdminSuccesListener(), errorListener);
+        requestQueue.add(request);
     }
 
 }

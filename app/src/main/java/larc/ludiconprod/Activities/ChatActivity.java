@@ -69,7 +69,7 @@ public class ChatActivity extends Activity {
     RelativeLayout backButton;
     Boolean needToScroll=true;
     int nrOfPage=0;
-    int isGroupChat=0;
+    public static int isGroupChat=0;
     Boolean createChat=false;
     String ChatId;
     ArrayList<String> unseenChats;

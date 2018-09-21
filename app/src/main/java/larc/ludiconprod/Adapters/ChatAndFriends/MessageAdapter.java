@@ -82,6 +82,7 @@ public class MessageAdapter extends BaseAdapter implements ListAdapter {
         CircleImageView topOtherParticipantImage;
         TextView topOtherParticipantName;
         TextView otherParticipantName;
+        RelativeLayout userLayout;
 
 
     }
@@ -149,6 +150,7 @@ public class MessageAdapter extends BaseAdapter implements ListAdapter {
                 holder.topOtherParticipantImage=(CircleImageView)view.findViewById(R.id.topOtherParticipantImage);
                 holder.topOtherParticipantName=(TextView)view.findViewById(R.id.topOtherParticipantName);
                 holder.otherParticipantName=(TextView)view.findViewById(R.id.otherParticipantName);
+                holder.userLayout = (RelativeLayout) view.findViewById(R.id.userLayout);
 
                 Typeface typeFace = Typeface.createFromAsset(fragment.getAssets(),"fonts/Quicksand-Medium.ttf");
                 holder.otherParticipantMessage.setTypeface(typeFace);
@@ -357,16 +359,25 @@ public class MessageAdapter extends BaseAdapter implements ListAdapter {
                     });
 
                 } else {
-                    holder.otherParticipantImage.setImageResource(R.drawable.ic_user);
+                    holder.otherParticipantImage.setImageResource(R.drawable.ph_user);
                 }
 
                 ViewGroup.LayoutParams paramsOther = holder.otherParticipantLayout.getLayoutParams();
                 paramsOther.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 holder.otherParticipantLayout.setLayoutParams(paramsOther);
-                holder.otherParticipantName.setText(currentMessage.name);
+                if (ChatActivity.isGroupChat == 1){
+                    holder.userLayout.setPadding(0,60,0,0);
+                }/*else {
+                    holder.otherParticipantName.setText(currentMessage.name);
+                }*/
+                if (currentMessage.name != null){
+                    holder.otherParticipantName.setText(currentMessage.name);
+                }else{
+                    holder.otherParticipantName.setVisibility(View.GONE);
+                }
                 if(position < list.size()-1 && list.get(position+1).authorId.equalsIgnoreCase(list.get(position).authorId)){
-                    holder.otherParticipantImage.setVisibility(View.INVISIBLE);
-                    holder.otherParticipantName.setText("");
+                    holder.otherParticipantImage.setVisibility(View.VISIBLE);
+/*                    holder.otherParticipantName.setVisibility(View.GONE);*/
                 }
 
 

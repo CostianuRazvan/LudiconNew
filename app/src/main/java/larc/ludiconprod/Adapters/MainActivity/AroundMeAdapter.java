@@ -488,14 +488,15 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             HTTPResponseController.getInstance().joinEvent(activity, params, headers, list.get(pos).id, fragment);
                             ((ViewHolder) holder).joinButton.setEnabled(false);
                         } else {
-                            Intent intent = new Intent(activity, Pop.class);
-                            intent.putExtra("formParameters", list.get(pos).formParameters);
-                            intent.putExtra("eventId", list.get(pos).id);
-                            intent.putExtra("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
-                            intent.putExtra("userId", Persistance.getInstance().getUserInfo(activity).id);
-                            intent.putExtra("editEnrollData", false);
-                            activity.startActivity(intent);
-
+                            if (activity != null) {
+                                Intent intent = new Intent(activity, Pop.class);
+                                intent.putExtra("formParameters", list.get(pos).formParameters);
+                                intent.putExtra("eventId", list.get(pos).id);
+                                intent.putExtra("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                                intent.putExtra("userId", Persistance.getInstance().getUserInfo(activity).id);
+                                intent.putExtra("editEnrollData", false);
+                                activity.startActivity(intent);
+                            }
                         }
 
                     }

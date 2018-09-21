@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,8 +43,15 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.User;
+import larc.ludiconprod.UserProfile;
 import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sport;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 
 public class UserProfileActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
 
@@ -57,6 +66,12 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
     LinearLayout buttonLayout;
     Button allReviews;
     LinearLayout rateLayout;
+    Button addFriend;
+    Button chat;
+    ImageView blockingIV;
+    RelativeLayout blocking;
+    public String ChatId;
+    public int isBlocked;
 
     ArrayList<String> userReviewName = new ArrayList<>();
     ArrayList<String> userReviewDate = new ArrayList<>();
@@ -67,6 +82,8 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
 
     @SuppressLint("ResourceType")
     public void addReview(){
+
+        final Typeface typeFace = Typeface.createFromAsset(super.getAssets(), "fonts/Quicksand-Medium.ttf");
 
         for (int i = 0; i < userReview.size(); i++){
 
@@ -88,25 +105,28 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
             name.setId(1);
             name.setText(userReviewName.get(i).toString());
             name.setTextSize(16);
-            name.setTextColor(getResources().getColor(R.color.pink));
+            name.setTextColor(Color.parseColor("#d4498b"));
             name.setPadding(30,20,0,0);
+            name.setTypeface(typeFace);
 
             TextView review = new TextView(this);
             params2.addRule(RelativeLayout.BELOW, name.getId());
             review.setId(2);
             review.setText("\"" + userReview.get(i).toString() + "\"");
-            review.setTextColor(getResources().getColor(R.color.black));
-            review.setTextSize(16);
+            review.setTextColor(Color.parseColor("#0c3855"));
+            review.setTypeface(typeFace);
+            review.setTextSize(13);
             review.setPadding(60,5,0,0);
 
             TextView date = new TextView(this);
             params3.addRule(RelativeLayout.RIGHT_OF, name.getId());
             date.setId(3);
             date.setText(userReviewDate.get(i).toString());
-            date.setTextColor(getResources().getColor(R.color.lightGray));
+            date.setTextColor(Color.parseColor("#acb8c1"));
             date.setTextSize(14);
             date.setPadding(0,25,30,0);
             date.setGravity(Gravity.RIGHT);
+            date.setTypeface(typeFace);
 
             RelativeLayout stars = new RelativeLayout(this);
             params4.addRule(RelativeLayout.RIGHT_OF, review.getId());
@@ -219,7 +239,6 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
         }
     }
 
-
     @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -245,8 +264,10 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
                 }
             });
 
-            Button addFriend = (Button) super.findViewById(R.id.profileFriend);
-            Button chat = (Button) super.findViewById(R.id.profileChat);
+             addFriend = (Button) super.findViewById(R.id.profileFriend);
+             chat = (Button) super.findViewById(R.id.profileChat);
+             blockingIV = (ImageView) this.findViewById(R.id.blockingIV);
+             blocking = (RelativeLayout) this.findViewById(R.id.blocking);
 
             chat.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -392,7 +413,7 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
             ll.getLayoutParams().height = 0;
             ll.setLayoutParams(ll.getLayoutParams());
 
-            User u = this.user;
+            final User u = this.user;
 
             TextView sportsCount = (TextView) findViewById(R.id.profilePracticeSportsCountLabel);
             ImageView image = (ImageView) findViewById(R.id.profileImage);
@@ -418,8 +439,9 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
                 rateLayout.setVisibility(View.GONE);
             }else{
                 rateLayout.setVisibility(View.VISIBLE);
+                DecimalFormat df = new DecimalFormat("#.00");
+                socialRate.setText(df.format(Double.valueOf(u.socialRate)));
             }
-            socialRate.setText(u.socialRate);
             countSocialRate.setText(getResources().getString(R.string.based_on) + " " + u.countSocialRate + " " + getResources().getString(R.string.reviews));
 
             final ArrayList<String> sportCodes = new ArrayList<>();
@@ -600,7 +622,9 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
             allReviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    allReviews();
+                    Intent intent = new Intent(UserProfileActivity.this, FullPageView.class);
+                    intent.putExtra("userId", user.id);
+                    startActivity(intent);
                 }
             });
 
@@ -608,6 +632,89 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
             tv.setAlpha(1);
             tv = findViewById(R.id.profileProgressBar);
             tv.setAlpha(0);
+
+            DatabaseReference myNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(UserProfileActivity.this).id).child("talkbuddies");
+            myNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot myChatParticipants) {
+                    String chatId;
+                    if(myChatParticipants.hasChild(user.id)) {
+                        chatId = myChatParticipants.child(user.id).getValue().toString();
+                        ChatId = chatId;
+
+                        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(UserProfileActivity.this).id).child("chats").child(ChatId);
+                        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                if (snapshot.hasChild("blk")) {
+                                    if (snapshot.child("blk").getValue().toString().equals("1")) {
+                                        isBlocked = 1;
+                                    }else{
+                                        isBlocked = 0;
+                                    }
+                                } else {
+                                    isBlocked = 0;
+                                }
+
+                                ViewGroup.LayoutParams params = blocking.getLayoutParams();
+                                params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                                params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                                blocking.setLayoutParams(params);
+
+                                if (isBlocked == 0) {
+                                    chat.setVisibility(View.VISIBLE);
+                                    addFriend.setVisibility(View.VISIBLE);
+
+                                    blockingIV.setImageResource(R.drawable.ic_unblock);
+
+                                }
+                                if (isBlocked == 1) {
+                                    chat.setVisibility(View.GONE);
+                                    addFriend.setVisibility(View.GONE);
+                                    blockingIV.setImageResource(R.drawable.ic_block);
+                                }
+
+                                blockingIV.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent(UserProfileActivity.this, BlockUserPopup.class);
+                                        intent.putExtra("userId", user.id);
+                                        intent.putExtra("isBlocked", isBlocked);
+                                        intent.putExtra("isUserBlock", "true");
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                    }else{
+                        RelativeLayout blockUser = (RelativeLayout) findViewById(R.id.blockUser);
+                        ViewGroup.LayoutParams params = blockUser.getLayoutParams();
+                        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                        params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+                        blockUser.setLayoutParams(params);
+                        blockUser.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(UserProfileActivity.this, BlockUserPopup.class);
+                                intent.putExtra("userId", user.id);
+                                intent.putExtra("isBlocked", isBlocked);
+                                intent.putExtra("otherParticipantName", userName);
+                                intent.putExtra("otherParticipantImage", userImage);
+                                intent.putExtra("isUserBlock", "true");
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -656,17 +763,6 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
         }, this);
     }
 
-    public void allReviews() {
-        User u = Persistance.getInstance().getUserInfo(this);
-        HashMap<String, String> params = new HashMap<String, String>();
-        HashMap<String, String> headers = new HashMap<String, String>();
-        HashMap<String, String> urlParams = new HashMap<String, String>();
-        headers.put("authKey", u.authKey);
-
-        //set urlParams
-        urlParams.put("userId", this.user.id);
-        HTTPResponseController.getInstance().getReviews(params, headers, this, urlParams, null);
-    }
 
     public void friendAdded() {
         final Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");

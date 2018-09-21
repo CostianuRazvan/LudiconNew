@@ -263,10 +263,22 @@
                 android:text="@string/check_in"
                 android:textColor="#ffffff"
 
-                android:textSize="14dp" />
+                    android:textSize="14dp" />
 
-
-
+            <Button
+                android:id="@+id/checkinallHN"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="170dp"
+                android:background="@drawable/pink_button_selector"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:text="@string/check_in_all"
+                android:textColor="#ffffff"
+                android:textSize="14dp"
+                android:visibility="gone"
+                android:fontFamily="@string/fontmedium"/>
 
         </RelativeLayout>
 

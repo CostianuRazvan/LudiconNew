@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popWindow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_popup">
+
+    <TextView
+        android:id="@+id/textBlockUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/block_this_user"
+        android:textColor="#0c3855"
+        android:textSize="18dp"
+        android:fontFamily="@string/fontmedium"
+        android:layout_marginTop="10dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/blockUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/once_you_block_this_user"
+        android:textColor="#acb8c1"
+        android:textSize="14dp"
+        android:fontFamily="@string/fontmedium"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_below="@+id/textBlockUser"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/transparent_button"
+        android:text="@string/cancel"
+        android:textColor="#acb8c1"
+        android:textSize="14dp"
+        android:layout_below="@+id/blockUser"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentLeft="true"
+        android:fontFamily="@string/fontmedium"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pink_button_selector"
+        android:text="@string/block"
+        android:textColor="#ffffff"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/cancel"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/block"
+        android:layout_below="@+id/blockUser"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@string/fontmedium"/>
+
+</RelativeLayout>
