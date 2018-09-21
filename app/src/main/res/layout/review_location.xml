@@ -14,8 +14,9 @@
         android:layout_marginTop="80dp"
         android:gravity="center"
         android:text="@string/how_was_the_location"
-        android:textColor="@color/white"
-        android:textSize="18dp" />
+        android:textColor="#ffffff"
+        android:textSize="18dp"
+        android:fontFamily="@string/fontmedium"/>
 
 
     <RelativeLayout
@@ -75,9 +76,10 @@
         android:text="ASDFGG"
         android:layout_centerHorizontal="true"
         android:textSize="18dp"
-        android:textColor="@color/white"
+        android:textColor="#ffffff"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:fontFamily="@string/fontmedium"/>
 
 
     <EditText
@@ -88,12 +90,12 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/round_review"
         android:hint="@string/write_your_feedback"
-        android:textColorHint="@color/white"
+        android:textColorHint="#ffffff"
         android:textSize="12dp"
         android:paddingLeft="10dp"
         android:paddingBottom="50dp"
         android:layout_below="@+id/rate"
-        android:textColor="@color/white"/>
+        android:textColor="#ffffff"/>
 
 
     <Button
@@ -107,9 +109,10 @@
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
         android:text="@string/submit"
-        android:textColor="#d4498b"
+        android:textColor="#d85c97"
         android:textSize="14dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@string/fontmedium"/>
 
     <!-- </RelativeLayout> -->
 

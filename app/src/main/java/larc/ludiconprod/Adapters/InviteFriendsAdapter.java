@@ -129,7 +129,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                     Bitmap bitmap = decodeBase64(currentFriend.profileImage);
                     holder.friendProfileImage.setImageBitmap(bitmap);
                 } else {
-                    holder.friendProfileImage.setImageResource(R.drawable.ic_user);
+                    holder.friendProfileImage.setImageResource(R.drawable.ph_user);
                 }
                 ViewGroup.LayoutParams params = holder.friendLevel.getLayoutParams();
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -241,17 +241,9 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             if( Locale.getDefault().getLanguage().startsWith("en")) {
                                 friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
                             } else if (Locale.getDefault().getLanguage().startsWith("ro")){
-                                if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
-                                    friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
-                                }else{
-                                    friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
-                                }
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                             }else if (Locale.getDefault().getLanguage().startsWith("fr")){
-                                if (Persistance.getInstance().getUserInfo(activity).gender.equals("male")) {
-                                    friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
-                                }else{
-                                    friend.userName = activity.getResources().getString(R.string.is_friend_girl) + Persistance.getInstance().getUserInfo(activity).lastName;
-                                }
+                                friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                             }
                             friend.offlineFriend = true;
                             friend.profileImage = "";
@@ -278,7 +270,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             }
                             holder.friendName.setText(displayName);
                         }
-                        holder.friendProfileImage.setImageResource(R.drawable.ic_invite);
+                        holder.friendProfileImage.setImageResource(R.drawable.ph_user);
 
                         holder.inviteButton.setText(R.string.remove);
                         holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
@@ -379,7 +371,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             });
                         }
 
-            if (!currentFriend.offlineFriend && position != 0) {
+            if (!currentFriend.offlineFriend && position != -1 && !currentFriend.userName.equals(activity.getResources().getString(R.string.add_offline_friends))) {
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -331,6 +331,7 @@
     <string name="show_full_history">VEZI TOT ISTORICUL</string>
     <string name="with_others">cu alţi</string>
     <string name="with_one_other">cu încă o persoană</string>
+    <string name="with_no_other">singur/ă</string>
     <string name="past_activities">Activități din trecut</string>
     <string name="has_played">A jucat</string>
     <string name="you_gained">Ai obţinut\t</string>
@@ -367,8 +368,24 @@
     <string name="good">Bun</string>
     <string name="average">Mediu</string>
     <string name="below_average">Sub mediu</string>
-    <string name="popup_to_review">Popup-uri pentru recenzii</string>
-    <string name="event">Evenimentul</string>
-    <string name="users">Participanţii</string>
+    <string name="select_reviewing_preferences">Ce recenzii preferi să oferi?</string>
+    <string name="review_events">Recenzii la evenimente</string>
+    <string name="review_locations">Recenzii la locaţii</string>
+    <string name="review_users">Recenzii la utilizatori</string>
     <string name="trusted">OFICIAL</string>
+    <string name="check_in_all">Check-in de grup</string>
+    <string name="checkinall_button">CHECK-IN DE GRUP</string>
+    <string name="social_rating1">Rating social :</string>
+
+    <string name="block_this_user">Blochezi acest utilizator?</string>
+    <string name="unblock_this_user">Deblochezi acest utilizator?</string>
+    <string name="cancel">Renunță</string>
+    <string name="block">Blochează</string>
+    <string name="unblock">Deblochează</string>
+    <string name="once_you_block_this_user">Dacă blochezi acest utilizator nu vei putea primi mesaje trimise de el!</string>
+    <string name="once_you_unblock_this_user">Dacă deblochezi acest utilizator vei putea primi din nou mesaje trimise de el!</string>
+    <string name="block_this_group_chat">Blochezi conversația de grup?</string>
+    <string name="unblock_this_group_chat">Deblochezi conversația de grup?</string>
+    <string name="once_you_block_this_group_chat">Dacă blochezi această conversație de grup nu vei mai primi notificări de mesaje!</string>
+    <string name="once_you_unblock_this_group_chat">Dacă blochezi această conversație de grup vei primi din nou notificări de mesaje!</string>
 </resources>

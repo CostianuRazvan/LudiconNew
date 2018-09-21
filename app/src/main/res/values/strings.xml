@@ -316,6 +316,7 @@
     <string name="you_play_something">You play something</string>
     <string name="press_back_again_to_exit">Press back again to exit.</string>
     <string name="is_friend">\'s\tFriend</string>
+    <string name="is_friend_girl">\'s\tFriend</string>
 
     <string name="we_cant_take_your_location">Sorry, we can\'t take your location, please try again later</string>
     <string name="no_location_services_available">No location services available!</string>
@@ -325,6 +326,7 @@
     <string name="last_activities">LAST ACTIVITIES</string>
     <string name="show_full_history">VIEW FULL HISTORY</string>
     <string name="with_one_other">with one other</string>
+    <string name="with_no_other">with no other</string>
     <string name="with">with</string>
     <string name="others1">others</string>
     <string name="past_activities">Past Activities</string>
@@ -372,9 +374,24 @@
     <string name="good">Good</string>
     <string name="average">Average</string>
     <string name="below_average">Below Average</string>
-    <string name="popup_to_review">Pop-ups to Review</string>
-    <string name="event">Event</string>
-    <string name="users">Users</string>
+    <string name="select_reviewing_preferences">Select reviewing preferences</string>
+    <string name="review_events">Review Events</string>
+    <string name="review_locations">Review Locations</string>
+    <string name="review_users">Review Users</string>
     <string name="trusted">TRUSTED</string>
+    <string name="check_in_all">Check-in All</string>
+    <string name="checkinall_button">CHECK-IN ALL</string>
+    <string name="social_rating1">Social rating :</string>
+    <string name="block_this_user">Block this user?</string>
+    <string name="unblock_this_user">Unblock this user?</string>
+    <string name="cancel">Cancel</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
+    <string name="once_you_block_this_user">Once you block this user, you won\'t be able to receive any messages sent by him!</string>
+    <string name="once_you_unblock_this_user">Once you unblock this user, you will be able to receive messages sent by him!</string>
+    <string name="block_this_group_chat">Block this group chat?</string>
+    <string name="unblock_this_group_chat">Unblock this group chat?</string>
+    <string name="once_you_block_this_group_chat">Once you block this group chat, you will not receive any message notifications anymore!</string>
+    <string name="once_you_unblock_this_group_chat">Once you unblock this group chat you will start receiving message notifications again!</string>
 
 </resources>

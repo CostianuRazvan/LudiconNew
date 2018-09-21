@@ -20,15 +20,10 @@ public class ReviewBrief {
     public String reviewDate;
     public String date;
 
-    public double userRate;
+    public String socialRateReview;
+    public String userId;
+    public String userPicture;
     public int countSocialRate;
-    public int excellentPerc;
-    public int goodPerc;
-    public int averagePerc;
-    public int bellowAveragePerc;
-    public int poorPerc;
-    public ArrayList<Review> listOfReviews = new ArrayList<>();
-
     public ReviewBrief(){}
 
     public ReviewBrief(JSONObject briefReview) throws JSONException {

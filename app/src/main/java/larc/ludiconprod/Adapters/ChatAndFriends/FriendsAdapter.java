@@ -121,7 +121,7 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
                 holder = (FriendsAdapter.ViewHolder) view.getTag();
             }
             //clear layout
-            holder.friendsImage.setImageResource(R.drawable.ic_user);
+            holder.friendsImage.setImageResource(R.drawable.ph_user);
 
             if (!currentFriend.profileImage.equalsIgnoreCase("")) {
                 Bitmap bitmap = decodeBase64(currentFriend.profileImage);

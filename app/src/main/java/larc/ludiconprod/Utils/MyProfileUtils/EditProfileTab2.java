@@ -1,10 +1,12 @@
 package larc.ludiconprod.Utils.MyProfileUtils;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -49,16 +51,19 @@ public class EditProfileTab2 extends Fragment {
     private RelativeLayout passwordLayout;
     private TextWatcher textWatcher;
 
-    private RadioGroup editEventReview;
-    private RadioGroup editLocationReview;
-    private RadioGroup editUsersReview;
-    private RadioButton editWithEvent;
-    private RadioButton editWithoutEvent;
-    private RadioButton editWithLocation;
-    private RadioButton editWithoutLocation;
-    private RadioButton editWithUser;
-    private RadioButton editWithoutUser;
+    ImageView check_event;
+    ImageView check_location;
+    ImageView check_users;
+    TextView popReview;
+    Button button_check_event;
+    Button button_check_location;
+    Button button_check_users;
+    int checkEvent;
+    int checkLocation;
+    int checkUsers;
 
+
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.edittab2, container, false);
@@ -118,16 +123,14 @@ public class EditProfileTab2 extends Fragment {
             email.setText(u.email);
             email.setTypeface(typeFace);
             ImageView image = (ImageView) v.findViewById(R.id.editImage);
-            editEventReview = (RadioGroup) v.findViewById(R.id.editEventReview);
-            editLocationReview = (RadioGroup) v.findViewById(R.id.editLocationReview);
-            editUsersReview = (RadioGroup) v.findViewById(R.id.editUsersReview);
-            editWithEvent = (RadioButton) v.findViewById(R.id.editWithEvent);
-            editWithoutEvent = (RadioButton) v.findViewById(R.id.editWithoutEvent);
-            editWithLocation = (RadioButton) v.findViewById(R.id.editWithLocation);
-            editWithoutLocation = (RadioButton) v.findViewById(R.id.editWithoutLocation);
-            editWithUser = (RadioButton) v.findViewById(R.id.editWithUser);
-            editWithoutUser = (RadioButton) v.findViewById(R.id.editWithoutUser);
-
+            check_event = (ImageView) v.findViewById(R.id.check_event);
+            check_location = (ImageView) v.findViewById(R.id.check_location);
+            check_users = (ImageView) v.findViewById(R.id.check_users);
+            popReview = (TextView) v.findViewById(R.id.popReview);
+            popReview.setTypeface(typeFace);
+            button_check_event = (Button) v.findViewById(R.id.button_check_event);
+            button_check_location = (Button) v.findViewById(R.id.button_check_location);
+            button_check_users = (Button) v.findViewById(R.id.button_check_users);
 
             if (u.profileImage != null && !u.profileImage.isEmpty()) {
                 Bitmap im = IntroActivity.decodeBase64(u.profileImage);
@@ -199,41 +202,31 @@ public class EditProfileTab2 extends Fragment {
             });
 
             if (u.rateEvent.equals("true")){
-                editWithEvent.setChecked(true);
-                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
+                check_event.setVisibility(View.VISIBLE);
+                checkEvent = 1;
                 epa.setEventReview("true");
+                button_check_event.setAlpha(1f);
             }else if(u.rateEvent.equals("false")){
-                editWithoutEvent.setChecked(true);
-                editWithoutEvent.setTextColor(Color.parseColor("#ffffff"));
+                check_event.setVisibility(View.GONE);
+                checkEvent = 0;
                 epa.setEventReview("false");
+                button_check_event.setAlpha(0.5f);
             }
 
-            if(editWithEvent.isChecked()) {
-                editWithEvent.setBackgroundResource(R.drawable.pink_button_selector);
-                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
-            } else{
-                editWithoutEvent.setBackgroundResource(R.drawable.green_button_selected);
-                editWithEvent.setTextColor(Color.parseColor("#ffffff"));
-            }
-
-            editEventReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            button_check_event.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                    if(editWithEvent.isChecked()){
-                        editWithEvent.setBackgroundResource(R.drawable.pink_button_selector);
-                        editWithoutEvent.setBackgroundResource(transparent);
-                        editWithEvent.setTextColor(Color.parseColor("#ffffff"));
-                        editWithoutEvent.setTextColor(Color.parseColor("#1A0c3855"));
+                public void onClick(View v) {
+                    if (checkEvent == 0) {
+                        check_event.setVisibility(View.VISIBLE);
+                        checkEvent = 1;
                         epa.setEventReview("true");
-                    }
-                    else{
-                        editWithoutEvent.setBackgroundResource(R.drawable.green_button_selected);
-                        editWithEvent.setBackgroundResource(transparent);
-                        editWithEvent.setTextColor(Color.parseColor("#1A0c3855"));
-                        editWithoutEvent.setTextColor(Color.parseColor("#ffffff"));
+                        button_check_event.setAlpha(1f);
+                    }else if (checkEvent == 1){
+                        check_event.setVisibility(View.GONE);
+                        checkEvent = 0;
                         epa.setEventReview("false");
+                        button_check_event.setAlpha(0.5f);
                     }
-
                     if (epa.sameProfileInfo()) {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(0);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
@@ -241,46 +234,35 @@ public class EditProfileTab2 extends Fragment {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(1);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
-
                 }
             });
 
             if (u.rateLocation.equals("true")){
-                editWithLocation.setChecked(true);
-                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
+                check_location.setVisibility(View.VISIBLE);
+                checkLocation = 1;
                 epa.setLocationReview("true");
+                button_check_location.setAlpha(1f);
             }else if (u.rateLocation.equals("false")){
-                editWithoutLocation.setChecked(true);
-                editWithoutLocation.setTextColor(Color.parseColor("#ffffff"));
+                check_location.setVisibility(View.GONE);
+                checkLocation = 0;
                 epa.setLocationReview("false");
+                button_check_location.setAlpha(0.5f);
             }
 
-            if(editWithLocation.isChecked()) {
-                editWithLocation.setBackgroundResource(R.drawable.pink_button_selector);
-                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
-            } else{
-                editWithoutLocation.setBackgroundResource(R.drawable.green_button_selected);
-                editWithLocation.setTextColor(Color.parseColor("#ffffff"));
-            }
-
-            editLocationReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            button_check_location.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                    if(editWithLocation.isChecked()){
-                        editWithLocation.setBackgroundResource(R.drawable.pink_button_selector);
-                        editWithoutLocation.setBackgroundResource(transparent);
-                        editWithLocation.setTextColor(Color.parseColor("#ffffff"));
-                        editWithoutLocation.setTextColor(Color.parseColor("#1A0c3855"));
+                public void onClick(View v) {
+                    if (checkLocation == 0) {
+                        check_location.setVisibility(View.VISIBLE);
+                        checkLocation = 1;
                         epa.setLocationReview("true");
-                    }
-                    else{
-                        editWithoutLocation.setBackgroundResource(R.drawable.green_button_selected);
-                        editWithLocation.setBackgroundResource(transparent);
-                        editWithLocation.setTextColor(Color.parseColor("#1A0c3855"));
-                        editWithoutLocation.setTextColor(Color.parseColor("#ffffff"));
+                        button_check_location.setAlpha(1f);
+                    }else if (checkLocation == 1){
+                        check_location.setVisibility(View.GONE);
+                        checkLocation = 0;
                         epa.setLocationReview("false");
+                        button_check_location.setAlpha(0.5f);
                     }
-
                     if (epa.sameProfileInfo()) {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(0);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
@@ -288,46 +270,35 @@ public class EditProfileTab2 extends Fragment {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(1);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
-
                 }
             });
 
             if (u.rateUsers.equals("true")){
-                editWithUser.setChecked(true);
-                editWithUser.setTextColor(Color.parseColor("#ffffff"));
+                check_users.setVisibility(View.VISIBLE);
+                checkUsers = 1;
                 epa.setUsersReview("true");
+                button_check_users.setAlpha(1f);
             }else if (u.rateUsers.equals("false")) {
-                editWithoutUser.setChecked(true);
-                editWithoutUser.setTextColor(Color.parseColor("#ffffff"));
+                check_users.setVisibility(View.GONE);
+                checkUsers = 0;
                 epa.setUsersReview("false");
+                button_check_users.setAlpha(0.5f);
             }
 
-            if(editWithUser.isChecked()) {
-                editWithUser.setBackgroundResource(R.drawable.pink_button_selector);
-                editWithUser.setTextColor(Color.parseColor("#ffffff"));
-            } else{
-                editWithoutUser.setBackgroundResource(R.drawable.green_button_selected);
-                editWithUser.setTextColor(Color.parseColor("#ffffff"));
-            }
-
-            editUsersReview.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            button_check_users.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                    if(editWithUser.isChecked()){
-                        editWithUser.setBackgroundResource(R.drawable.pink_button_selector);
-                        editWithoutUser.setBackgroundResource(transparent);
-                        editWithUser.setTextColor(Color.parseColor("#ffffff"));
-                        editWithoutUser.setTextColor(Color.parseColor("#1A0c3855"));
+                public void onClick(View v) {
+                    if (checkUsers == 0) {
+                        check_users.setVisibility(View.VISIBLE);
+                        checkUsers = 1;
                         epa.setUsersReview("true");
-                    }
-                    else{
-                        editWithoutUser.setBackgroundResource(R.drawable.green_button_selected);
-                        editWithUser.setBackgroundResource(transparent);
-                        editWithUser.setTextColor(Color.parseColor("#1A0c3855"));
-                        editWithoutUser.setTextColor(Color.parseColor("#ffffff"));
+                        button_check_users.setAlpha(1f);
+                    }else if (checkUsers == 1){
+                        check_users.setVisibility(View.GONE);
+                        checkUsers = 0;
                         epa.setUsersReview("false");
+                        button_check_users.setAlpha(0.5f);
                     }
-
                     if (epa.sameProfileInfo()) {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(0);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
@@ -335,7 +306,6 @@ public class EditProfileTab2 extends Fragment {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(1);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
                     }
-
                 }
             });
 

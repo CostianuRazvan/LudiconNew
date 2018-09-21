@@ -165,191 +165,137 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/popup_to_review"
-                        android:textColor="@color/black"
+                        android:text="@string/select_reviewing_preferences"
+                        android:textColor="#0c3855"
                         android:fontFamily="@string/fontmedium"
                         android:layout_marginLeft="20dp"
                         android:id="@+id/popReview"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/popReview"
                         android:id="@+id/eventLabel"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_event"/>
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/ic_calendar"
-                            android:id="@+id/imageCalendar"/>
+                            android:id="@+id/imageCalendar"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imageCalendar"
-                            android:text="@string/event"
-                            android:textSize="15sp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="10dp" />
+                            android:text="@string/review_events"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:layout_marginTop="13dp"
+                            android:textColor="#0c3855"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_event"/>
                     </RelativeLayout>
 
-                    <RadioGroup
-                        android:checkedButton="@+id/male"
-                        android:id="@+id/editEventReview"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/rounded_edittext"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_below="@+id/eventLabel">
-
-                        <RadioButton
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:layout_marginLeft="1dp"
-                            android:id="@+id/editWithEvent"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/yes"/>
-                        <RadioButton
-                            android:layout_marginRight="1dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:id="@+id/editWithoutEvent"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/no"/>
-                    </RadioGroup>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/editEventReview"
+                        android:layout_below="@+id/eventLabel"
                         android:id="@+id/locationLabel"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_location"/>
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/ic_info"
-                            android:id="@+id/imageLocation"/>
+                            android:id="@+id/imageLocation"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imageLocation"
-                            android:text="@string/location"
-                            android:textSize="15sp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="10dp"/>
+                            android:text="@string/review_locations"
+                            android:textSize="16sp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:textColor="#0c3855"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_location"/>
                     </RelativeLayout>
-
-                    <RadioGroup
-                        android:checkedButton="@+id/male"
-                        android:id="@+id/editLocationReview"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/rounded_edittext"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_below="@+id/locationLabel">
-
-                        <RadioButton
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:layout_marginLeft="1dp"
-                            android:id="@+id/editWithLocation"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/yes"/>
-                        <RadioButton
-                            android:layout_marginRight="1dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:id="@+id/editWithoutLocation"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/no"/>
-                    </RadioGroup>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/editLocationReview"
+                        android:layout_below="@+id/locationLabel"
                         android:id="@+id/usersLabel"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_users"/>
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/ic_user"
-                            android:id="@+id/imageUsers"/>
+                            android:id="@+id/imageUsers"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/imageUsers"
-                            android:text="@string/users"
-                            android:textSize="15sp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="10dp"/>
-                    </RelativeLayout>
-                    <RadioGroup
-                        android:checkedButton="@+id/male"
-                        android:id="@+id/editUsersReview"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/rounded_edittext"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_below="@+id/usersLabel">
+                            android:text="@string/review_users"
+                            android:textSize="16sp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:textColor="#0c3855"/>
 
-                        <RadioButton
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:layout_marginLeft="1dp"
-                            android:id="@+id/editWithUser"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/yes"/>
-                        <RadioButton
-                            android:layout_marginRight="1dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:id="@+id/editWithoutUser"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:textSize="16sp"
-                            android:textColor="#1A0c3855"
-                            android:text="@string/no"/>
-                    </RadioGroup>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_users"/>
+                    </RelativeLayout>
 
                 </RelativeLayout>
 

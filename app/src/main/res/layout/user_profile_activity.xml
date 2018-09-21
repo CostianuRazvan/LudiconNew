@@ -230,9 +230,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@string/fontbold"
+                        android:fontFamily="@string/fontmedium"
                         android:text="@string/social_rating"
-                        android:textColor="@color/black"
+                        android:textColor="#0c3855"
                         android:textSize="16sp" />
 
                     <TextView
@@ -242,7 +242,7 @@
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@string/fontmedium"
                         android:text="Based on 23 reviews"
-                        android:textColor="@color/lightGray"
+                        android:textColor="#acb8c1"
                         android:textSize="12sp" />
                 </LinearLayout>
                 <LinearLayout
@@ -257,7 +257,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@string/fontmedium"
                         android:text="4.23"
-                        android:textColor="@color/pink"
+                        android:textColor="#d4498b"
                         android:textSize="16dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -297,9 +297,10 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/view_all_reviews"
-                    android:textColor="@color/pink"
+                    android:textColor="#d4498b"
                     android:textSize="16sp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@string/fontmedium"/>
 
             </LinearLayout>
 

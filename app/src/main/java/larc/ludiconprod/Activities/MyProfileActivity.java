@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -143,7 +144,12 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             String date = eventDate.get(i);
             String count = participantsCount.get(i);
 
-            if (count.equals("1")) {
+            int countInt = Integer.parseInt(count) - 1;
+            count = countInt + "";
+
+            if(count.equals("0")){
+                et.setText(date + " " + name + " " + getResources().getString(R.string.with_no_other) + ".");
+            }else if (count.equals("1")) {
                 et.setText(date + " " + name + " " + getResources().getString(R.string.with_one_other) + ".");
             } else {
                 if (Locale.getDefault().getLanguage().startsWith("en")) {
@@ -176,6 +182,8 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
     @SuppressLint("ResourceType")
     public void addReview(){
 
+        final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Medium.ttf");
+
         for (int i = 0; i < userReview.size(); i++){
 
             RelativeLayout layout = new RelativeLayout(this.getContext());
@@ -197,25 +205,28 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             name.setId(1);
             name.setText(userReviewName.get(i).toString());
             name.setTextSize(16);
-            name.setTextColor(getResources().getColor(R.color.pink));
+            name.setTextColor(Color.parseColor("#d4498b"));
             name.setPadding(30,20,0,0);
+            name.setTypeface(typeFace);
 
             TextView review = new TextView(this.getContext());
             params2.addRule(RelativeLayout.BELOW, name.getId());
             review.setId(2);
             review.setText("\"" + userReview.get(i).toString() + "\"");
-            review.setTextColor(getResources().getColor(R.color.black));
-            review.setTextSize(16);
+            review.setTextColor(Color.parseColor("#0c3855"));
+            review.setTypeface(typeFace);
+            review.setTextSize(13);
             review.setPadding(60,5,0,0);
 
             TextView date = new TextView(this.getContext());
             params3.addRule(RelativeLayout.RIGHT_OF, name.getId());
             date.setId(3);
             date.setText(userReviewDate.get(i).toString());
-            date.setTextColor(getResources().getColor(R.color.lightGray));
+            date.setTextColor(Color.parseColor("#acb8c1"));
             date.setTextSize(14);
             date.setPadding(0,25,30,0);
             date.setGravity(Gravity.RIGHT);
+            date.setTypeface(typeFace);
 
             RelativeLayout stars = new RelativeLayout(this.getContext());
             params4.addRule(RelativeLayout.RIGHT_OF, review.getId());
@@ -447,14 +458,9 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
             allReviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    HashMap<String, String> urlParams = new HashMap<String, String>();
-                    headers.put("authKey", up.authKey);
-
-                    //set urlParams
-                    urlParams.put("userId", up.id);
-                    HTTPResponseController.getInstance().getReviews(params, headers, activity, urlParams, null);
+                    Intent intent = new Intent(mContext, FullPageView.class);
+                    intent.putExtra("userId", up.id);
+                    startActivity(intent);
                 }
             });
         } catch (Exception e) {
@@ -644,8 +650,9 @@ public class MyProfileActivity extends Fragment implements Response.Listener<JSO
                 rateLayout.setVisibility(View.GONE);
             }else{
                 rateLayout.setVisibility(View.VISIBLE);
+                DecimalFormat df = new DecimalFormat("#.00");
+                socialRate.setText(df.format(Double.valueOf(u.socialRate)));
             }
-            socialRate.setText(u.socialRate);
             countSocialRate.setText(getResources().getString(R.string.based_on) + " " + u.countSocialRate + " " + getResources().getString(R.string.reviews));
             ProgressBar levelBar = (ProgressBar) v.findViewById(R.id.profileLevelBar);
             levelBar.setProgress(u.points * levelBar.getMax() / u.pointsOfNextLevel);

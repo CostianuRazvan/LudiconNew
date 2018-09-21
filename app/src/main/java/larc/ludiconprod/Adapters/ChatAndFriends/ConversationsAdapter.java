@@ -133,7 +133,7 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                 holder = (ConversationsAdapter.ViewHolder) view.getTag();
             }
             //clear layout
-            holder.chatParticipantImage.setImageResource(R.drawable.ic_user);
+            holder.chatParticipantImage.setImageResource(R.drawable.ph_user);
             if (threadsList.size() > 0 && threadsList.size() > position && threadsList.get(position) != null) {
                 threadsList.get(position).cancel();
                 threadsList.remove(position);

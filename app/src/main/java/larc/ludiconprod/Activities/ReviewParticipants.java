@@ -81,7 +81,7 @@ public class ReviewParticipants extends Activity {
 
         int star_id = 456;
 
-        for (int i = 0; i < participantsName.size() - 1; i++) {
+        for (int i = 0; i < participantsName.size(); i++) {
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -112,13 +112,9 @@ public class ReviewParticipants extends Activity {
             stars4Entry.setBackgroundResource(R.drawable.icon_star_full);
             stars5Entry.setBackgroundResource(R.drawable.icon_star_full);
 
-            if (!Persistance.getInstance().getUserInfo(ReviewParticipants.this).id.equals(participantsName.get(i).toString())) {
-                userName.setText(participantsName.get(i).toString());
-            }
-            if (!Persistance.getInstance().getUserInfo(ReviewParticipants.this).profileImage.equals(participantsImage.get(i).toString())) {
-                Bitmap bitmap = decodeBase64(participantsImage.get(i).toString());
-                userImageProfile.setImageBitmap(bitmap);
-            }
+            userName.setText(participantsName.get(i).toString());
+            Bitmap bitmap = decodeBase64(participantsImage.get(i).toString());
+            userImageProfile.setImageBitmap(bitmap);
 
             layout_user.addView(mView);
             reviewList.add(review);
@@ -256,7 +252,7 @@ public class ReviewParticipants extends Activity {
                 headers.put("authKey", Persistance.getInstance().getUserInfo(ReviewParticipants.this).authKey);
                 params.put("userId", Persistance.getInstance().getUserInfo(ReviewParticipants.this).id);
                 params.put("eventId", Persistance.getInstance().getEventToReview(ReviewParticipants.this).id);
-                for (int i = 0; i < participantsId.size() - 1; i++) {
+                for (int i = 0; i < participantsId.size(); i++) {
                     if (!Persistance.getInstance().getUserInfo(ReviewParticipants.this).id.equals(participantsId.get(i).toString())) {
                         params.put("participants[" + i + "][id]", participantsId.get(i).toString());
                         params.put("participants[" + i + "][rate]", rateList.get(i).toString());

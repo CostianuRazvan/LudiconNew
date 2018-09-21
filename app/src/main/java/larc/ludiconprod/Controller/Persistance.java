@@ -22,6 +22,7 @@ import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.UserPosition;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sponsors;
 
 /**
@@ -55,6 +56,7 @@ public class Persistance {
     private final String SponsorsString = "Sponsors";
     private final String pastEventsString="PastEvents";
     private final String eventString="Event";
+    private final String reviewString="Reviews";
 
 
     public void setUserInfo(Activity activity, User user) {
@@ -197,6 +199,28 @@ public class Persistance {
         Gson gson = new Gson();
         ArrayList<EventBrief>eventList=new ArrayList<>();
         Type type = new TypeToken<ArrayList<EventBrief>>() {
+        }.getType();
+        if (json.equals("0")) {
+            eventList = new ArrayList<>();
+        } else {
+            eventList = gson.fromJson(json, type);
+        }
+        return  eventList;
+    }
+
+    public void setReviews(Activity activity, ArrayList<ReviewBrief> eventList){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(this.reviewString, 0).edit();
+        Gson gson = new Gson();
+        editor.putString(this.reviewString, gson.toJson(eventList));
+        editor.apply();
+    }
+
+    public ArrayList<ReviewBrief> getReviews(Activity activity){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(this.reviewString, 0);
+        String json = sharedPreferences.getString(this.reviewString, "0");
+        Gson gson = new Gson();
+        ArrayList<ReviewBrief>eventList=new ArrayList<>();
+        Type type = new TypeToken<ArrayList<ReviewBrief>>() {
         }.getType();
         if (json.equals("0")) {
             eventList = new ArrayList<>();

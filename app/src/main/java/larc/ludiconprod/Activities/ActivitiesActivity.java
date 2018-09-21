@@ -78,6 +78,7 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Event;
+import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.Location.GPSTracker;
 import larc.ludiconprod.Utils.Location.LocationCheckState;
@@ -158,6 +159,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     // HAPPENING NOW AREA
     RelativeLayout happeningNowLayout;
     static Button checkinButton;
+    static Button checkinallButton;
 
     private boolean noGps = false;
     static public int startedEventDate = Integer.MAX_VALUE;
@@ -253,6 +255,20 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             Persistance.getInstance().setHappeningNow(null, activity);
             Persistance.getInstance().setEventToReview(activity, currentEvent);
         }
+    }
+
+    public void getParticipants(String pageNumber, Bundle b, EventDetails eventDetails) {
+
+        Event currentEvent = Persistance.getInstance().getHappeningNow(getActivity());
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> headers = new HashMap<String, String>();
+        HashMap<String, String> urlParams = new HashMap<String, String>();
+        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+        urlParams.put("eventId", currentEvent.id);
+        urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+        urlParams.put("pageNumber", pageNumber);
+        HTTPResponseController.getInstance().getParticipants(params, headers, getActivity(), urlParams, false);
     }
 
     @Override
@@ -587,11 +603,12 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         heartImageMyActivity = (ImageView) v.findViewById(R.id.heartImageMyActivity);
         noActivitiesTextFieldMyActivity = (TextView) v.findViewById(R.id.noActivitiesTextFieldMyActivity);
         pressPlusButtonTextFieldMyActivity = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldMyActivity);
-        progressBarMyEvents = (ProgressBar) v.findViewById(R.id.progressBarMyEvents);
 
         progressBarMyEvents = (ProgressBar) v.findViewById(R.id.progressBarMyEvents);
-        progressBarMyEvents.setIndeterminate(true);
-        progressBarMyEvents.setAlpha(0f);
+        if(progressBarMyEvents != null) {
+            progressBarMyEvents.setIndeterminate(true);
+            progressBarMyEvents.setAlpha(0f);
+        }
 
         if (!isFirstTimeMyEvents) {
             layoutManagerMyActivities = new LinearLayoutManager(getContext());
@@ -671,6 +688,8 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if(HappeningNowStartedAlready){
                 checkinButton = (Button) v.findViewById(R.id.checkinHN);
                 checkinButton.setText("CHECK-OUT");
+                checkinallButton = (Button) v.findViewById(R.id.checkinallHN);
+                checkinallButton.setVisibility(View.GONE);
 
                 buttonState = 1;
 
@@ -712,6 +731,18 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         CircleImageView friends2 = (CircleImageView) v.findViewById(R.id.friends2HN);
         TextView allFriends = (TextView) v.findViewById(R.id.friendsNumberHN);
         checkinButton = (Button) v.findViewById(R.id.checkinHN);
+        checkinallButton = (Button) v.findViewById(R.id.checkinallHN);
+
+        Event happeningEvent = Persistance.getInstance().getHappeningNow(activity);
+        boolean HappeningNowStartedAlready = (happeningEvent != null);
+
+        if (upcomingEvent.creatorId.equals(Persistance.getInstance().getUserInfo(activity).id) && !HappeningNowStartedAlready){
+            checkinallButton.setVisibility(View.VISIBLE);
+            checkinButton.setVisibility(View.GONE);
+        }else{
+            checkinButton.setVisibility(View.VISIBLE);
+            checkinallButton.setVisibility(View.GONE);
+        }
 
         Sport sport = new Sport(upcomingEvent.sportCode);
         String weWillPlayString = "";
@@ -811,6 +842,98 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 urlParams.put("eventId", upcomingEvent.id);
                 urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
                 HTTPResponseController.getInstance().getEventDetails(params, headers, activity, urlParams);
+            }
+        });
+
+        final Bundle b = new Bundle();
+        final EventDetails eventDetails = new EventDetails();
+
+        checkinallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Button not pressed yet -> user press "CHECK-IN"
+                if (buttonState == 0) {
+                    // Check if user is < 1 km away from the place
+                    LocationCheckState locationState = checkedLocation(upcomingEvent);
+
+                    if (locationState == LocationCheckState.LOCATION_OK) {
+
+                        // Yes it is, let's make the check-in for him
+                        HashMap<String, String> params = new HashMap<String, String>();
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                        params.put("eventId", upcomingEvent.id);
+                        HTTPResponseController.getInstance().checkin(params, headers, activity);
+
+                        buttonState = 1;
+
+                        checkinallButton.setText("CHECK-OUT");
+                        HappeningNowLocation happeningNowLocation = new HappeningNowLocation();
+                        happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
+
+                        Persistance.getInstance().setHappeningNow(upcomingEvent, activity);
+                        Persistance.getInstance().setLocation(activity, happeningNowLocation);
+
+                        requestLocationUpdates();
+
+                    } else
+                    if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE){
+                        // No, he is not, don't let him start the event
+                        Toast.makeText(activity, getResources().getString(R.string.go_to_event_location_to_start_sweating_on_points), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(activity, getResources().getString(R.string.we_cant_take_your_location), Toast.LENGTH_LONG).show();
+                    }
+                }
+                // Button is pressed, time is counted -> user press "CHECK-OUT"
+                else if (buttonState == 1) {
+
+                    // Confirmation dialog for stop the event
+                    final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),
+                            "fonts/Quicksand-Medium.ttf");
+                    final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold.ttf");
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
+                    confirmationDialog.show();
+                    confirmationDialog.title.setText(R.string.confirm);
+                    confirmationDialog.title.setTypeface(typeFaceBold);
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_stop_sweating_on_points);
+                    confirmationDialog.message.setTypeface(typeFace);
+                    confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                // User confirms he wants to stop the event
+                                checkinallButton.setText(R.string.check_in_all);
+
+                                getParticipants("0", b, eventDetails);
+
+
+                                buttonState = 0;
+
+                                ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
+                                params.height = 0;
+                                happeningNowLayout.setLayoutParams(params);
+
+                                // Clean up
+                                if (googleApiClient.isConnected()) {
+                                    googleApiClient.disconnect();
+                                }
+                                //LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, (LocationListener) activity);
+
+                                confirmationDialog.dismiss();
+                                Persistance.getInstance().setHappeningNow(upcomingEvent, activity);
+                                Persistance.getInstance().setLocation(activity, null);
+                            }
+                            catch (Exception ex){   ex.printStackTrace();}
+                        }
+                    });
+                    confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            confirmationDialog.dismiss();
+                        }
+                    });
+                }
             }
         });
 
