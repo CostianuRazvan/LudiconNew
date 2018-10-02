@@ -691,12 +691,11 @@ public class UserProfileActivity extends AppCompatActivity implements Response.L
                             }
                         });
                     }else{
-                        RelativeLayout blockUser = (RelativeLayout) findViewById(R.id.blockUser);
-                        ViewGroup.LayoutParams params = blockUser.getLayoutParams();
+                        ViewGroup.LayoutParams params = blocking.getLayoutParams();
                         params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
                         params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
-                        blockUser.setLayoutParams(params);
-                        blockUser.setOnClickListener(new View.OnClickListener() {
+                        blocking.setLayoutParams(params);
+                        blocking.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Intent intent = new Intent(UserProfileActivity.this, BlockUserPopup.class);

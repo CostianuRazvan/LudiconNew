@@ -27,6 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.facebook.login.LoginManager;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -1274,12 +1276,32 @@ public class HTTPResponseController {
                         ((RegisterActivity)activity).isButtonSubmitEnabled = true;
                     }
 
+                   // Log out user
+                    DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+                    userNode.child("activeToken").setValue(false);
+                    Persistance.getInstance().deleteUserProfileInfo(activity);
+                    Log.v("logout", "am dat logout");
+                    SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
+                    preferences.edit().remove("ProfileImage").apply();
+                    activity.finish();
+                    Intent intent = new Intent(activity, IntroActivity.class);
+                    activity.startActivity(intent);
+                    Persistance.getInstance().setHappeningNow(null, activity);
+
                 } catch (Exception e) {
                     e.printStackTrace();
 
-                    LoginManager.getInstance().logOut();
+                    // Log out user
+                    DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+                    userNode.child("activeToken").setValue(false);
+                    Persistance.getInstance().deleteUserProfileInfo(activity);
+                    Log.v("logout", "am dat logout");
+                    SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
+                    preferences.edit().remove("ProfileImage").apply();
+                    activity.finish();
                     Intent intent = new Intent(activity, IntroActivity.class);
                     activity.startActivity(intent);
+                    Persistance.getInstance().setHappeningNow(null, activity);
                 }
 
 
