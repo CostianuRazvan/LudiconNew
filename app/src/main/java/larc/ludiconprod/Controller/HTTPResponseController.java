@@ -87,7 +87,7 @@ import static larc.ludiconprod.Activities.FullHistory.pastEventList;
 
 public class HTTPResponseController {
 
-    String prodServer = "https://ludicon.app/";
+    String prodServer = "http://167.99.253.124/";  //"https://ludicon.app/";
     public static final String firebaseRefference = "https://ludicon-chat-cf900.firebaseio.com/";
     public static final String API_KEY = "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33";
 
@@ -136,8 +136,6 @@ public class HTTPResponseController {
             IntroActivity.profileImage.setAlpha(0.3f);
             IntroActivity.profileImage.animate().alpha(1f).setDuration(1000);
         }
-
-
     }
 
     private Response.Listener<JSONObject> createRequestSuccessListener() {

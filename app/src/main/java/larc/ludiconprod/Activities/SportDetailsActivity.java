@@ -394,7 +394,7 @@ public class SportDetailsActivity extends Activity {
 
                  HashMap<String, String> headers = new HashMap<String, String>();
                  headers.put("authKey", Persistance.getInstance().getUserInfo(SportDetailsActivity.this).authKey);
-                 HTTPResponseController.getInstance().returnResponse(params, headers, SportDetailsActivity.this, "https://ludicon.app/api/user/");
+                 HTTPResponseController.getInstance().returnResponse(params, headers, SportDetailsActivity.this, "http://167.99.253.124/api/user/");
                 SharedPreferences settings = SportDetailsActivity.this.getSharedPreferences("ProfileImage", SportDetailsActivity.this.MODE_PRIVATE);
                 settings.edit().clear().commit();
 

@@ -174,7 +174,7 @@ public class LoginActivity extends Activity {
                         HashMap<String, String> headers = new HashMap<String, String>();
                         headers.put("apiKey", HTTPResponseController.API_KEY);
                        // headers.put("Content-Type","application/json;charset=utf-8");
-                        HTTPResponseController.getInstance().returnResponse(params, headers, LoginActivity.this, "https://ludicon.app/api/login/");
+                        HTTPResponseController.getInstance().returnResponse(params, headers, LoginActivity.this, "http://167.99.253.124/api/login/");
                         progressBar.setIndeterminate(true);
                         progressBar.setAlpha(1f);
                     }
