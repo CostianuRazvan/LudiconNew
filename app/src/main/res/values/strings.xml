@@ -193,12 +193,12 @@
     <string name="save_changes">SAVE CHANGES</string>
     <string name="no_quests_yet">No quests, yet!</string>
     <string name="come_back_later_join_activities_10_and_gain_ludicoins">Come back later. Exciting quests will be available for you!</string>
-    <string name="discount_code">DISCOUNT CODE:</string>
+    <string name="discount_code">CANCEL QUEST</string>
     <string name="valid_till_20_july_2017">Valid till 20 July 2017</string>
     <string name="_20_off">20% OFF</string>
     <string name="smart_football_club">Smart Football Club</string>
     <string name="use_this_voucher_to_recive_1_off_for_all_football_activities_from_monday_yo_friday">Use this voucher to recive 1% OFF for all football activities from Monday yo Friday</string>
-    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Use Ludicoins to redeem our partners prizes</string>
+    <string name="use_ludicoins_to_redeem_our_10_partners_prises">Accept a quest and claim your title!</string>
     <string name="browse_quests">BROWSE QUESTS</string>
     <string name="activity1">Activity</string>
     <string name="unfollow">UNFOLLOW</string>
@@ -258,7 +258,7 @@
     <string name="cool">Cool!</string>
     <string name="its_you">It\'s you :)</string>
     <string name="remove">REMOVE</string>
-    <string name="are_you_sure_you_want_to_reedem_this_coupon">Are you sure you want to reedem this coupon?</string>
+    <string name="are_you_sure_you_want_to_reedem_this_coupon">Are you sure you want to start this quest?</string>
 
     <string name="go_to_eventDetails">Go to Event Details</string>
     <string name="go_to_profileDetails">Go to Profile Details</string>
@@ -352,4 +352,7 @@
     <string name="day">day</string>
     <string name="days">days</string>
     <string name="select_location1">Select location</string>
+    <string name="progress">PROGRESS</string>
+    <string name="reward_text">REWARD</string>
+    <string name="are_you_sure_you_want_to_cancel_this_quest">Are you sure you want to cancel this quest?</string>
 </resources>

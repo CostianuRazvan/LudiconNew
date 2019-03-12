@@ -61,6 +61,35 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    >
+
+                    <TextView
+                        android:id="@+id/pointsToWinCoupons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="And gain 125 "
+                        android:textColor="#02b9ad"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/pointsIMV"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_toEndOf="@+id/pointsToWinCoupons"
+                        android:src="@drawable/ic_user_points" />
+                </RelativeLayout>
+            </RelativeLayout>
+
         </LinearLayout>
 
         <TextView

@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +27,10 @@ import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Adapters.MainActivity.MyAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
+import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Coupon;
+import larc.ludiconprod.Utils.Quest;
 
 /**
  * Created by alex_ on 18.08.2017.
@@ -34,14 +38,14 @@ import larc.ludiconprod.Utils.Coupon;
 
 public class MyCouponsAdapter extends BaseAdapter implements ListAdapter {
 
-    private ArrayList<Coupon> list = new ArrayList<>();
+    private ArrayList<Quest> list = new ArrayList<>();
     private Context context;
     private Activity activity;
     private Resources resources;
     private CouponsActivity fragment;
     private final ListView listView;
 
-    public MyCouponsAdapter(ArrayList<Coupon> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
+    public MyCouponsAdapter(ArrayList<Quest> list, Context context, Activity activity, Resources resources, CouponsActivity fragment) {
         this.list = list;
         this.context = context;
         this.activity = activity;
@@ -71,7 +75,7 @@ public class MyCouponsAdapter extends BaseAdapter implements ListAdapter {
         if (list.size() > 0) {
             final CouponsAdapter.ViewHolder holder;
 
-            final Coupon currentCoupon = list.get(i);
+            final Quest currentQuest = list.get(i);
 
             // Initialize the view
             if (view == null) {
@@ -93,6 +97,10 @@ public class MyCouponsAdapter extends BaseAdapter implements ListAdapter {
                 holder.validDate.setTypeface(typeFace);
                 holder.ludicoinsCode = (TextView) view.findViewById(R.id.discountCode);
                 holder.ludicoinsCode.setTypeface(typeFaceBold);
+                holder.pointsToWin =  (TextView) view.findViewById(R.id.pointsToWin);
+                holder.pointsToWin.setTypeface(typeFace);
+                holder.progressValue =  (TextView) view.findViewById(R.id.progressValue);
+                holder.progressValue.setTypeface(typeFace);
 
                 view.setTag(holder);
             } else {
@@ -101,20 +109,82 @@ public class MyCouponsAdapter extends BaseAdapter implements ListAdapter {
 
             view.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-            holder.title.setText(currentCoupon.title);
-            if (!currentCoupon.companyPicture.equals("")) {
-                Bitmap bitmap = MyAdapter.decodeBase64(currentCoupon.companyPicture);
+            holder.title.setText(currentQuest.title);
+            if (!currentQuest.picture.equals("")) {
+                Bitmap bitmap = MyAdapter.decodeBase64(currentQuest.picture);
                 holder.locationImage.setImageBitmap(bitmap);
+            } else {
+                holder.locationImage.setImageResource(R.drawable.ph_company);
             }
 
-            holder.location.setText(currentCoupon.companyName);
-            holder.title.setText(currentCoupon.title);
-            holder.ludicoinsCode.setText("Discount code: " + currentCoupon.discountCode);
-            holder.description.setText(currentCoupon.description);
+            holder.location.setText("Created by Ludicon"); //currentQuest.companyName);
+            holder.title.setText(currentQuest.title);
+            ///holder.ludicoinsCode.setText("Discount code: " + currentCoupon.discountCode);
+            holder.description.setText(currentQuest.description);
 
-            Date date = new Date(currentCoupon.expiryDate * 1000);
-            SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-            holder.validDate.setText("Valid till " + fmt.format(date));
+            holder.pointsToWin.setText("And gain " + currentQuest.points);
+
+            SpannableStringBuilder spanTxt = new SpannableStringBuilder( holder.pointsToWin.getText());
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#400c3855")), 0, 9, 0);
+            spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#02b9ad")), 9, spanTxt.length(), 0);
+            holder.pointsToWin.setText(spanTxt);
+
+            if(currentQuest.expiryDate == 0){
+                holder.validDate.setText(activity.getResources().getString(R.string.unlimited_time));
+            }
+            else {
+                Date date = new Date(currentQuest.expiryDate * 1000);
+                SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+
+                holder.validDate.setText(activity.getResources().getString(R.string.valid_till) + " " + fmt.format(date));
+            }
+
+            if(currentQuest.status == 2) {
+                holder.progressValue.setText("COMPLETE");
+            }
+            else{
+                holder.progressValue.setText(currentQuest.currentProgress + "/" + currentQuest.totalProgress);
+            }
+
+            final View currView = view;
+            final Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");
+            final Typeface typeFaceBold = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Bold.ttf");
+
+            view.findViewById(R.id.discountCodeLayout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currView.setBackgroundColor(Color.parseColor("#f5f5f5"));
+
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity);
+                    confirmationDialog.show();
+                    confirmationDialog.title.setText(R.string.confirm);
+                    confirmationDialog.title.setTypeface(typeFaceBold);
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_cancel_this_quest);
+                    confirmationDialog.message.setTypeface(typeFace);
+
+                    confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            HashMap<String, String> params = new HashMap<String, String>();
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+
+                            params.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+                            params.put("questId", currentQuest.questId);
+                            HTTPResponseController.getInstance().cancelQuest(params, headers, activity, fragment.onRequestSuccessListener(), fragment);
+                            confirmationDialog.dismiss();
+                        }
+                    });
+
+                    confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            confirmationDialog.dismiss();
+                        }
+                    });
+                }
+            });
+
         }
 
         return view;

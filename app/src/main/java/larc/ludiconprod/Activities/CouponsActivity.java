@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.android.volley.NetworkError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.squareup.picasso.Downloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import larc.ludiconprod.Adapters.ChatAndFriends.FriendsAdapter;
 import larc.ludiconprod.Adapters.CouponsActivity.CouponsAdapter;
 import larc.ludiconprod.Adapters.CouponsActivity.MyCouponsAdapter;
 import larc.ludiconprod.Controller.HTTPResponseController;
@@ -62,7 +64,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
     private MyCouponsAdapter myCouponsAdapter;
 
     public ArrayList<Quest> quests = new ArrayList<>();
-    public ArrayList<Coupon> myCoupons = new ArrayList<>();
+    public ArrayList<Quest> myQuests = new ArrayList<>();
 
     boolean firstTimeCoupons = false;
     public int couponsPage = 0;
@@ -146,7 +148,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         String urlParams = "";
 
         urlParams += "userId=" + Persistance.getInstance().getUserInfo(activity).id;
-        urlParams += "&page=" + pageNumber;
+        //urlParams += "&page=" + pageNumber;
 
         HTTPResponseController.getInstance().getMyCoupons(urlParams, headers, this, new Response.Listener<JSONObject>() {
             @Override
@@ -200,6 +202,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
             heartImage.setVisibility(View.INVISIBLE);
             noCoupons.setVisibility(View.INVISIBLE);
             discoverActivities.setVisibility(View.INVISIBLE);
+            noMyCouponsButton.setVisibility(View.INVISIBLE);
             noMyCouponsButton.setEnabled(false);
         }
 
@@ -269,7 +272,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         if (!this.firstTimeMyCoupons) {
             listView.setAdapter(this.myCouponsAdapter);
         }
-        if (this.myCoupons.size() == 0) {
+        if (this.myQuests.size() == 0) {
             heartImage.setVisibility(View.VISIBLE);
             noCoupons.setVisibility(View.VISIBLE);
             discoverActivities.setVisibility(View.VISIBLE);
@@ -290,6 +293,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         }
 
         if (listView != null) {
+            /*
             listView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(final View v, MotionEvent event) {
@@ -305,12 +309,13 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
                     return false;
                 }
             });
+            */
         }
         if (!this.addedSwipeMyCoupons) {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    myCoupons.clear();
+                    myQuests.clear();
                     myCouponsPage = 0;
                     getMyCoupons("0");
                     firstPageMyCoupons = true;
@@ -401,7 +406,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.couponsSwapRefresh);
         mSwipeRefreshLayout.setRefreshing(false);
 
-        myCoupons.clear();
+        myQuests.clear();
         myCouponsPage = 0;
         getMyCoupons("0");
         firstPageMyCoupons = true;
@@ -441,7 +446,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
             this.tabs.setViewPager(pager);
 
             this.couponsAdapter = new CouponsAdapter(this.quests, activity.getApplicationContext(), activity, getResources(), this);
-            this.myCouponsAdapter = new MyCouponsAdapter(this.myCoupons, activity.getApplicationContext(), activity, getResources(), this);
+            this.myCouponsAdapter = new MyCouponsAdapter(this.myQuests, activity.getApplicationContext(), activity, getResources(), this);
 
             getCoupons("0");
             getMyCoupons("0");
@@ -473,7 +478,7 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
                 quest = new Quest(
                   o.getString("questID"), o.getString("title"), o.getString("description"),
                         o.getString("image"), (o.getString("expirydate") == null || o.getString("expirydate").compareTo("null") == 0) ? 0 : Long.parseLong(o.getString("expirydate")),
-                        Integer.parseInt(o.getString("difficulty")), Integer.parseInt(o.getString("participantsCount"))
+                        Integer.parseInt(o.getString("difficulty")), 0 /*Integer.parseInt(o.getString("participantsCount"))*/, Integer.parseInt(o.getString("points"))
                 );
 
                 this.quests.add(quest);
@@ -495,36 +500,28 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
         }
 
         try {
-            JSONArray coupons = response.getJSONArray("coupons");
+            JSONArray myQuests = response.getJSONArray("quests");
 
             if (this.myCouponsPage == 0) {
-                this.myCoupons.clear();
+                this.myQuests.clear();
             }
 
-            Coupon c;
-            for (int i = 0; i < coupons.length(); ++i) {
-                JSONObject o = coupons.getJSONObject(i);
-                c = new Coupon();
-                c.couponBlockId = o.getString("couponBlockId");
-                c.title = o.getString("title");
-                c.description = o.getString("description");
-                if(o.getString("expiryDate") != null && o.getString("expiryDate").compareTo(" ") != 0) {
-                    c.expiryDate = Long.parseLong(o.getString("expiryDate"));
-                }
-                else{
-                    c.expiryDate = 0;
-                }
-                c.numberOfCoupons = Integer.parseInt(o.getString("numberOfCoupons"));
-                c.ludicoins = Integer.parseInt(o.getString("ludicoins"));
-                c.companyPicture = o.getString("companyPicture");
-                c.companyName = o.getString("companyName");
-                c.discountCode = o.getString("discountCode");
+            Quest quest;
+            for (int i = 0; i < myQuests.length(); ++i) {
+                JSONObject o = myQuests.getJSONObject(i);
 
-                this.myCoupons.add(c);
+                quest = new Quest(
+                        o.getString("questID"), o.getString("title"), o.getString("description"),
+                        o.getString("image"), (o.getString("expirydate") == null || o.getString("expirydate").compareTo("null") == 0) ? 0 : Long.parseLong(o.getString("expirydate")),
+                        Integer.parseInt(o.getString("difficulty")), Integer.parseInt(o.getString("status")), Integer.parseInt(o.getString("currentprogress")), Integer.parseInt(o.getString("totalprogress")),
+                        (o.getString("completiondate") == null || o.getString("completiondate").compareTo("null") == 0) ? 0 : Long.parseLong(o.getString("completiondate")) , Integer.parseInt(o.getString("points"))
+                );
+
+                this.myQuests.add(quest);
             }
 
             if (this.myCouponsPage == 0) {
-                Persistance.getInstance().setMyCouponsCache(this.myCoupons, super.getActivity());
+                //Persistance.getInstance().setMyCouponsCache(this.myQuests, super.getActivity());
             }
 
             this.updateMyCouponsList();
@@ -557,12 +554,27 @@ public class CouponsActivity extends Fragment implements Response.ErrorListener,
             this.firstPageCoupons = true;
             this.couponsPage = 0;
 
-            this.myCoupons.clear();
+            this.myQuests.clear();
             this.getMyCoupons("0");
             this.firstPageMyCoupons = true;
             this.myCouponsPage = 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Response.Listener<JSONObject> onRequestSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                getCoupons("0");
+                getMyCoupons("0");
+                try {
+                    Toast.makeText(mContext, jsonObject.getString("ok"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
 }
