@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="larc.ludiconprod"
-    android:versionCode="50"
-    android:versionName="2.76" >
+    android:versionCode="58"
+    android:versionName="2.95" >
 
     <uses-sdk
-        android:minSdkVersion="21"
-        android:targetSdkVersion="20" />
+        android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -302,11 +301,39 @@
             android:theme="@style/AppTheme.CustomTheme1">
         </activity>
 
-        <activity android:name=".Activities.RateReview"
+        <activity android:name=".Activities.ReviewEvent"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/AppTheme.CustomTheme1">
         </activity>
+
+        <activity android:name=".Activities.ReviewLocation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
+
+        <activity android:name=".Activities.ReviewParticipants"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
+
+        <activity android:name=".Activities.FullPageView"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
+
+        <activity android:name=".Activities.CheckInAll"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
+
+        <activity android:name=".Activities.BlockUserPopup"
+            android:theme="@style/AppTheme.CustomTheme1">
+        </activity>
+
     </application>
 
 </manifest>
