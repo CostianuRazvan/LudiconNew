@@ -123,7 +123,7 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
     EventDetails eventDetails;
     Double lat = Double.MAX_VALUE;
     Double lng = Double.MAX_VALUE;
-    public boolean isFormBased = true;
+    public boolean isFormBased;
     public ArrayList<String> formParameters = new ArrayList<String>();
 
     RadioButton yes;
@@ -435,8 +435,6 @@ public class CreateNewActivity extends Activity implements AdapterView.OnItemSel
         yesOrNoSwitch = (RadioGroup) findViewById(R.id.yesOrNoSwitch);
         yes = (RadioButton) findViewById(R.id.yes);
         no = (RadioButton) findViewById(R.id.no);
-        yes.setTypeface(typeFace);
-        no.setTypeface(typeFace);
         enrollmentFields = (TextView) findViewById(R.id.enrollmentFields);
         enrollmentFields1 = (LinearLayout) findViewById(R.id.enrollmentFields1);
         enrollmentFields2 = (LinearLayout) findViewById(R.id.enrollmentFields2);

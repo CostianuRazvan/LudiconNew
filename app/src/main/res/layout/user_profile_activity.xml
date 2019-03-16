@@ -209,6 +209,101 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:id="@+id/rateLayout">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/socialRatingUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@string/fontmedium"
+                        android:text="@string/social_rating"
+                        android:textColor="#0c3855"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/countSocialRateUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@string/fontmedium"
+                        android:text="Based on 23 reviews"
+                        android:textColor="#acb8c1"
+                        android:textSize="12sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/socialRateUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@string/fontmedium"
+                        android:text="4.23"
+                        android:textColor="#d4498b"
+                        android:textSize="16dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:id="@+id/reviewLayout">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/socialReviews">
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:id="@+id/buttonLayout">
+
+                <Button
+                    android:id="@+id/allReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/pink_stroke_rounded_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@string/view_all_reviews"
+                    android:textColor="#d4498b"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@string/fontmedium"/>
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

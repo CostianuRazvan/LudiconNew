@@ -102,7 +102,7 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
                 spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
                 spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 13, 46, 0);
                 spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
-                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 46, 55, 0);
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 46, spanTxt.length(), 0);
 
             }else if (Locale.getDefault().getLanguage().startsWith("fr")) {
                 spanTxt.append(fragment.getResources().getString(R.string.be_on) + " ");
@@ -113,7 +113,7 @@ public class LeaderboardAdapter extends BaseAdapter implements ListAdapter {
                 spanTxt.append(fragment.getResources().getString(R.string.at_the_end_of_the_month_and_earn) + " ");
                 spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#0c3855")), 20, 52,0);
                 spanTxt.append(fragment.getResources().getString(R.string.ludicoins));
-                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 52, 63,0);
+                spanTxt.setSpan(new ForegroundColorSpan(Color.parseColor("#fcb851")), 52, spanTxt.length(),0);
             }
             ((TextView) view.findViewById(R.id.topText)).setText(spanTxt, TextView.BufferType.SPANNABLE);
 

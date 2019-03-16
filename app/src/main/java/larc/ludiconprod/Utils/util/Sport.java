@@ -49,7 +49,7 @@ public class Sport {
             SPORT_MAP.put("PIN", "ping-pong");
             SPORT_MAP.put("SQU", "squash");
             SPORT_MAP.put("TEN", "tennis");
-            SPORT_MAP.put("VOL", "vollyball");
+            SPORT_MAP.put("VOL", "volley-ball");
         }
     }
     public final String sportName;

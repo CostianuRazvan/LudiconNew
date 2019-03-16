@@ -156,6 +156,149 @@
                     android:hint="@string/age"
                     android:layout_marginBottom="8dp"/>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_reviewing_preferences"
+                        android:textColor="#0c3855"
+                        android:fontFamily="@string/fontmedium"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/popReview"
+                        android:textSize="16sp"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/popReview"
+                        android:id="@+id/eventLabel"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_event"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_calendar"
+                            android:id="@+id/imageCalendar"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imageCalendar"
+                            android:text="@string/review_events"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:layout_marginTop="13dp"
+                            android:textColor="#0c3855"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_event"/>
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/eventLabel"
+                        android:id="@+id/locationLabel"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_location"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_info"
+                            android:id="@+id/imageLocation"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imageLocation"
+                            android:text="@string/review_locations"
+                            android:textSize="16sp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:textColor="#0c3855"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_location"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/locationLabel"
+                        android:id="@+id/usersLabel"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_edittext">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_button_transparent"
+                            android:id="@+id/button_check_users"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_user"
+                            android:id="@+id/imageUsers"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="8dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/imageUsers"
+                            android:text="@string/review_users"
+                            android:textSize="16sp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginLeft="5dp"
+                            android:fontFamily="@string/fontmedium"
+                            android:textColor="#0c3855"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_check"
+                            android:id="@+id/check_users"/>
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
                 <Button
                     android:id="@+id/editPasswordButton"
                     android:layout_width="match_parent"

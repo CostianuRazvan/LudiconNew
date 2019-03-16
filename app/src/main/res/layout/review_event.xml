@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_modal_gradient">
+
+    <TextView
+        android:id="@+id/rateEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:text="@string/how_was_the_event"
+        android:textColor="#ffffff"
+        android:textSize="18dp"
+        android:fontFamily="@string/fontmedium"/>
+
+
+    <RelativeLayout
+        android:id="@+id/stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rateEvent"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/stars1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_star_line"
+            android:layout_marginRight="5dp"/>
+
+        <ImageView
+            android:id="@+id/stars2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/stars1"
+            android:src="@drawable/icon_star_line"
+            android:layout_marginRight="5dp"/>
+
+        <ImageView
+            android:id="@+id/stars3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/stars2"
+            android:src="@drawable/icon_star_line"
+            android:layout_marginRight="5dp"/>
+
+        <ImageView
+            android:id="@+id/stars4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/stars3"
+            android:src="@drawable/icon_star_line"
+            android:layout_marginRight="5dp"/>
+
+        <ImageView
+            android:id="@+id/stars5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/stars4"
+            android:src="@drawable/icon_star_line" />
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rate"
+        android:layout_below="@+id/stars"
+        android:text="ASDFGG"
+        android:layout_centerHorizontal="true"
+        android:textSize="18dp"
+        android:textColor="#ffffff"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@string/fontmedium"/>
+
+
+    <EditText
+        android:id="@+id/review"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_review"
+        android:hint="@string/write_your_feedback"
+        android:textColorHint="#ffffff"
+        android:textSize="12dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="50dp"
+        android:layout_below="@+id/rate"
+        android:textColor="#ffffff"/>
+
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_below="@+id/review"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/white_button_selector"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:text="@string/submit"
+        android:textColor="#d85c97"
+        android:textSize="14dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@string/fontmedium"/>
+
+    <!-- </RelativeLayout> -->
+
+
+</RelativeLayout>
+

@@ -20,13 +20,13 @@
             android:layout_height="40dp"
             android:layout_marginRight="8dp"
             android:id="@+id/otherParticipantImage"
-            android:background="@drawable/ic_bnav_user_selected"/>
+            android:background="@drawable/ph_user"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/otherParticipantName"
-            android:textColor="@color/black"
+            android:textColor="#0c3855"
             android:textSize="14dp"
             android:layout_toRightOf="@+id/otherParticipantImage"
             android:text = "Ludicon"/>
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/otherParticipantImage"
         android:layout_toLeftOf="@+id/otherParticipantPadding"
-        android:layout_marginTop="20dp">
+        android:id="@+id/userLayout">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -157,7 +157,7 @@
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
-            android:background="@drawable/ic_bnav_user_selected" />
+            android:background="@drawable/ph_user" />
 
         <TextView
             android:id="@+id/topOtherParticipantName"

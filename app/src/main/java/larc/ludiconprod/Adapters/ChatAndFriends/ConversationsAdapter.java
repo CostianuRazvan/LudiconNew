@@ -133,7 +133,7 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                 holder = (ConversationsAdapter.ViewHolder) view.getTag();
             }
             //clear layout
-            holder.chatParticipantImage.setImageResource(R.drawable.ic_user);
+            holder.chatParticipantImage.setImageResource(R.drawable.ph_user);
             if (threadsList.size() > 0 && threadsList.size() > position && threadsList.get(position) != null) {
                 threadsList.get(position).cancel();
                 threadsList.remove(position);
@@ -203,6 +203,7 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                     } else {
                         intent.putExtra("groupChat", 0);
                     }
+                    intent.putExtra("eventId", currentChat.eventId);
 
                     activity.startActivity(intent);
                     ChatAndFriendsActivity.isOnChatPage = false;
@@ -287,9 +288,15 @@ public class ConversationsAdapter extends BaseAdapter implements ListAdapter {
                     } else {
                         String displayDate = "";
                         try {
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-                            java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
-                            displayDate = formatter.format(date);
+                            if( Locale.getDefault().getLanguage().startsWith("en") || Locale.getDefault().getLanguage().startsWith("ro")) {
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+                                java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
+                                displayDate = formatter.format(date);
+                            }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+                                java.util.Date date = new java.util.Date(new Double(currentChat.lastMessageTime * 1000).longValue());
+                                displayDate = formatter.format(date);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

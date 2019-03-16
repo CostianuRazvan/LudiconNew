@@ -111,91 +111,89 @@ public class IntroActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        try {
+            super.onCreate(savedInstanceState);
+            Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+            FacebookSdk.sdkInitialize(getApplicationContext());
 
+            Calligrapher calligrapher = new Calligrapher(this);
+            calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
 
-        Calligrapher calligrapher = new Calligrapher(this);
-        calligrapher.setFont(this, "fonts/Quicksand-Medium.ttf", true);
+            setContentView(R.layout.intro_activity);
+            logo = (ImageView) findViewById(R.id.logo);
+            logo.setImageResource(R.drawable.logo);
+            // set font
+            Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
 
-
-        setContentView(R.layout.intro_activity);
-        logo = (ImageView) findViewById(R.id.logo);
-        logo.setImageResource(R.drawable.logo);
-        // set font
-        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Bold.ttf");
-
-
-        facebookButton = (LoginButton) findViewById(R.id.facebookButton);
+            facebookButton = (LoginButton) findViewById(R.id.facebookButton);
         /*facebookButton.setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
         facebookButton.setLoginBehavior(LoginBehavior.NATIVE_ONLY);*/
-        //facebookButton.setLoginBehavior(LoginBehavior.WEB_ONLY);
-        facebookButton.setTypeface(typeFace);
-        facebookButton.setReadPermissions(Arrays.asList("public_profile, email, user_friends"));
-        loginButton = (Button) findViewById(R.id.loginButton);
-        loginButton.setTypeface(typeFace);
-        termsAndPrivacyPolicy = (TextView) findViewById(R.id.termsAndPrivacyPolicy);
+            //facebookButton.setLoginBehavior(LoginBehavior.WEB_ONLY);
+            facebookButton.setTypeface(typeFace);
+            facebookButton.setReadPermissions(Arrays.asList("public_profile, email, user_friends"));
 
-        registerButton = (Button) findViewById(R.id.registerButton);
-        registerButton.setTypeface(typeFace);
-        infoTextView = (TextView) findViewById(R.id.textView);
-        profileImage = (ImageView) findViewById(R.id.profileImage);
-        logo.animate().translationY(-300f).setDuration(1000);
+            loginButton = (Button) findViewById(R.id.loginButton);
+            loginButton.setTypeface(typeFace);
+            termsAndPrivacyPolicy = (TextView) findViewById(R.id.termsAndPrivacyPolicy);
 
-        callbackManager = CallbackManager.Factory.create();
-        if (Persistance.getInstance().getUserInfo(this).id == null) {
-            facebookButton.setVisibility(View.VISIBLE);
-            loginButton.setVisibility(View.VISIBLE);
-            registerButton.setVisibility(View.VISIBLE);
-            infoTextView.setVisibility(View.VISIBLE);
-            termsAndPrivacyPolicy.setVisibility(View.VISIBLE);
-            facebookButton.animate().alpha(1f).setDuration(1000);
-            loginButton.animate().alpha(1f).setDuration(1000);
-            registerButton.animate().alpha(1f).setDuration(1000);
-            infoTextView.animate().alpha(1f).setDuration(1000);
-            go = true;
-        }
+            registerButton = (Button) findViewById(R.id.registerButton);
+            registerButton.setTypeface(typeFace);
+            infoTextView = (TextView) findViewById(R.id.textView);
+            profileImage = (ImageView) findViewById(R.id.profileImage);
+            logo.animate().translationY(-300f).setDuration(1000);
 
+            callbackManager = CallbackManager.Factory.create();
 
-        facebookLogin();
-        System.out.println(Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId + " fbid");
-        if (Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId != null && Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId.equals("")) {
-            goToActivity();
-        } else
-        if (!go) {
-            final GraphRequest request = new GraphRequest(
-                    AccessToken.getCurrentAccessToken(),
-                    "/me/friends",
-                    null,
-                    HttpMethod.GET,
-                    new GraphRequest.Callback() {
-                        public void onCompleted(GraphResponse response) {
-                            final ArrayList<String> friends = new ArrayList<String>();
-                            JSONArray friendsList;
-                            try {
-                                if(response != null && response.getJSONObject() != null) {
-                                    friendsList = response.getJSONObject().getJSONArray("data");
-                                    for (int l = 0; l < friendsList.length(); l++) {
-                                        friends.add(friendsList.getJSONObject(l).getString("id"));
+            if (Persistance.getInstance().getUserInfo(this).id == null) {
+                facebookButton.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.VISIBLE);
+                registerButton.setVisibility(View.VISIBLE);
+                infoTextView.setVisibility(View.VISIBLE);
+                termsAndPrivacyPolicy.setVisibility(View.VISIBLE);
+                facebookButton.animate().alpha(1f).setDuration(1000);
+                loginButton.animate().alpha(1f).setDuration(1000);
+                registerButton.animate().alpha(1f).setDuration(1000);
+                infoTextView.animate().alpha(1f).setDuration(1000);
+                go = true;
+            }
+
+            facebookLogin();
+            System.out.println(Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId + " fbid");
+            if (Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId != null && Persistance.getInstance().getUserInfo(IntroActivity.this).facebookId.equals("")) {
+                goToActivity();
+            } else if (!go) {
+                final GraphRequest request = new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/friends",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                final ArrayList<String> friends = new ArrayList<String>();
+                                JSONArray friendsList;
+                                try {
+                                    if (response != null && response.getJSONObject() != null) {
+                                        friendsList = response.getJSONObject().getJSONArray("data");
+                                        for (int l = 0; l < friendsList.length(); l++) {
+                                            friends.add(friendsList.getJSONObject(l).getString("id"));
+                                        }
                                     }
-                                }
 
-                                String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
-                                String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
-                                String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
-                                String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
-                                HashMap<String, String> params = new HashMap<String, String>();
-                                params.put("firstName", firstName);
-                                params.put("lastName", lastName);
-                                params.put("email", email);
-                                params.put("password", password);
-                                params.put("isCustom", "1");
-                                if(response != null && response.getJSONObject() != null) {
-                                    for (int i = 0; i < friends.size(); i++) {
-                                        params.put("fbFriends[" + i + "]", friends.get(i));
+                                    String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
+                                    String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
+                                    String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
+                                    String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
+                                    HashMap<String, String> params = new HashMap<String, String>();
+                                    params.put("firstName", firstName);
+                                    params.put("lastName", lastName);
+                                    params.put("email", email);
+                                    params.put("password", password);
+                                    params.put("isCustom", "1");
+                                    if (response != null && response.getJSONObject() != null) {
+                                        for (int i = 0; i < friends.size(); i++) {
+                                            params.put("fbFriends[" + i + "]", friends.get(i));
+                                        }
                                     }
-                                }
 
                                 HashMap<String, String> headers = new HashMap<String, String>();
                                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
@@ -203,16 +201,16 @@ public class IntroActivity extends Activity {
                             } catch (Exception e) {
                                 e.printStackTrace();
 
-                                String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
-                                String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
-                                String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
-                                String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
-                                HashMap<String, String> params = new HashMap<String, String>();
-                                params.put("firstName", firstName);
-                                params.put("lastName", lastName);
-                                params.put("email", email);
-                                params.put("password", password);
-                                params.put("isCustom", "1");
+                                    String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
+                                    String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
+                                    String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
+                                    String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
+                                    HashMap<String, String> params = new HashMap<String, String>();
+                                    params.put("firstName", firstName);
+                                    params.put("lastName", lastName);
+                                    params.put("email", email);
+                                    params.put("password", password);
+                                    params.put("isCustom", "1");
 
                                 HashMap<String, String> headers = new HashMap<String, String>();
                                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
@@ -222,29 +220,29 @@ public class IntroActivity extends Activity {
                     }
             );//.executeAsync();
 
-            // Run facebook graphRequest.
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    GraphResponse gResponse = request.executeAndWait();
-                }
-            });
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                // Run facebook graphRequest.
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GraphResponse gResponse = request.executeAndWait();
+                    }
+                });
+                t.start();
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
 
-                String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
-                String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
-                String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
-                String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("firstName", firstName);
-                params.put("lastName", lastName);
-                params.put("email", email);
-                params.put("password", password);
-                params.put("isCustom", "1");
+                    String firstName = Persistance.getInstance().getUserInfo(IntroActivity.this).firstName;
+                    String lastName = Persistance.getInstance().getUserInfo(IntroActivity.this).lastName;
+                    String email = Persistance.getInstance().getUserInfo(IntroActivity.this).email;
+                    String password = Persistance.getInstance().getUserInfo(IntroActivity.this).password;
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("firstName", firstName);
+                    params.put("lastName", lastName);
+                    params.put("email", email);
+                    params.put("password", password);
+                    params.put("isCustom", "1");
 
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("apiKey", "b0a83e90-4ee7-49b7-9200-fdc5af8c2d33");
@@ -252,76 +250,89 @@ public class IntroActivity extends Activity {
             }
         }
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+            loginButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-        registerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+            registerButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                    startActivity(intent);
+                }
+            });
 
-        typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
-        termsAndPrivacyPolicy.setTypeface(typeFace);
-        infoTextView.setTypeface(typeFace);
-        termsAndPrivacyPolicy.setText(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)), TextView.BufferType.SPANNABLE);
-        SpannableString ss = new SpannableString(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)));
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.ludicon.ro/documents/TermsOfUse.pdf"));
-                startActivity(browserIntent);
-            }
+            typeFace = Typeface.createFromAsset(getAssets(), "fonts/Quicksand-Medium.ttf");
+            termsAndPrivacyPolicy.setTypeface(typeFace);
+            infoTextView.setTypeface(typeFace);
+            termsAndPrivacyPolicy.setText(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)), TextView.BufferType.SPANNABLE);
+            SpannableString ss = new SpannableString(Html.fromHtml(getResources().getString(R.string.by_continuing_you_agree_our_nterms_and_privacy_policy)));
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.ludicon.ro/documents/TermsOfUse.pdf"));
+                    startActivity(browserIntent);
+                }
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-            }
-        };
-        ClickableSpan clickableSpan2 = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.ludicon.ro/documents/PrivacyPolicy.pdf"));
-                startActivity(browserIntent);
-            }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                }
+            };
+            ClickableSpan clickableSpan2 = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.ludicon.ro/documents/PrivacyPolicy.pdf"));
+                    startActivity(browserIntent);
+                }
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                }
+            };
+            if (Locale.getDefault().getLanguage().startsWith("en")) {
+                ss.setSpan(clickableSpan, 31, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 31, 36, 0);
+                ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 14, termsAndPrivacyPolicy
+                        .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 14,
+                        termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
+                ss.setSpan(clickableSpan, 50, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 50, 59, 0);
+                ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 29, termsAndPrivacyPolicy
+                        .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 29,
+                        termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (Locale.getDefault().getLanguage().startsWith("fr")) {
+                ss.setSpan(clickableSpan, 33, 53, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 33, 53, 0);
+                ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 28, termsAndPrivacyPolicy
+                        .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 28,
+                        termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-        };
-        if( Locale.getDefault().getLanguage().startsWith("en")) {
-            ss.setSpan(clickableSpan, 31, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 31, 36, 0);
-            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 14, termsAndPrivacyPolicy
-                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 14,
-                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }else if (Locale.getDefault().getLanguage().startsWith("ro")){
-            ss.setSpan(clickableSpan, 50, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 50, 59, 0);
-            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 29, termsAndPrivacyPolicy
-                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 29,
-                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }else if (Locale.getDefault().getLanguage().startsWith("fr")){
-            ss.setSpan(clickableSpan, 33, 53, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), 33, 53, 0);
-            ss.setSpan(clickableSpan2, termsAndPrivacyPolicy.getText().toString().length() - 28, termsAndPrivacyPolicy
-                    .getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#d4498b")), termsAndPrivacyPolicy.getText().toString().length() - 28,
-                    termsAndPrivacyPolicy.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            termsAndPrivacyPolicy.setText(ss);
+            termsAndPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
+            termsAndPrivacyPolicy.setHighlightColor(Color.TRANSPARENT);
         }
-        termsAndPrivacyPolicy.setText(ss);
-        termsAndPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
-        termsAndPrivacyPolicy.setHighlightColor(Color.TRANSPARENT);
 
+        catch(Exception ex){
+            // Fallback strategy
+            facebookButton.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
+            registerButton.setVisibility(View.VISIBLE);
+            infoTextView.setVisibility(View.VISIBLE);
+            termsAndPrivacyPolicy.setVisibility(View.VISIBLE);
+            facebookButton.animate().alpha(1f).setDuration(1000);
+            loginButton.animate().alpha(1f).setDuration(1000);
+            registerButton.animate().alpha(1f).setDuration(1000);
+            infoTextView.animate().alpha(1f).setDuration(1000);
+        }
     }
 
     public ArrayList<String> updateFriends() {
@@ -478,14 +489,15 @@ public class IntroActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         facebookButton.setVisibility(View.INVISIBLE);
         loginButton.setVisibility(View.INVISIBLE);
         registerButton.setVisibility(View.INVISIBLE);
         infoTextView.setVisibility(View.INVISIBLE);
         termsAndPrivacyPolicy.setVisibility(View.INVISIBLE);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
 
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 }

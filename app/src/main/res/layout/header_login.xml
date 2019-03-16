@@ -42,6 +42,34 @@
             android:src="@drawable/ic_user"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/goToEvent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical|center_horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_info"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/blocking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical|center_horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/blockingIV"
+            android:src="@drawable/ic_unblock"/>
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
 

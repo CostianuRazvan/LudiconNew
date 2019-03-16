@@ -21,7 +21,7 @@
         android:id="@+id/aroundMeCardLayout">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginLeft="16dp"
@@ -63,9 +63,17 @@
                     />
 
                 </RelativeLayout>
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/ic_trusted_crown"
+                    android:layout_marginLeft="40dp"
+                    android:id="@+id/trustedCrown"
+                    android:visibility="invisible"
+                    android:layout_alignTop="@id/imageView"/>
             </RelativeLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:orientation="vertical">
@@ -79,7 +87,7 @@
                     android:text="Creator Name" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
@@ -92,13 +100,24 @@
 
                     <TextView
                         android:id="@+id/sportName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:layout_marginLeft="4dp"
                         android:layout_toRightOf="@+id/sportNameLabel"
                         android:textColor="@color/green"
                         android:text="@string/football" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/sportName"
+                        android:id="@+id/trustedText"
+                        android:text="@string/trusted"
+                        android:textColor="#fcb851"
+                        android:visibility="invisible"
+                        android:fontFamily="@string/fontmedium"
+                        android:gravity="right"/>
                 </LinearLayout>
             </LinearLayout>
 

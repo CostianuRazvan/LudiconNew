@@ -13,8 +13,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:text="@string/enroll_in_event"
-        android:textColor="@color/black"
+        android:textColor="#0c3855"
         android:textSize="20dp"
+        android:fontFamily="@string/fontmedium"
         android:layout_marginLeft="110dp"
         />
 
@@ -59,7 +60,8 @@
                      android:text="@string/join"
                      android:textSize="14dp"
                      android:textColor="@color/white"
-                     android:background="@drawable/pink_button_selector"/>
+                     android:background="@drawable/pink_button_selector"
+                     android:fontFamily="@string/fontmedium"/>
             </LinearLayout>
 
         </RelativeLayout>

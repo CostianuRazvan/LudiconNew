@@ -52,13 +52,6 @@ public class EventBrief {
         calendar.setTimeInMillis(date1 * 1000);
         date = formatter.format(calendar.getTime());
 
-       /* this.placeName = briefEvent.getString("placeName");
-        this.ludicoins = briefEvent.getInt("ludicoins");
-        this.points = briefEvent.getInt("points");
-        this.creatorName = briefEvent.getString("creatorName");
-        this.creatorLevel = briefEvent.getInt("creatorLevel");
-        this.creatorProfilePicture = briefEvent.getString("creatorProfilePicture");*/
-
     }
 
     public String sportName_method(String sportName){
@@ -126,7 +119,7 @@ public class EventBrief {
             } else if (sportName.equals("TEN")) {
                 sport = "Tennis";
             } else if (sportName.equals("VOL")) {
-                sport = "Vollyball";
+                sport = "Volley-ball";
             } else {
                 sport = "Autres";
             }

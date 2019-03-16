@@ -129,7 +129,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                     Bitmap bitmap = decodeBase64(currentFriend.profileImage);
                     holder.friendProfileImage.setImageBitmap(bitmap);
                 } else {
-                    holder.friendProfileImage.setImageResource(R.drawable.ic_user);
+                    holder.friendProfileImage.setImageResource(R.drawable.ph_user);
                 }
                 ViewGroup.LayoutParams params = holder.friendLevel.getLayoutParams();
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -270,14 +270,14 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             }
                             holder.friendName.setText(displayName);
                         }
-                        holder.friendProfileImage.setImageResource(R.drawable.ic_invite);
+                        holder.friendProfileImage.setImageResource(R.drawable.ph_user);
 
                         holder.inviteButton.setText(R.string.remove);
                         holder.inviteButton.setBackgroundResource(R.drawable.green_button_selector);
                         holder.inviteButton.setVisibility(View.VISIBLE);
                         holder.inviteButton.setEnabled(true);
                         holder.inviteButton.setTextColor(Color.parseColor("#ffffff"));
-                        if (currentFriend.isOfflineParticipant && !Persistance.getInstance().getUserInfo(activity).id.equals(InviteFriendsActivity.participantList.get(0).userID)) {
+                        if (currentFriend.isOfflineParticipant && !Persistance.getInstance().getUserInfo(activity).id.equals(ActivityDetailsActivity.creatorID) && !currentFriend.userID.equals(Persistance.getInstance().getUserInfo(activity).id)) {
                             holder.inviteButton.setVisibility(View.INVISIBLE);
                             holder.inviteButton.setEnabled(false);
                         }
@@ -371,7 +371,7 @@ public class InviteFriendsAdapter extends BaseAdapter implements ListAdapter {
                             });
                         }
 
-            if (!currentFriend.offlineFriend && position != 0) {
+            if (!currentFriend.offlineFriend && position != -1 && !currentFriend.userName.equals(activity.getResources().getString(R.string.add_offline_friends))) {
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override

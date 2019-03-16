@@ -18,8 +18,11 @@ import larc.ludiconprod.Utils.Chat;
 import larc.ludiconprod.Utils.Coupon;
 import larc.ludiconprod.Utils.Event;
 import larc.ludiconprod.Utils.EventBrief;
+import larc.ludiconprod.Utils.EventDetails;
+import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.UserPosition;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sponsors;
 
 /**
@@ -52,6 +55,9 @@ public class Persistance {
     private final String happeningNowEvent = "HappeningNowEvent";
     private final String SponsorsString = "Sponsors";
     private final String pastEventsString="PastEvents";
+    private final String eventString="Event";
+    private final String reviewString="Reviews";
+
 
     public void setUserInfo(Activity activity, User user) {
 
@@ -150,6 +156,28 @@ public class Persistance {
         return  sponsorsList;
     }
 
+    public void setEventToReview(Activity activity, Event event){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(this.eventString, 0).edit();
+        Gson gson = new Gson();
+        editor.putString(this.eventString, gson.toJson(event));
+        editor.apply();
+    }
+
+    public Event getEventToReview(Activity activity) {
+        String json = null;
+        System.out.println(activity + "activity");
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(eventString, 0);
+        json = sharedPreferences.getString(eventString, "0");
+        Gson gson = new Gson();
+        Event event;
+        if (json.equals("0")) {
+            event = new Event();
+        } else {
+            event = gson.fromJson(json, Event.class);
+        }
+        return event;
+    }
+
 
     public void setMyActivities(Activity activity, ArrayList<Event> eventList){
         SharedPreferences.Editor editor = activity.getSharedPreferences(this.myActivitiesString, 0).edit();
@@ -171,6 +199,28 @@ public class Persistance {
         Gson gson = new Gson();
         ArrayList<EventBrief>eventList=new ArrayList<>();
         Type type = new TypeToken<ArrayList<EventBrief>>() {
+        }.getType();
+        if (json.equals("0")) {
+            eventList = new ArrayList<>();
+        } else {
+            eventList = gson.fromJson(json, type);
+        }
+        return  eventList;
+    }
+
+    public void setReviews(Activity activity, ArrayList<ReviewBrief> eventList){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(this.reviewString, 0).edit();
+        Gson gson = new Gson();
+        editor.putString(this.reviewString, gson.toJson(eventList));
+        editor.apply();
+    }
+
+    public ArrayList<ReviewBrief> getReviews(Activity activity){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(this.reviewString, 0);
+        String json = sharedPreferences.getString(this.reviewString, "0");
+        Gson gson = new Gson();
+        ArrayList<ReviewBrief>eventList=new ArrayList<>();
+        Type type = new TypeToken<ArrayList<ReviewBrief>>() {
         }.getType();
         if (json.equals("0")) {
             eventList = new ArrayList<>();

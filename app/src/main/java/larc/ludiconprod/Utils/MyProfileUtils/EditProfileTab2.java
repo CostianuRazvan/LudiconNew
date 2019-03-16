@@ -1,10 +1,12 @@
 package larc.ludiconprod.Utils.MyProfileUtils;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -49,6 +51,19 @@ public class EditProfileTab2 extends Fragment {
     private RelativeLayout passwordLayout;
     private TextWatcher textWatcher;
 
+    ImageView check_event;
+    ImageView check_location;
+    ImageView check_users;
+    TextView popReview;
+    Button button_check_event;
+    Button button_check_location;
+    Button button_check_users;
+    int checkEvent;
+    int checkLocation;
+    int checkUsers;
+
+
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.edittab2, container, false);
@@ -108,6 +123,14 @@ public class EditProfileTab2 extends Fragment {
             email.setText(u.email);
             email.setTypeface(typeFace);
             ImageView image = (ImageView) v.findViewById(R.id.editImage);
+            check_event = (ImageView) v.findViewById(R.id.check_event);
+            check_location = (ImageView) v.findViewById(R.id.check_location);
+            check_users = (ImageView) v.findViewById(R.id.check_users);
+            popReview = (TextView) v.findViewById(R.id.popReview);
+            popReview.setTypeface(typeFace);
+            button_check_event = (Button) v.findViewById(R.id.button_check_event);
+            button_check_location = (Button) v.findViewById(R.id.button_check_location);
+            button_check_users = (Button) v.findViewById(R.id.button_check_users);
 
             if (u.profileImage != null && !u.profileImage.isEmpty()) {
                 Bitmap im = IntroActivity.decodeBase64(u.profileImage);
@@ -135,9 +158,11 @@ public class EditProfileTab2 extends Fragment {
             if(u.gender.equals("0")){
                 male.setChecked(true);
                 male.setTextColor(Color.parseColor("#ffffff"));
+                epa.setSex(0);
             } else if(u.gender.equals("1")) {
                 female.setChecked(true);
                 female.setTextColor(Color.parseColor("#ffffff"));
+                epa.setSex(1);
             }
 
             if(male.isChecked()) {
@@ -166,6 +191,114 @@ public class EditProfileTab2 extends Fragment {
                         epa.setSex(1);
                     }
 
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+                }
+            });
+
+            if (u.rateEvent.equals("true")){
+                check_event.setVisibility(View.VISIBLE);
+                checkEvent = 1;
+                epa.setEventReview("true");
+                button_check_event.setAlpha(1f);
+            }else if(u.rateEvent.equals("false")){
+                check_event.setVisibility(View.GONE);
+                checkEvent = 0;
+                epa.setEventReview("false");
+                button_check_event.setAlpha(0.5f);
+            }
+
+            button_check_event.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkEvent == 0) {
+                        check_event.setVisibility(View.VISIBLE);
+                        checkEvent = 1;
+                        epa.setEventReview("true");
+                        button_check_event.setAlpha(1f);
+                    }else if (checkEvent == 1){
+                        check_event.setVisibility(View.GONE);
+                        checkEvent = 0;
+                        epa.setEventReview("false");
+                        button_check_event.setAlpha(0.5f);
+                    }
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+                }
+            });
+
+            if (u.rateLocation.equals("true")){
+                check_location.setVisibility(View.VISIBLE);
+                checkLocation = 1;
+                epa.setLocationReview("true");
+                button_check_location.setAlpha(1f);
+            }else if (u.rateLocation.equals("false")){
+                check_location.setVisibility(View.GONE);
+                checkLocation = 0;
+                epa.setLocationReview("false");
+                button_check_location.setAlpha(0.5f);
+            }
+
+            button_check_location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkLocation == 0) {
+                        check_location.setVisibility(View.VISIBLE);
+                        checkLocation = 1;
+                        epa.setLocationReview("true");
+                        button_check_location.setAlpha(1f);
+                    }else if (checkLocation == 1){
+                        check_location.setVisibility(View.GONE);
+                        checkLocation = 0;
+                        epa.setLocationReview("false");
+                        button_check_location.setAlpha(0.5f);
+                    }
+                    if (epa.sameProfileInfo()) {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(0);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(0);
+                    } else {
+                        epa.findViewById(R.id.saveChangesButton).setAlpha(1);
+                        epa.findViewById(R.id.saveChangesButton2).setAlpha(1);
+                    }
+                }
+            });
+
+            if (u.rateUsers.equals("true")){
+                check_users.setVisibility(View.VISIBLE);
+                checkUsers = 1;
+                epa.setUsersReview("true");
+                button_check_users.setAlpha(1f);
+            }else if (u.rateUsers.equals("false")) {
+                check_users.setVisibility(View.GONE);
+                checkUsers = 0;
+                epa.setUsersReview("false");
+                button_check_users.setAlpha(0.5f);
+            }
+
+            button_check_users.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkUsers == 0) {
+                        check_users.setVisibility(View.VISIBLE);
+                        checkUsers = 1;
+                        epa.setUsersReview("true");
+                        button_check_users.setAlpha(1f);
+                    }else if (checkUsers == 1){
+                        check_users.setVisibility(View.GONE);
+                        checkUsers = 0;
+                        epa.setUsersReview("false");
+                        button_check_users.setAlpha(0.5f);
+                    }
                     if (epa.sameProfileInfo()) {
                         epa.findViewById(R.id.saveChangesButton).setAlpha(0);
                         epa.findViewById(R.id.saveChangesButton2).setAlpha(0);

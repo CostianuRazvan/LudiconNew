@@ -82,6 +82,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ImageView imageViewBackground;
         public TextView creatorLevelMyActivity;
         public ProgressBar progressBar;
+        public ImageView trustedCrown;
+        public TextView trustedText;
         View view;
 
         public ViewHolder(View view) {
@@ -103,6 +105,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.friendsNumber = (TextView) view.findViewById(R.id.friendsNumber);
             this.imageViewBackground = (ImageView) view.findViewById(R.id.imageViewBackground);
             this.creatorLevelMyActivity = (TextView) view.findViewById(R.id.creatorLevelMyActivity);
+            this.trustedCrown = (ImageView) view.findViewById(R.id.trustedCrown);
+            this.trustedText = (TextView) view.findViewById(R.id.trustedText);
             this.progressBar = (ProgressBar) view.findViewById(R.id.cardProgressBar);
             this.progressBar.setAlpha(0);
 
@@ -416,6 +420,15 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 date = stringDate[2] + " " + getMonth(Integer.parseInt(stringDate[1])) + " " + year + ", " + stringDateAndTime[1].substring(0, 5);
             }
                 ((ViewHolder)holder).eventDate.setText(date);
+
+                if (currentEvent.authorizedLevel == 1 ){
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.VISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.VISIBLE);
+                }else{
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.INVISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.INVISIBLE);
+                }
+
                 break;
         }
     }

@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.TimeZone;
 
 import larc.ludiconprod.Adapters.ChatAndFriends.MessageAdapter;
+import larc.ludiconprod.Controller.HTTPResponseController;
 import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Chat;
@@ -68,7 +69,7 @@ public class ChatActivity extends Activity {
     RelativeLayout backButton;
     Boolean needToScroll=true;
     int nrOfPage=0;
-    int isGroupChat=0;
+    public static int isGroupChat=0;
     Boolean createChat=false;
     String ChatId;
     ArrayList<String> unseenChats;
@@ -283,6 +284,8 @@ public class ChatActivity extends Activity {
             });
 
         }
+        RelativeLayout goToEvent=(RelativeLayout)findViewById(R.id.goToEvent);
+
         if(!ChatId.equalsIgnoreCase("isNot") && isGroupChat == 1) {
             if (otherUsersId != null) {
                 otherUsersId.clear();
@@ -290,6 +293,25 @@ public class ChatActivity extends Activity {
             if (otherUsersImage != null) {
                 otherUsersImage.clear();
             }
+            ViewGroup.LayoutParams params = goToEvent.getLayoutParams();
+            params.height =(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+            params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+            goToEvent.setLayoutParams(params);
+            goToEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    HashMap<String, String> urlParams = new HashMap<String, String>();
+                    headers.put("authKey", Persistance.getInstance().getUserInfo(ChatActivity.this).authKey);
+
+                    //set urlParams
+
+                    urlParams.put("eventId", getIntent().getStringExtra("eventId"));
+                    urlParams.put("userId", Persistance.getInstance().getUserInfo(ChatActivity.this).id);
+                    HTTPResponseController.getInstance().getEventDetails(params, headers, ChatActivity.this, urlParams);
+                }
+            });
 
             // Check if we have event_info:
             //final DatabaseReference firebaseRefEventInfo = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(ChatActivity.this).id).child("chats").child(ChatId);

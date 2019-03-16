@@ -1,10 +1,13 @@
 package larc.ludiconprod.Activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -19,11 +22,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -66,6 +72,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import larc.ludiconprod.Adapters.MainActivity.AroundMeAdapter;
@@ -77,6 +84,7 @@ import larc.ludiconprod.Controller.Persistance;
 import larc.ludiconprod.Dialogs.ConfirmationDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.Utils.Event;
+import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.HappeningNowLocation;
 import larc.ludiconprod.Utils.Location.GPSTracker;
 import larc.ludiconprod.Utils.Location.LocationCheckState;
@@ -87,13 +95,14 @@ import larc.ludiconprod.Utils.util.Sponsors;
 import larc.ludiconprod.Utils.util.Sport;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
+import static android.content.Context.MODE_PRIVATE;
 import static larc.ludiconprod.Activities.Main.bottomBar;
 
 /**
  * Created by ancuta on 7/26/2017.
  */
 
-public class ActivitiesActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, LocationListener,  Response.ErrorListener {
+public class ActivitiesActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Response.ErrorListener {
 
     ViewPager pager;
     Context mContext;
@@ -140,7 +149,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     private SwipeRefreshLayout mSwipeRefreshLayout1;
     private SwipeRefreshLayout mSwipeRefreshLayout2;
 
-  Boolean isGetingPage = false;
+    Boolean isGetingPage = false;
 
     static public double longitude = 0;
     static public double latitude = 0;
@@ -156,6 +165,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     // HAPPENING NOW AREA
     RelativeLayout happeningNowLayout;
     static Button checkinButton;
+    static Button checkinallButton;
 
     private boolean noGps = false;
     static public int startedEventDate = Integer.MAX_VALUE;
@@ -177,11 +187,94 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.title_location_permission)
+                        .setMessage(R.string.text_location_permission)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(getActivity(),//MainActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        //Request location updates:
+                        //locationManager.requestLocationUpdates(provider, 400, 1, this);
+                        requestLocationUpdates();
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
+    }
 
     public LocationCheckState checkedLocation(Event currentEvent) {
         try {
             if (!googleApiClient.isConnected()) {
                 googleApiClient.connect();
+            }
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                checkLocationPermission();
             }
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location != null) {
@@ -203,12 +296,10 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             } else {
                 return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
             }
-        }
-        catch (IllegalStateException ex) {
+        } catch (IllegalStateException ex) {
             // Other specific stuff to do
             return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             return LocationCheckState.LOCATION_COULD_NOT_BE_DETERMINED;
         }
 
@@ -221,7 +312,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         Event currentEvent = Persistance.getInstance().getHappeningNow(getActivity());
         HappeningNowLocation happeningNowLocation = Persistance.getInstance().getLocation(activity);
 
-        if(happeningNowLocation != null) {
+        if (happeningNowLocation != null) {
             happeningNowLocation.endDate = String.valueOf(System.currentTimeMillis() / 1000);
 
             if (currentEvent == null) {
@@ -249,7 +340,22 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             HTTPResponseController.getInstance().savePoints(params, headers, activity, this);
             Persistance.getInstance().setHappeningNow(null, activity);
+            Persistance.getInstance().setEventToReview(activity, currentEvent);
         }
+    }
+
+    public void getParticipants(String pageNumber, Bundle b, EventDetails eventDetails) {
+
+        Event currentEvent = Persistance.getInstance().getHappeningNow(getActivity());
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> headers = new HashMap<String, String>();
+        HashMap<String, String> urlParams = new HashMap<String, String>();
+        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+        urlParams.put("eventId", currentEvent.id);
+        urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+        urlParams.put("pageNumber", pageNumber);
+        HTTPResponseController.getInstance().getParticipants(params, headers, getActivity(), urlParams, false);
     }
 
     @Override
@@ -323,7 +429,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             updateActiveToken(activity);
 
             // Creating ViewPager Adapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs
-            Titles = new CharSequence[]{getResources().getString(R.string.around_me),getResources().getString(R.string.my_activities)};
+            Titles = new CharSequence[]{getResources().getString(R.string.around_me), getResources().getString(R.string.my_activities)};
             adapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), Titles, Numboftabs);
 
             // Assigning ViewPager View and setting the adapter
@@ -348,13 +454,15 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             myAdapter = new MyAdapter(myEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
             fradapter = new AroundMeAdapter(aroundMeEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
 
+            checkLocationPermission();
+
             // Happening now started -- More than 3 Hours have passed since Start => Then Stop it
             HappeningNowLocation happeningNowLocation = Persistance.getInstance().getLocation(getActivity());
-            if(happeningNowLocation != null){
+            if (happeningNowLocation != null) {
                 String startUnixDateString = happeningNowLocation.startDate;
                 long startUnixDate = 0;
 
-                if(startUnixDateString != null){
+                if (startUnixDateString != null) {
                     startUnixDate = Long.parseLong(startUnixDateString);
                 }
 
@@ -363,7 +471,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
                 // If more than 3 hours
                 long acceptableDifference = 3 * 60 * 60;
-                if(difference > acceptableDifference) {
+                if (difference > acceptableDifference) {
                     // Stop happening now
                     savePoints();
 
@@ -396,8 +504,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             String facebookId = Persistance.getInstance().getUserInfo(super.getActivity()).facebookId;
             if (facebookId.equals("")) {
                 shareButton.getLayoutParams().height = 0;
-            }
-            else {
+            } else {
                 ShareLinkContent contentLink = new ShareLinkContent.Builder()
                         .setContentUrl(Uri.parse("https://developers.facebook.com"))
                         .build();
@@ -427,13 +534,31 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                     }
 
                     @Override
-                    public void onCancel() { }
+                    public void onCancel() {
+                    }
 
                     @Override
-                    public void onError(FacebookException error) { }
+                    public void onError(FacebookException error) {
+                    }
                 });
             }
 
+            SharedPreferences shared = activity.getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
+            String channel = (shared.getString("language", ""));
+            if (!Locale.getDefault().getDisplayLanguage().substring(0, 2).toLowerCase().equals(channel)) {
+                String language = Locale.getDefault().getDisplayLanguage().substring(0, 2).toLowerCase();
+                SharedPreferences prefs = activity.getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("language", language);
+                editor.commit();
+
+                HashMap<String, String> params1 = new HashMap<>();
+                params1.put("userId", Persistance.getInstance().getUserInfo(activity).id);
+                params1.put("language", language);
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                HTTPResponseController.getInstance().updateUser(params1, headers, activity);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -466,7 +591,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 layoutManagerAroundMe.setOrientation(LinearLayoutManager.VERTICAL);
             }
 
-            if(fradapter == null){
+            if (fradapter == null) {
                 fradapter = new AroundMeAdapter(aroundMeEventList, sponsorsList, activity.getApplicationContext(), activity, getResources(), currentFragment);
             }
 
@@ -477,7 +602,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if (frlistView == null) {
                 frlistView = (RecyclerView) v.findViewById(R.id.events_listView2);
 
-                if(frlistView != null) {
+                if (frlistView != null) {
                     frlistView.setLayoutManager(layoutManagerAroundMe);
                     frlistView.setAdapter(fradapter);
                 }
@@ -491,7 +616,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             pressPlusButtonTextFieldAroundMe = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldAroundMe);
 
             FloatingActionButton createNewActivityFloatingButtonAroundMe = (FloatingActionButton) v.findViewById(R.id.floatingButton2);
-            if(createNewActivityFloatingButtonAroundMe != null) {
+            if (createNewActivityFloatingButtonAroundMe != null) {
                 createNewActivityFloatingButtonAroundMe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -529,7 +654,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             mSwipeRefreshLayout2 = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh2);
 
-            if(mSwipeRefreshLayout2 != null) {
+            if (mSwipeRefreshLayout2 != null) {
                 mSwipeRefreshLayout2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
@@ -568,11 +693,12 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         heartImageMyActivity = (ImageView) v.findViewById(R.id.heartImageMyActivity);
         noActivitiesTextFieldMyActivity = (TextView) v.findViewById(R.id.noActivitiesTextFieldMyActivity);
         pressPlusButtonTextFieldMyActivity = (TextView) v.findViewById(R.id.pressPlusButtonTextFieldMyActivity);
-        progressBarMyEvents = (ProgressBar) v.findViewById(R.id.progressBarMyEvents);
 
         progressBarMyEvents = (ProgressBar) v.findViewById(R.id.progressBarMyEvents);
-        progressBarMyEvents.setIndeterminate(true);
-        progressBarMyEvents.setAlpha(0f);
+        if (progressBarMyEvents != null) {
+            progressBarMyEvents.setIndeterminate(true);
+            progressBarMyEvents.setAlpha(0f);
+        }
 
         if (!isFirstTimeMyEvents) {
             layoutManagerMyActivities = new LinearLayoutManager(getContext());
@@ -616,16 +742,16 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             });
         }
 
-       mSwipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    getMyEvents("0");
-                    getFirstPageMyActivity = true;
-                    mSwipeRefreshLayout1.setRefreshing(false);
-                    NumberOfRefreshMyEvents = 0;
-                    fromSwipe = true;
-                }
-            });
+        mSwipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyEvents("0");
+                getFirstPageMyActivity = true;
+                mSwipeRefreshLayout1.setRefreshing(false);
+                NumberOfRefreshMyEvents = 0;
+                fromSwipe = true;
+            }
+        });
 
         isFirstTimeMyEvents = true;
 
@@ -639,25 +765,26 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         checkIsHappeningNow();
     }
 
-    private void checkIsHappeningNow(){
+    private void checkIsHappeningNow() {
 
         Event happeningEvent = Persistance.getInstance().getHappeningNow(activity);
         boolean HappeningNowStartedAlready = (happeningEvent != null);
 
         // Check if we should display Happening now
-        if(myEventList.size() != 0 || HappeningNowStartedAlready){
+        if (myEventList.size() != 0 || HappeningNowStartedAlready) {
 
             Event upcomingEvent = null;
 
-            if(HappeningNowStartedAlready){
+            if (HappeningNowStartedAlready) {
                 checkinButton = (Button) v.findViewById(R.id.checkinHN);
                 checkinButton.setText("CHECK-OUT");
+                checkinallButton = (Button) v.findViewById(R.id.checkinallHN);
+                checkinallButton.setVisibility(View.GONE);
 
                 buttonState = 1;
 
                 upcomingEvent = happeningEvent;
-            }
-            else {
+            } else {
                 // Get the closest to current date event
                 upcomingEvent = myEventList.get(0);
             }
@@ -693,6 +820,18 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         CircleImageView friends2 = (CircleImageView) v.findViewById(R.id.friends2HN);
         TextView allFriends = (TextView) v.findViewById(R.id.friendsNumberHN);
         checkinButton = (Button) v.findViewById(R.id.checkinHN);
+        checkinallButton = (Button) v.findViewById(R.id.checkinallHN);
+
+        Event happeningEvent = Persistance.getInstance().getHappeningNow(activity);
+        boolean HappeningNowStartedAlready = (happeningEvent != null);
+
+        if (upcomingEvent.creatorId.equals(Persistance.getInstance().getUserInfo(activity).id) && !HappeningNowStartedAlready) {
+            checkinallButton.setVisibility(View.VISIBLE);
+            checkinButton.setVisibility(View.GONE);
+        } else {
+            checkinButton.setVisibility(View.VISIBLE);
+            checkinallButton.setVisibility(View.GONE);
+        }
 
         Sport sport = new Sport(upcomingEvent.sportCode);
         String weWillPlayString = "";
@@ -769,12 +908,10 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             if (!upcomingEvent.participansProfilePicture.get(i).equals("") && i == 0) {
                 Bitmap bitmap = decodeBase64(upcomingEvent.participansProfilePicture.get(i));
                 friends0.setImageBitmap(bitmap);
-            } else
-            if (!upcomingEvent.participansProfilePicture.get(i).equals("") && i == 1) {
+            } else if (!upcomingEvent.participansProfilePicture.get(i).equals("") && i == 1) {
                 Bitmap bitmap = decodeBase64(upcomingEvent.participansProfilePicture.get(i));
                 friends1.setImageBitmap(bitmap);
-            } else
-            if (!upcomingEvent.participansProfilePicture.get(i).equals("") && i == 2) {
+            } else if (!upcomingEvent.participansProfilePicture.get(i).equals("") && i == 2) {
                 Bitmap bitmap = decodeBase64(upcomingEvent.participansProfilePicture.get(i));
                 friends2.setImageBitmap(bitmap);
             }
@@ -792,6 +929,97 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                 urlParams.put("eventId", upcomingEvent.id);
                 urlParams.put("userId", Persistance.getInstance().getUserInfo(activity).id);
                 HTTPResponseController.getInstance().getEventDetails(params, headers, activity, urlParams);
+            }
+        });
+
+        final Bundle b = new Bundle();
+        final EventDetails eventDetails = new EventDetails();
+
+        checkinallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Button not pressed yet -> user press "CHECK-IN"
+                if (buttonState == 0) {
+                    // Check if user is < 1 km away from the place
+                    LocationCheckState locationState = checkedLocation(upcomingEvent);
+
+                    if (locationState == LocationCheckState.LOCATION_OK) {
+
+                        // Yes it is, let's make the check-in for him
+                        HashMap<String, String> params = new HashMap<String, String>();
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                        params.put("eventId", upcomingEvent.id);
+                        HTTPResponseController.getInstance().checkin(params, headers, activity);
+
+                        buttonState = 1;
+
+                        checkinallButton.setText("CHECK-OUT");
+                        HappeningNowLocation happeningNowLocation = new HappeningNowLocation();
+                        happeningNowLocation.startDate = String.valueOf(System.currentTimeMillis() / 1000);
+
+                        Persistance.getInstance().setHappeningNow(upcomingEvent, activity);
+                        Persistance.getInstance().setLocation(activity, happeningNowLocation);
+
+                        requestLocationUpdates();
+
+                    } else if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE) {
+                        // No, he is not, don't let him start the event
+                        Toast.makeText(activity, getResources().getString(R.string.go_to_event_location_to_start_sweating_on_points), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(activity, getResources().getString(R.string.we_cant_take_your_location), Toast.LENGTH_LONG).show();
+                    }
+                }
+                // Button is pressed, time is counted -> user press "CHECK-OUT"
+                else if (buttonState == 1) {
+
+                    // Confirmation dialog for stop the event
+                    final Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),
+                            "fonts/Quicksand-Medium.ttf");
+                    final Typeface typeFaceBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Quicksand-Bold.ttf");
+                    final ConfirmationDialog confirmationDialog = new ConfirmationDialog(getActivity());
+                    confirmationDialog.show();
+                    confirmationDialog.title.setText(R.string.confirm);
+                    confirmationDialog.title.setTypeface(typeFaceBold);
+                    confirmationDialog.message.setText(R.string.are_you_sure_you_want_to_stop_sweating_on_points);
+                    confirmationDialog.message.setTypeface(typeFace);
+                    confirmationDialog.confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                // User confirms he wants to stop the event
+                                checkinallButton.setText(R.string.check_in_all);
+
+                                getParticipants("0", b, eventDetails);
+
+
+                                buttonState = 0;
+
+                                ViewGroup.LayoutParams params = happeningNowLayout.getLayoutParams();
+                                params.height = 0;
+                                happeningNowLayout.setLayoutParams(params);
+
+                                // Clean up
+                                if (googleApiClient.isConnected()) {
+                                    googleApiClient.disconnect();
+                                }
+                                //LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, (LocationListener) activity);
+
+                                confirmationDialog.dismiss();
+                                Persistance.getInstance().setHappeningNow(upcomingEvent, activity);
+                                Persistance.getInstance().setLocation(activity, null);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                    confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            confirmationDialog.dismiss();
+                        }
+                    });
+                }
             }
         });
 
@@ -823,14 +1051,12 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
                         requestLocationUpdates();
 
-                    } else
-                        if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE){
-                            // No, he is not, don't let him start the event
-                            Toast.makeText(activity, getResources().getString(R.string.go_to_event_location_to_start_sweating_on_points), Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            Toast.makeText(activity, getResources().getString(R.string.we_cant_take_your_location), Toast.LENGTH_LONG).show();
-                        }
+                    } else if (locationState == LocationCheckState.LOCATION_NOT_IN_RANGE) {
+                        // No, he is not, don't let him start the event
+                        Toast.makeText(activity, getResources().getString(R.string.go_to_event_location_to_start_sweating_on_points), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(activity, getResources().getString(R.string.we_cant_take_your_location), Toast.LENGTH_LONG).show();
+                    }
                 }
                 // Button is pressed, time is counted -> user press "CHECK-OUT"
                 else if (buttonState == 1) {
@@ -869,8 +1095,9 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
                                 confirmationDialog.dismiss();
                                 Persistance.getInstance().setHappeningNow(null, activity);
                                 Persistance.getInstance().setLocation(activity, null);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                            catch (Exception ex){   ex.printStackTrace();}
                         }
                     });
                     confirmationDialog.dismiss.setOnClickListener(new View.OnClickListener() {
@@ -896,12 +1123,12 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
 
             // Should get the location again
             HappeningNowLocation happeningNowLocation = Persistance.getInstance().getLocation(activity);
-            if(happeningNowLocation != null) {
+            if (happeningNowLocation != null) {
                 requestLocationUpdates();
             }
+        } catch (NullPointerException e) {
+        } catch (IllegalStateException ex) {
         }
-        catch (NullPointerException e) { }
-        catch (IllegalStateException ex) { }
     }
 
 
@@ -920,8 +1147,8 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     public void onLocationChanged(Location location) {
         System.out.println(location.getLatitude() + " new api");
 
-         HappeningNowLocation happeningNowLocation = Persistance.getInstance().getLocation(activity);
-        if(happeningNowLocation != null) {
+        HappeningNowLocation happeningNowLocation = Persistance.getInstance().getLocation(activity);
+        if (happeningNowLocation != null) {
             happeningNowLocation.locationList.add(new LocationInfo(location.getLatitude(), location.getLongitude()));
 
             Persistance.getInstance().setLocation(activity, happeningNowLocation);
@@ -929,13 +1156,13 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
     }
 
     private void requestLocationUpdates() {
-        if(!googleApiClient.isConnected()) {
+        if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
         }
 
         locationListener = this;
 
-        if(locationRequest == null){
+        if (locationRequest == null) {
             locationRequest = new LocationRequest();
             locationRequest.setInterval(60 * 1000);
             locationRequest.setFastestInterval(10 * 1000);
@@ -1055,7 +1282,7 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
         HashMap<String, String> urlParams = new HashMap<String, String>();
         headers.put("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
 
-        pageNumberAroundMe =  Integer.parseInt(pageNumber);
+        pageNumberAroundMe = Integer.parseInt(pageNumber);
 
         GPSTracker gps = new GPSTracker(activity.getApplicationContext(), activity);
         if (!gps.canGetLocation()) {
@@ -1063,17 +1290,26 @@ public class ActivitiesActivity extends Fragment implements GoogleApiClient.Conn
             this.prepareError(getResources().getString(R.string.no_location_services_available));
 
             //return;
-        }
-        else{
+        } else {
             hideError();
             this.noGps = false;
 
             // After location services turned off, wake them alive
-            if(latitude == 0) {
+            if (latitude == 0) {
                 if (!googleApiClient.isConnected()) {
                     googleApiClient.connect();
                 }
 
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    checkLocationPermission();
+                }
                 Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 if (location != null) {
                     latitude = location.getLatitude();

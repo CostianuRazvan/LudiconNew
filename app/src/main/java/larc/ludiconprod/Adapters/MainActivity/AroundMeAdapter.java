@@ -92,6 +92,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressBar progressBar;
         View view;
         RelativeLayout friendsNumberLayout;
+        ImageView trustedCrown;
+        TextView trustedText;
 
         public ViewHolder(View view) {
             super(view);
@@ -114,6 +116,8 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.creatorLevelAroundMe = (TextView) view.findViewById(R.id.creatorLevelAroundMe);
             this.progressBar = (ProgressBar) view.findViewById(R.id.cardProgressBar);
             this.friendsNumberLayout=(RelativeLayout)view.findViewById(R.id.friendsNumberLayout) ;
+            this.trustedCrown = (ImageView) view.findViewById(R.id.trustedCrown);
+            this.trustedText = (TextView) view.findViewById(R.id.trustedText);
             this.progressBar.setAlpha(0);
 
             Typeface typeFace = Typeface.createFromAsset(activity.getAssets(), "fonts/Quicksand-Medium.ttf");
@@ -484,17 +488,27 @@ public class AroundMeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             HTTPResponseController.getInstance().joinEvent(activity, params, headers, list.get(pos).id, fragment);
                             ((ViewHolder) holder).joinButton.setEnabled(false);
                         } else {
-                            Intent intent = new Intent(activity, Pop.class);
-                            intent.putExtra("formParameters", list.get(pos).formParameters);
-                            intent.putExtra("eventId", list.get(pos).id);
-                            intent.putExtra("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
-                            intent.putExtra("userId", Persistance.getInstance().getUserInfo(activity).id);
-                            activity.startActivity(intent);
-
+                            if (activity != null) {
+                                Intent intent = new Intent(activity, Pop.class);
+                                intent.putExtra("formParameters", list.get(pos).formParameters);
+                                intent.putExtra("eventId", list.get(pos).id);
+                                intent.putExtra("authKey", Persistance.getInstance().getUserInfo(activity).authKey);
+                                intent.putExtra("userId", Persistance.getInstance().getUserInfo(activity).id);
+                                intent.putExtra("editEnrollData", false);
+                                activity.startActivity(intent);
+                            }
                         }
 
                     }
                 });
+
+                if (list.get(pos).authorizedLevel == 1 ){
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.VISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.VISIBLE);
+                }else{
+                    ((ViewHolder)holder).trustedCrown.setVisibility(View.INVISIBLE);
+                    ((ViewHolder)holder).trustedText.setVisibility(View.INVISIBLE);
+                }
 
                 System.out.println(list.get(pos).id + " eventid:" + pos + "  " + list.get(pos).numberOfParticipants + " profilepicture" + list.get(position).participansProfilePicture.size());
                 break;

@@ -174,6 +174,8 @@
     <string name="activity1">Activitate</string>
     <string name="player_profile">Profilul utilizatorului</string>
     <string name="check_out">CHECK-OUT</string>
+    <string name="check_in">CHECK-IN</string>
+
     <string name="around_me">ÎN JURUL MEU</string>
     <string name="my_activities">ACTIVITĂȚILE MELE</string>
     <string name="quests">MISIUNI</string>
@@ -296,8 +298,6 @@
     <string name="happening_now">Se întâmplă acum!</string>
     <string name="you_are_playing">Ești la </string>
 
-    <string name="check_in">START</string>
-
     <string name="_2_sports">2 sporturi</string>
     <string name="_3_mutual_friends">3 urmăriri comune</string>
     <string name="mutual_follower">urmărire comună</string>
@@ -313,6 +313,7 @@
     <string name="you_play_something">Jucați ceva</string>
     <string name="press_back_again_to_exit">Apasă din nou pentru a ieși.</string>
     <string name="is_friend">Prietenul lui\t\t</string>
+    <string name="is_friend_girl">Prietena lui\t\t</string>
 
     <string name="we_cant_take_your_location">Ne pare rău, nu putem să îţi luăm locația, încearcă din nou mai târziu</string>
     <string name="no_location_services_available">Nu sunt disponibile serviciile de localizare!</string>
@@ -331,6 +332,7 @@
     <string name="show_full_history">VEZI TOT ISTORICUL</string>
     <string name="with_others">cu alţi</string>
     <string name="with_one_other">cu încă o persoană</string>
+    <string name="with_no_other">singur/ă</string>
     <string name="past_activities">Activități din trecut</string>
     <string name="has_played">A jucat</string>
     <string name="you_gained">Ai obţinut\t</string>
@@ -343,10 +345,55 @@
 
     <string name="with">cu</string>
     <string name="others1">alții</string>
-
     <string name="how_was_the_event">Cum a fost evenimentul?</string>
-    <string name="write_your_feedback">Scrie-ne cum ți s-a părut</string>
-    <string name="how_was_the_location">Cum a fost locația?</string>
+    <string name="write_your_feedback">Scrie o recenzie...</string>
+    <string name="how_was_the_location">Cum a fost locaţia?</string>
+    <string name="very_poor">Foarte slab</string>
+    <string name="poor">Slab</string>
+    <string name="common">Mediocru</string>
+    <string name="rare">Bun</string>
+    <string name="epic">Foarte bun</string>
+    <string name="legendary">Grozav</string>
+    <string name="how_were_the_participants">Cum au fost participanţii?</string>
+    <string name="edit_enrollment_data">MODIFICĂ FORMULARUL DE ÎNSCRIERE</string>
+    <string name="skip">SKIP</string>
+    <string name="event_url">LINKUL EVENIMENTULUI</string>
+    <string name="link_copied">Link copiat</string>
+
+    <string name="social_rating">RATING SOCIAL</string>
+    <string name="based_on">Bazat pe</string>
+    <string name="reviews">recenzii</string>
+    <string name="view_all_reviews">VEZI TOATE RECENZIILE</string>
+    <string name="reviews1">Recenzii</string>
+    <string name="excellent">Excelent</string>
+    <string name="good">Bun</string>
+    <string name="average">Mediu</string>
+    <string name="below_average">Sub mediu</string>
+    <string name="select_reviewing_preferences">Ce recenzii preferi să oferi?</string>
+    <string name="review_events">Recenzii la evenimente</string>
+    <string name="review_locations">Recenzii la locaţii</string>
+    <string name="review_users">Recenzii la utilizatori</string>
+    <string name="trusted">OFICIAL</string>
+    <string name="check_in_all">Check-in de grup</string>
+    <string name="checkinall_button">CHECK-IN DE GRUP</string>
+    <string name="social_rating1">Rating social :</string>
+
+    <string name="block_this_user">Blochezi acest utilizator?</string>
+    <string name="unblock_this_user">Deblochezi acest utilizator?</string>
+    <string name="cancel">Renunță</string>
+    <string name="block">Blochează</string>
+    <string name="unblock">Deblochează</string>
+    <string name="once_you_block_this_user">Dacă blochezi acest utilizator nu vei putea primi mesaje trimise de el!</string>
+    <string name="once_you_unblock_this_user">Dacă deblochezi acest utilizator vei putea primi din nou mesaje trimise de el!</string>
+    <string name="block_this_group_chat">Blochezi conversația de grup?</string>
+    <string name="unblock_this_group_chat">Deblochezi conversația de grup?</string>
+    <string name="once_you_block_this_group_chat">Dacă blochezi această conversație de grup nu vei mai primi notificări de mesaje!</string>
+    <string name="once_you_unblock_this_group_chat">Dacă blochezi această conversație de grup vei primi din nou notificări de mesaje!</string>
+
+    <string name="title_location_permission">Do you want to allow access to location?</string>
+    <string name="text_location_permission">Location will be used for getting the activities near you.</string>
+    <string name="ok">OK</string>
+
     <string name="progress">PROGRESS</string>
     <string name="are_you_sure_you_want_to_cancel_this_quest">Are you sure you want to cancel this quest?</string>
 </resources>

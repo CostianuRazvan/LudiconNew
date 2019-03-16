@@ -27,6 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.facebook.login.LoginManager;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -44,18 +46,24 @@ import larc.ludiconprod.Activities.ActivityDetailsActivity;
 import larc.ludiconprod.Activities.BalanceActivity;
 import larc.ludiconprod.Activities.ChatActivity;
 import larc.ludiconprod.Activities.ChatAndFriendsActivity;
+import larc.ludiconprod.Activities.CheckInAll;
 import larc.ludiconprod.Activities.CouponsActivity;
 import larc.ludiconprod.Activities.CreateNewActivity;
 import larc.ludiconprod.Activities.FullHistory;
+//import larc.ludiconprod.Activities.FullPageView;
+import larc.ludiconprod.Activities.FullPageView;
 import larc.ludiconprod.Activities.GMapsActivity;
 import larc.ludiconprod.Activities.IntroActivity;
 import larc.ludiconprod.Activities.InviteFriendsActivity;
 import larc.ludiconprod.Activities.LoginActivity;
 import larc.ludiconprod.Activities.Main;
+import larc.ludiconprod.Activities.Pop;
 import larc.ludiconprod.Activities.PopDownloadEnrollmentData;
 import larc.ludiconprod.Activities.ProfileDetailsActivity;
 import larc.ludiconprod.Activities.RegisterActivity;
 import larc.ludiconprod.Activities.ResetPasswordFinalActivity;
+import larc.ludiconprod.Activities.ReviewLocation;
+import larc.ludiconprod.Activities.ReviewParticipants;
 import larc.ludiconprod.Dialogs.PointsReceivedDialog;
 import larc.ludiconprod.R;
 import larc.ludiconprod.User;
@@ -64,7 +72,9 @@ import larc.ludiconprod.Utils.EventBrief;
 import larc.ludiconprod.Utils.EventDetails;
 import larc.ludiconprod.Utils.Friend;
 import larc.ludiconprod.Utils.HappeningNowLocation;
+import larc.ludiconprod.Utils.Review;
 import larc.ludiconprod.Utils.util.AuthorizedLocation;
+import larc.ludiconprod.Utils.util.ReviewBrief;
 import larc.ludiconprod.Utils.util.Sponsors;
 import larc.ludiconprod.Utils.util.Sport;
 
@@ -80,6 +90,8 @@ import static larc.ludiconprod.Activities.ActivitiesActivity.startedEventDate;
 import static larc.ludiconprod.Activities.FullHistory.getFirstPagePastEvents;
 import static larc.ludiconprod.Activities.FullHistory.pageNumberPastEvents;
 import static larc.ludiconprod.Activities.FullHistory.pastEventList;
+import static larc.ludiconprod.Activities.FullPageView.getFirstPageReviews;
+import static larc.ludiconprod.Activities.FullPageView.reviewsList;
 
 /**
  * Created by ancuta on 7/12/2017.
@@ -114,6 +126,7 @@ public class HTTPResponseController {
     boolean flag = false;
     Activity oldActivity;
     Boolean isEdit = false;
+    public static Review review;
 
 
     public static Bitmap decodeBase64(String input) {
@@ -173,10 +186,10 @@ public class HTTPResponseController {
 
 
                         if (user.range.equals("0")) {
-                                Intent intent = new Intent(activity, ProfileDetailsActivity.class);
-                                // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                                activity.startActivity(intent);
-                                activity.finish();
+                            Intent intent = new Intent(activity, ProfileDetailsActivity.class);
+                            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                            activity.startActivity(intent);
+                            activity.finish();
                         } else {
                             new CountDownTimer(1100, 100) {
                                 @Override
@@ -202,28 +215,25 @@ public class HTTPResponseController {
                         Intent intent = new Intent(activity, IntroActivity.class);
                         activity.startActivity(intent);
                     }
-                } else
-                    if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(activity, ResetPasswordFinalActivity.class);
-                                intent.putExtra("from", "register");
-                                activity.startActivity(intent);
-                            }
-                        }, 1000);
-                    } else
-                        if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
-                            Persistance.getInstance().setIsUserFirstTime(activity, true);
-
-                            Intent intent = new Intent(activity, Main.class);
-                            //intent.putExtra("FirstTime", true);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            activity.finishAffinity();
+                } else if (activity.getLocalClassName().toString().equals("Activities.RegisterActivity")) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(activity, ResetPasswordFinalActivity.class);
+                            intent.putExtra("from", "register");
                             activity.startActivity(intent);
                         }
+                    }, 1000);
+                } else if (activity.getLocalClassName().toString().equals("Activities.SportDetailsActivity")) {
+                    Persistance.getInstance().setIsUserFirstTime(activity, true);
+
+                    Intent intent = new Intent(activity, Main.class);
+                    //intent.putExtra("FirstTime", true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.finishAffinity();
+                    activity.startActivity(intent);
+                }
             }
         };
     }
@@ -262,7 +272,7 @@ public class HTTPResponseController {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
-                    Toast.makeText(activity, "Enrollment data has been sent to email." , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Enrollment data has been sent to email.", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -292,6 +302,56 @@ public class HTTPResponseController {
             public void onResponse(JSONObject jsonObject) {
                 try {
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> reviewParticipantsSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> savePointsAsAdminSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    System.out.println(" save points as admin on succes");
+                    System.out.println(jsonObject.getInt("points") + " points");
+                    SharedPreferences.Editor editor = activity.getSharedPreferences("HappeningNowEvent", 0).edit();
+                    editor.clear();
+                    editor.commit();
+                    editor = activity.getSharedPreferences("locationsList", 0).edit();
+                    editor.clear();
+                    editor.commit();
+
+                    startedEventDate = Integer.MAX_VALUE;
+                    ArrayList<Event> recacheList = new ArrayList<>();
+                    for (int i = 0; i < myEventList.size(); i++) {
+                        recacheList.add(myEventList.get(i));
+                        if (i == 9) {
+                            break;
+                        }
+                    }
+                    Persistance.getInstance().setMyActivities(activity, recacheList);
+
+                    myEventList.clear();
+                    ActivitiesActivity.currentFragment.getMyEvents("0");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -410,6 +470,52 @@ public class HTTPResponseController {
         };
     }
 
+    private Response.Listener<JSONObject> enrollmentDataSuccesListener(final boolean editEnrollData) {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                System.out.println(jsonObject + " enrollmentData");
+                try {
+                    ArrayList<String> formFields = new ArrayList<String>();
+                    ArrayList<String> formValues = new ArrayList<String>();
+                    formFields.clear();
+                    formValues.clear();
+
+                    for (int i = 0; i < jsonObject.getJSONArray("formFields").length(); i++) {
+                        formFields.add(jsonObject.getJSONArray("formFields").get(i).toString());
+                    }
+                    for (int i = 0; i < jsonObject.getJSONArray("formValues").length(); i++) {
+                        formValues.add(jsonObject.getJSONArray("formValues").get(i).toString());
+                    }
+
+                    Intent intent = new Intent(activity, Pop.class);
+                    intent.putExtra("formFields", formFields);
+                    intent.putExtra("formValues", formValues);
+                    intent.putExtra("editEnrollData", editEnrollData);
+                    intent.putExtra("eventId", eventid);
+                    activity.startActivity(intent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> editEnrollmentDataSuccesListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
     private Response.Listener<JSONObject> createAroundMeEventSuccesListener() {
         return new Response.Listener<JSONObject>() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -447,16 +553,17 @@ public class HTTPResponseController {
                         }
                         System.out.println(event.id + " eventid:" + i + "  " + event.numberOfParticipants + " profilepicture" + jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("participantsProfilePicture").length());
 
-                        String isFormBasedStr =  jsonObject.getJSONArray("aroundMe").getJSONObject(i).getString("isFormBased");
-                        if (isFormBasedStr.equals("0")){
+                        String isFormBasedStr = jsonObject.getJSONArray("aroundMe").getJSONObject(i).getString("isFormBased");
+                        if (isFormBasedStr.equals("0")) {
                             event.isFormBased = false;
-                        }else event.isFormBased = true;
+                        } else event.isFormBased = true;
 
-                        if (event.isFormBased == true && jsonObject.getJSONArray("aroundMe").getJSONObject(i).optJSONArray("formParameters") != null){
-                         for (int j = 0; j < jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("formParameters").length(); j++) {
-                            event.formParameters.add(jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("formParameters").getString(j));
+                        if (event.isFormBased == true && jsonObject.getJSONArray("aroundMe").getJSONObject(i).optJSONArray("formParameters") != null) {
+                            for (int j = 0; j < jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("formParameters").length(); j++) {
+                                event.formParameters.add(jsonObject.getJSONArray("aroundMe").getJSONObject(i).getJSONArray("formParameters").getString(j));
                             }
                         }
+                        event.authorizedLevel = jsonObject.getJSONArray("aroundMe").getJSONObject(i).getInt("authorizedLevel");
 
                         aroundMeEventList.add(event);
                     }
@@ -528,6 +635,7 @@ public class HTTPResponseController {
                                 event.participansProfilePicture.add(jsonObject.getJSONArray("myEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
 
                             }
+                            event.authorizedLevel = jsonObject.getJSONArray("myEvents").getJSONObject(i).getInt("authorizedLevel");
                             myEventList.add(event);
 
                         }
@@ -562,55 +670,106 @@ public class HTTPResponseController {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 System.out.println(jsonObject + " pastEvents");
-                    if (getFirstPagePastEvents) {
-                        pastEventList.clear();
-                    }
-                    try {
-                        for (int i = 0; i < jsonObject.getJSONArray("pastEvents").length(); i++) {
-                            EventBrief eventBrief = new EventBrief();
-                            eventBrief.id = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("id");
-                            int date = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("eventDate");
-                            eventBrief.eventDateTimeStamp = date;
-                            java.util.Date date1 = new java.util.Date((long) date * 1000);
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                            String displayDate = formatter.format(date1);
-                            eventBrief.eventDate = displayDate;
-                            eventBrief.placeName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("placeName");
-                            eventBrief.sportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("sportName");
-                            if (eventBrief.sportName.equalsIgnoreCase("OTH")) {
-                                eventBrief.otherSportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("otherSportName");
-                            }
-                            eventBrief.creatorName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorName");
-                            eventBrief.creatorLevel = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorLevel"));
-                            eventBrief.creatorId = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorId");
-                            eventBrief.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
-                            eventBrief.numberOfParticipants = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("numberOfParticipants"));
-                            for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
-                                eventBrief.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
-
-                            }
-                            eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoins");
-                            eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("points");
-
-                            pastEventList.add(eventBrief);
-                        }
-
-                        FullHistory.currentFragment.updateListOfPastEvents();
-                        if (jsonObject.getJSONArray("pastEvents").length() >= 1) {
-                            FullHistory.NumberOfRefreshPastEvents++;
-                        }
-                        if (getFirstPagePastEvents) {
-                            ArrayList<EventBrief> localEventList = new ArrayList<>();
-                            localEventList.addAll(pastEventList);
-                            Persistance.getInstance().setPastEvents(activity, localEventList);
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                if (getFirstPagePastEvents) {
+                    pastEventList.clear();
                 }
+                try {
+                    for (int i = 0; i < jsonObject.getJSONArray("pastEvents").length(); i++) {
+                        EventBrief eventBrief = new EventBrief();
+                        eventBrief.id = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("id");
+                        int date = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getInt("eventDate");
+                        eventBrief.eventDateTimeStamp = date;
+                        java.util.Date date1 = new java.util.Date((long) date * 1000);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        String displayDate = formatter.format(date1);
+                        eventBrief.eventDate = displayDate;
+                        eventBrief.placeName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("placeName");
+                        eventBrief.sportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("sportName");
+                        if (eventBrief.sportName.equalsIgnoreCase("OTH")) {
+                            eventBrief.otherSportName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("otherSportName");
+                        }
+                        eventBrief.creatorName = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorName");
+                        eventBrief.creatorLevel = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorLevel"));
+                        eventBrief.creatorId = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorId");
+                        eventBrief.creatorProfilePicture = jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("creatorProfilePicture");
+                        eventBrief.numberOfParticipants = Integer.parseInt(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getString("numberOfParticipants"));
+                        for (int j = 0; j < jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").length(); j++) {
+                            eventBrief.participansProfilePicture.add(jsonObject.getJSONArray("pastEvents").getJSONObject(i).getJSONArray("participantsProfilePicture").getString(j));
+                        }
+                        eventBrief.ludicoins = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("ludicoinsGained");
+                        eventBrief.points = jsonObject.getJSONArray("pastEvents").getJSONObject(i).optInt("pointsGained");
+
+                        pastEventList.add(eventBrief);
+                    }
+
+                    FullHistory.currentFragment.updateListOfPastEvents();
+                    if (jsonObject.getJSONArray("pastEvents").length() >= 1) {
+                        FullHistory.NumberOfRefreshPastEvents++;
+                    }
+                    if (getFirstPagePastEvents) {
+                        ArrayList<EventBrief> localEventList = new ArrayList<>();
+                        localEventList.addAll(pastEventList);
+                        Persistance.getInstance().setPastEvents(activity, localEventList);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
+
+    private Response.Listener<JSONObject> createReviewsSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                System.out.println(jsonObject + " reviews");
+                if (getFirstPageReviews) {
+                    reviewsList.clear();
+                }
+                try {
+                    if(getFirstPageReviews) {
+                        review = new Review();
+                        review.socialRate = jsonObject.getString("socialRate");
+                        review.countSocialRate = jsonObject.getInt("countSocialRate");
+                        review.excellentPerc = jsonObject.getInt("excellentPerc");
+                        review.goodPerc = jsonObject.getInt("goodPerc");
+                        review.averagePerc = jsonObject.getInt("averagePerc");
+                        review.bellowAveragePerc = jsonObject.getInt("bellowAveragePerc");
+                        review.poorPerc = jsonObject.getInt("poorPerc");
+                    }
+
+                    for (int i = 0; i < jsonObject.getJSONArray("reviews").length(); i++) {
+                        ReviewBrief reviewBrief = new ReviewBrief();
+                        reviewBrief.id = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("id");
+                        reviewBrief.userId = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userId");
+                        reviewBrief.userName = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userName");
+                        reviewBrief.userPicture = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("userPicture");
+                        reviewBrief.reviewPreview = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewPreview");
+                        reviewBrief.socialRateReview = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("socialRate");
+                        reviewBrief.reviewDate = jsonObject.getJSONArray("reviews").getJSONObject(i).getString("reviewDate");
+
+                        reviewsList.add(reviewBrief);
+                    }
+
+                    FullPageView.currentFragment.updateListOfReviews();
+                    if (jsonObject.getJSONArray("reviews").length() >= 1) {
+                        FullPageView.NumberOfRefreshReviews++;
+                    }
+                    if (getFirstPageReviews) {
+                        ArrayList<ReviewBrief> localReviewList = new ArrayList<>();
+                        localReviewList.addAll(reviewsList);
+                        Persistance.getInstance().setReviews(activity, localReviewList);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         };
     }
 
@@ -697,12 +856,18 @@ public class HTTPResponseController {
         };
     }
 
-    private Response.Listener<JSONObject> getParticipantsSuccesListener() {
+    private Response.Listener<JSONObject> getParticipantsSuccesListener(final boolean showParticipants) {
         return new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject jsonObject) {
+                System.out.println("succes review users");
                 System.out.println(jsonObject + " participants");
                 try {
+                    ArrayList<String> stringNameList = new ArrayList<>();
+                    ArrayList<String> stringImageList = new ArrayList<>();
+                    ArrayList<String> idList = new ArrayList<>();
+                    ArrayList<Integer> levelList = new ArrayList<>();
                     for (int i = 0; i < jsonObject.getJSONArray("participants").length(); i++) {
                         Friend friend = new Friend();
                         friend.userID = jsonObject.getJSONArray("participants").getJSONObject(i).getString("userId");
@@ -714,13 +879,25 @@ public class HTTPResponseController {
                         friend.isInvited = false;
 
                         InviteFriendsActivity.participantList.add(friend);
+                        if (activity.getLocalClassName().toString().equals("Activities.ReviewLocation")) {
+                            if (!Persistance.getInstance().getUserInfo(activity).id.equals(friend.userID)) {
+                                stringNameList.add(friend.userName);
+                                stringImageList.add(friend.profileImage);
+                                idList.add(friend.userID);
+                            }
+                        }else if (activity.getLocalClassName().toString().equals("Activities.Main")) {
+                            stringNameList.add(friend.userName);
+                            stringImageList.add(friend.profileImage);
+                            idList.add(friend.userID);
+                            levelList.add(friend.level);
+                        }
                         for (int j = 0; j < friend.numberOfOffliners; j++) {
                             Friend offlineFriend = new Friend();
-                            if( Locale.getDefault().getLanguage().startsWith("en")) {
+                            if (Locale.getDefault().getLanguage().startsWith("en")) {
                                 offlineFriend.userName = friend.userName + activity.getResources().getString(R.string.is_friend);
-                            } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                            } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
                                 offlineFriend.userName = activity.getResources().getString(R.string.is_friend) + friend.userName;
-                            }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                            } else if (Locale.getDefault().getLanguage().startsWith("fr")) {
                                 offlineFriend.userName = activity.getResources().getString(R.string.is_friend) + friend.userName;
                             }
                             offlineFriend.offlineFriend = true;
@@ -733,13 +910,31 @@ public class HTTPResponseController {
 
                     if (!ActivityDetailsActivity.ifFirstTimeGetParticipants) {
                         System.out.println("intra aici la participanti");
-                        Intent intent = new Intent(activity, InviteFriendsActivity.class);
-                        intent.putExtra("isParticipant", true);
-                        intent.putExtra("isEdit", false);
-                        intent.putExtra("mustRedirect", true);
-                        InviteFriendsActivity.isFirstTimeInviteFriends = false;
-                        InviteFriendsActivity.justSeeParticipants = true;
-                        activity.startActivity(intent);
+                        if (showParticipants == true) {
+                            Intent intent = new Intent(activity, InviteFriendsActivity.class);
+                            intent.putExtra("isParticipant", true);
+                            intent.putExtra("isEdit", false);
+                            intent.putExtra("mustRedirect", true);
+                            InviteFriendsActivity.isFirstTimeInviteFriends = false;
+                            InviteFriendsActivity.justSeeParticipants = true;
+                            activity.startActivity(intent);
+                        } else {
+                            if (activity.getLocalClassName().toString().equals("Activities.ReviewLocation")) {
+                                Intent intent = new Intent(activity, ReviewParticipants.class);
+                                intent.putExtra("participantsNameList", stringNameList);
+                                intent.putExtra("participantsImageList", stringImageList);
+                                intent.putExtra("userIdList", idList);
+                                activity.startActivity(intent);
+                            }else if (activity.getLocalClassName().toString().equals("Activities.Main")) {
+                                Intent intent = new Intent(activity, CheckInAll.class);
+                                intent.putExtra("participantsNameList", stringNameList);
+                                intent.putExtra("participantsImageList", stringImageList);
+                                intent.putExtra("userIdList", idList);
+                                intent.putExtra("levelList", levelList);
+                                activity.startActivity(intent);
+                            }
+
+                        }
                         //activity.finish();
                     } else {
                         InviteFriendsActivity.inviteFriendsAdapter.notifyDataSetChanged();
@@ -775,11 +970,11 @@ public class HTTPResponseController {
 
                     for (int i = 0; i < jsonObject.getInt("offlineFriendsCount"); i++) {
                         Friend friend = new Friend();
-                        if( Locale.getDefault().getLanguage().startsWith("en")) {
+                        if (Locale.getDefault().getLanguage().startsWith("en")) {
                             friend.userName = Persistance.getInstance().getUserInfo(activity).lastName + activity.getResources().getString(R.string.is_friend);
-                        } else if (Locale.getDefault().getLanguage().startsWith("ro")){
+                        } else if (Locale.getDefault().getLanguage().startsWith("ro")) {
                             friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
-                        }else if (Locale.getDefault().getLanguage().startsWith("fr")){
+                        } else if (Locale.getDefault().getLanguage().startsWith("fr")) {
                             friend.userName = activity.getResources().getString(R.string.is_friend) + Persistance.getInstance().getUserInfo(activity).lastName;
                         }
                         InviteFriendsActivity.numberOfOfflineFriends++;
@@ -853,6 +1048,7 @@ public class HTTPResponseController {
                         }
                         b.putStringArrayList("formParameters", formParameters);
                     }
+                    b.putString("eventURL", jsonObject.getString("eventURL"));
 
                     if (flag == true) {
                         oldActivity.finish();
@@ -1078,12 +1274,32 @@ public class HTTPResponseController {
                         ((RegisterActivity)activity).isButtonSubmitEnabled = true;
                     }
 
+                   // Log out user
+                    DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+                    userNode.child("activeToken").setValue(false);
+                    Persistance.getInstance().deleteUserProfileInfo(activity);
+                    Log.v("logout", "am dat logout");
+                    SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
+                    preferences.edit().remove("ProfileImage").apply();
+                    activity.finish();
+                    Intent intent = new Intent(activity, IntroActivity.class);
+                    activity.startActivity(intent);
+                    Persistance.getInstance().setHappeningNow(null, activity);
+
                 } catch (Exception e) {
                     e.printStackTrace();
 
-                    LoginManager.getInstance().logOut();
+                    // Log out user
+                    DatabaseReference userNode = FirebaseDatabase.getInstance().getReference().child("users").child(Persistance.getInstance().getUserInfo(activity).id);
+                    userNode.child("activeToken").setValue(false);
+                    Persistance.getInstance().deleteUserProfileInfo(activity);
+                    Log.v("logout", "am dat logout");
+                    SharedPreferences preferences = activity.getSharedPreferences("ProfileImage", 0);
+                    preferences.edit().remove("ProfileImage").apply();
+                    activity.finish();
                     Intent intent = new Intent(activity, IntroActivity.class);
                     activity.startActivity(intent);
+                    Persistance.getInstance().setHappeningNow(null, activity);
                 }
 
 
@@ -1116,6 +1332,34 @@ public class HTTPResponseController {
                 try {
                     JSONObject errorMessageJson = new JSONObject(errorMessage);
                     Toast.makeText(activity, errorMessageJson.getString("error") , Toast.LENGTH_LONG).show();
+                } catch (Throwable t) {
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener reviewLocationErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String errorMessage = error.getMessage();
+                try {
+                    JSONObject errorMessageJson = new JSONObject(errorMessage);
+                    Toast.makeText(activity, errorMessageJson.getString("error"), Toast.LENGTH_LONG).show();
+                } catch (Throwable t) {
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener reviewParticipantsErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String errorMessage = error.getMessage();
+                try {
+                    JSONObject errorMessageJson = new JSONObject(errorMessage);
+                    Toast.makeText(activity, errorMessageJson.getString("error"), Toast.LENGTH_LONG).show();
                 } catch (Throwable t) {
                 }
             }
@@ -1177,7 +1421,7 @@ public class HTTPResponseController {
     public void getAroundMeEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber") + "&userLatitude=" + urlParams.get("userLatitude") +
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber") + "&userLatitude=" + urlParams.get("userLatitude") +
                 "&userLongitude=" + urlParams.get("userLongitude") + "&userRange=" + urlParams.get("userRange") + "&userSports=" + urlParams.get("userSports"), params, headers, this.createAroundMeEventSuccesListener(), errorListener);
 
 
@@ -1187,14 +1431,13 @@ public class HTTPResponseController {
     public void getMyEvent(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }
 
     public void joinEvent(Activity activity, HashMap<String, String> params, HashMap<String, String> headers, String eventId, Response.ErrorListener errorListener) {
         setActivity(activity, params.get("email"), params.get("password"));
         eventid = eventId;
-
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/joinEvent", params, headers, this.createJoinEventSuccesListener(eventId), this.createRequestErrorListener());
         requestQueue.add(jsObjRequest);
@@ -1231,7 +1474,7 @@ public class HTTPResponseController {
         setActivity(activity, params.get("email"), params.get("password"));
         setEventId(urlParams.get("eventId"), false, "", -1, false);
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/event?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId"), params, headers, this.getEventDetailsSuccesListener(), this.createRequestErrorListener());
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/event?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId"), params, headers, this.getEventDetailsSuccesListener(), this.createRequestErrorListener());
         requestQueue.add(jsObjRequest);
     }
 
@@ -1274,14 +1517,14 @@ public class HTTPResponseController {
             listener = this.createRequestSuccessListener();
         }
 
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/user", params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1_1/user", params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
-    public void getParticipants(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams) {
+    public void getParticipants(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, boolean showParticipants) {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/eventParticipants?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.getParticipantsSuccesListener(), (Response.ErrorListener) activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/eventParticipants?eventId=" + urlParams.get("eventId") + "&userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.getParticipantsSuccesListener(showParticipants), null);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1314,7 +1557,7 @@ public class HTTPResponseController {
 
     public void getUserProfile(HashMap<String, String> params, HashMap<String, String> headers, String id, Activity activity, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/user?userId=" + id, params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1_1/user?userId=" + id, params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1429,7 +1672,44 @@ public class HTTPResponseController {
     public void reviewLocation(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         setActivity(activity, "", "");
-        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/reviewLocation", params, headers, this.reviewLocationSuccesListener(), errorListener);
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/reviewLocation", params, headers, this.reviewLocationSuccesListener(), reviewLocationErrorListener());
         requestQueue.add(request);
     }
+
+    public void reviewParticipants(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2/reviewParticipants", params, headers, this.reviewParticipantsSuccesListener(), reviewParticipantsErrorListener());
+        requestQueue.add(request);
+    }
+
+    public void enrollmentData(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener, boolean editEnrollData) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/enrollmentData?userId=" + urlParams.get("userId") + "&eventId=" + urlParams.get("eventId"), params, headers, this.enrollmentDataSuccesListener(editEnrollData), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+    public void editEnrollmentData(Activity activity, HashMap<String, String> params, HashMap<String, String> headers, String eventId, Response.ErrorListener errorListener) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        eventid = eventId;
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2/editEnrollmentData/", params, headers, this.editEnrollmentDataSuccesListener(), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+    public void getReviews(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, HashMap<String, String> urlParams, Response.ErrorListener errorListener) {
+        setActivity(activity, params.get("email"), params.get("password"));
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/reviews?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createReviewsSuccessListener(), errorListener);
+        requestQueue.add(jsObjRequest);
+    }
+
+    public void savePointsAsAdmin(HashMap<String, String> params, HashMap<String, String> headers, Activity activity, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+        setActivity(activity, "", "");
+        CustomRequest request = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1/savePointsAsAdmin", params, headers, this.savePointsAsAdminSuccesListener(), errorListener);
+        requestQueue.add(request);
+    }
+
 }

@@ -474,19 +474,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/descriptionLabel"
+                    android:layout_below="@+id/mapLayout"
+                    android:text="@string/description"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Lorem ipsum dolor sit amet,consesctetur lorem it adipsicing elit,sed do eiusmod tempor."
                     android:textSize="14dp"
                     android:fontFamily="@string/fontmedium"
                     android:textColor="@color/lightGray"
-                    android:layout_below="@id/mapLayout"
-                    android:layout_marginTop="16dp"
+                    android:layout_below="@id/descriptionLabel"
+                    android:layout_marginTop="5dp"
                     android:id="@+id/description"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventUrlLabel"
+                    android:layout_below="@+id/description"
+                    android:text="@string/event_url"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventURL"
+                    android:layout_below="@+id/eventUrlLabel"
+                    android:textSize="14dp"
+                    android:layout_marginTop="5dp"
+                    android:text="URL Event"
+                    android:fontFamily="@string/fontmedium"
+                    android:textColor="@color/lightGray"
+                    android:textIsSelectable="true"/>
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:id="@+id/downloadEnrollmentData"
-                    android:layout_below="@+id/description"
+                    android:layout_below="@+id/eventURL"
                     android:background="@drawable/pink_button_selector"
                     android:layout_marginTop="16dp"
                     android:text="@string/download_enrollment_data"
@@ -494,10 +526,22 @@
                     android:textSize="14dp"
                     android:visibility="visible"/>
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/editEnrollmentData"
+                    android:layout_below="@+id/downloadEnrollmentData"
+                    android:background="@drawable/pink_button_selector"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/edit_enrollment_data"
+                    android:textColor="#ffffff"
+                    android:textSize="14dp"
+                    android:visibility="gone"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/downloadEnrollmentData"
+                    android:layout_below="@+id/editEnrollmentData"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp">
 
@@ -539,7 +583,7 @@
                     android:text="@string/join"
                     android:textColor="#ffffff"
                     android:textSize="14dp"
-                    android:layout_below="@+id/downloadEnrollmentData"
+                    android:layout_below="@+id/editEnrollmentData"
                     android:id="@+id/joinOrUnjoinButton"
                     android:layout_marginTop="24dp"
                     android:visibility="invisible"
