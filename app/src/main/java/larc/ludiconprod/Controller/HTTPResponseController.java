@@ -1434,8 +1434,8 @@ public class HTTPResponseController {
         setActivity(activity, params.get("email"), params.get("password"));
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
 
-        //CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2_1/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
+        //CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, prodServer + "api/v2/events?userId=" + urlParams.get("userId") + "&pageNumber=" + urlParams.get("pageNumber"), params, headers, this.createMyEventSuccesListener(), errorListener);
         requestQueue.add(jsObjRequest);
     }
 
@@ -1521,8 +1521,8 @@ public class HTTPResponseController {
             listener = this.createRequestSuccessListener();
         }
 
-        //CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1_1/user", params, headers, listener, errorListener);
-        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1/user", params, headers, listener, errorListener);
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1_1/user", params, headers, listener, errorListener);
+        //CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, prodServer + "api/v2_1/user", params, headers, listener, errorListener);
         requestQueue.add(jsObjRequest);
     }
 
